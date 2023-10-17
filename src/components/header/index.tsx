@@ -20,7 +20,7 @@ import { Button, Icon } from "@rneui/themed";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { CompositeScreenProps, useNavigation } from "@react-navigation/native";
 import { TabParamList } from "../tab-navigator";
-import { RootStackParamList } from "../../App";
+import { RootStackParamList } from "../../../App";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StackScreenProps } from "@react-navigation/stack";
 
@@ -63,6 +63,9 @@ export const Header = ({ navigation, route }: HomeScreenProp) => {
                         fontSize: 14,
                         marginTop: -1,
                     }}
+                    onPress={() =>
+                        navigation.navigate("Watching", { filmId: 1 })
+                    }
                 >
                     <FontAwesomeIcon
                         icon={faCrown}
@@ -86,8 +89,10 @@ const styles = StyleSheet.create({
     },
     searchBarContainer: {
         width: 250,
-        border: "none",
-        backgroundColor: "black",
+        borderTopWidth: 0,
+        borderBottomWidth: 0,
+        // backgroundColor: "#212121",
+        backgroundColor: "transparent",
     },
     inputSearch: {
         fontSize: 13,

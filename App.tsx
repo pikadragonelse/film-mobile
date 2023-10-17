@@ -4,16 +4,18 @@ import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { View, Text, Dimensions } from "react-native";
 import { Icon, makeStyles } from "@rneui/themed";
-import { TabNavigator } from "./components/tab-navigator";
-import { Header } from "./components/header";
-import { SearchScreen } from "./page/search";
-import { HeaderSearch } from "./components/header-search";
-import { store } from "./redux/store";
+import { TabNavigator } from "./src/components/tab-navigator";
+import { Header } from "./src/components/header";
+import { SearchScreen } from "./src/page/search";
+import { HeaderSearch } from "./src/components/header-search";
+import { store } from "./src/redux/store";
 import { Provider } from "react-redux";
+import { Watching } from "./src/page/watching";
 
 export type RootStackParamList = {
     BottomTabNav: undefined;
     Search: undefined;
+    Watching: { filmId: number };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -24,7 +26,7 @@ export default function App() {
         ...DefaultTheme,
         colors: {
             ...DefaultTheme.colors,
-            background: "black",
+            background: "#191919",
         },
     };
 
@@ -40,6 +42,11 @@ export default function App() {
                     <Stack.Screen
                         name="Search"
                         component={SearchScreen}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Watching"
+                        component={Watching}
                         options={{ headerShown: false }}
                     />
                 </Stack.Navigator>

@@ -5,7 +5,7 @@ import { CompositeScreenProps, useNavigation } from "@react-navigation/native";
 import { Button } from "@rneui/base";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { TabParamList } from "../../components/tab-navigator";
-import { RootStackParamList } from "../../App";
+import { RootStackParamList } from "../../../App";
 import { StackScreenProps } from "@react-navigation/stack";
 
 type HomeScreenProp = CompositeScreenProps<
@@ -23,6 +23,8 @@ export const Home = ({ navigation, route }: HomeScreenProp) => {
 
 const styles = StyleSheet.create({
     homeContainer: {
-        backgroundColor: "black",
+        // backgroundColor: "#212121",
+        backgroundColor: "transparent",
+        paddingBottom: 10,
     },
 });

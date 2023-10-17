@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { HeaderSearch } from "../../components/header-search";
 import { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamList } from "../../App";
+import { RootStackParamList } from "../../../App";
 
 export type SearchScreenProps = StackScreenProps<RootStackParamList>;
 
