@@ -18,7 +18,7 @@ import { Home } from "../../page/home";
 import { Rank } from "../../page/rank";
 import { Film } from "../../page/film";
 import { Personal } from "../../page/personal";
-import { RootStackParamList } from "../../App";
+import { RootStackParamList } from "../../../App";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Button } from "@rneui/base";
 import { NavigatorScreenParams } from "@react-navigation/native";
