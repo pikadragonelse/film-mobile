@@ -7,13 +7,17 @@ import {
     Animated,
     ScrollView,
     Dimensions,
+    FlatList,
 } from "react-native";
 import { VideoPlayerCustom } from "../../components/video-player";
 import { Rating } from "react-native-ratings";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
     faAngleDown,
+    faAngleUp,
     faArrowUpFromBracket,
+    faHeart,
+    faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
 import Collapsible from "react-native-collapsible";
 import {
@@ -25,7 +29,10 @@ import {
     TabView,
     Image,
 } from "@rneui/themed";
-import { faBookmark, faHeart } from "@fortawesome/free-regular-svg-icons";
+import {
+    faBookmark as faBookmarkRegular,
+    faHeart as faHeartRegular,
+} from "@fortawesome/free-regular-svg-icons";
 import { ScrollTo, Target } from "@nandorojo/anchor";
 import { styles } from "./style";
 import { RootStackParamList } from "../../../App";
@@ -58,41 +65,98 @@ const list = [
     },
 ];
 
-const dataRCM = [
+export interface RcmFilm {
+    id: number;
+    image: string;
+    isSingle: boolean;
+    episode: number;
+    name: string;
+}
+
+const dataRCM: RcmFilm[] = [
     {
         id: 1,
         image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
         isSingle: true,
         episode: 10,
-        name: "Wreck-It Ralph 2: Phá đảo thế giới ảo",
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
     },
     {
-        id: 1,
+        id: 2,
         image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
         isSingle: true,
         episode: 10,
-        name: "Wreck-It Ralph 2: Phá đảo thế giới ảo",
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
     },
     {
-        id: 1,
+        id: 3,
         image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-        isSingle: true,
+        isSingle: false,
         episode: 10,
-        name: "Wreck-It Ralph 2: Phá đảo thế giới ảo",
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
     },
     {
-        id: 1,
+        id: 4,
         image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
         isSingle: true,
         episode: 10,
-        name: "Wreck-It Ralph 2: Phá đảo thế giới ảo",
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
     },
     {
-        id: 1,
+        id: 5,
         image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
         isSingle: true,
         episode: 10,
-        name: "Wreck-It Ralph 2: Phá đảo thế giới ảo",
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 6,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 7,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 8,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 9,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 10,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 11,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 12,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
     },
 ];
 
@@ -101,7 +165,10 @@ const listEpisode = [1, 2, 3, 4, 5, 6, 7, 8];
 export type WatchingScreenProps = StackScreenProps<RootStackParamList>;
 
 export const Watching = ({ navigation }: WatchingScreenProps) => {
-    const [isShowDesc, setIsShowDesc] = useState<boolean>(true);
+    const [isHideDesc, setIsHideDesc] = useState<boolean>(true);
+    const [isSaveMovie, setIsSaveMovie] = useState<boolean>(false);
+    const [isLikeMovie, setIsLikeMovie] = useState<boolean>(false);
+
     const [index, setIndex] = useState(0);
 
     return (
@@ -155,15 +222,19 @@ export const Watching = ({ navigation }: WatchingScreenProps) => {
                             </Text>
                             <TouchableOpacity
                                 style={styles.infoIcon}
-                                onPress={() => setIsShowDesc(!isShowDesc)}
+                                onPress={() => setIsHideDesc(!isHideDesc)}
                             >
                                 <FontAwesomeIcon
-                                    icon={faAngleDown}
+                                    icon={
+                                        isHideDesc === true
+                                            ? faAngleDown
+                                            : faAngleUp
+                                    }
                                     style={styles.infoIcon}
                                 />
                             </TouchableOpacity>
                         </View>
-                        <Collapsible collapsed={isShowDesc}>
+                        <Collapsible collapsed={isHideDesc}>
                             <Text style={styles.desc}>
                                 Lorem Ipsum is simply dummy text of the printing
                                 and typesetting industry. Lorem Ipsum has been
@@ -221,18 +292,34 @@ export const Watching = ({ navigation }: WatchingScreenProps) => {
                         ))}
                     </ScrollView>
                     <View style={styles.containerFeature}>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => setIsLikeMovie(!isLikeMovie)}
+                        >
                             <FontAwesomeIcon
                                 style={styles.feature}
-                                icon={faHeart}
+                                icon={
+                                    isLikeMovie === true
+                                        ? faHeart
+                                        : faHeartRegular
+                                }
                                 size={22}
+                                color={isLikeMovie === true ? "red" : "white"}
                             />
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => setIsSaveMovie(!isSaveMovie)}
+                        >
                             <FontAwesomeIcon
                                 style={styles.feature}
-                                icon={faBookmark}
+                                icon={
+                                    isSaveMovie === true
+                                        ? faBookmark
+                                        : faBookmarkRegular
+                                }
                                 size={22}
+                                color={
+                                    isSaveMovie === true ? "yellow" : "white"
+                                }
                             />
                         </TouchableOpacity>
                         <TouchableOpacity>
@@ -269,15 +356,42 @@ export const Watching = ({ navigation }: WatchingScreenProps) => {
                     </View>
                     <View style={styles.sectionContainer}>
                         <Text style={styles.sectionTitle}>Phim đề xuất</Text>
-                        <View>
-                            <Image
-                                source={{
-                                    uri: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-                                }}
-                                style={{ width: 200, height: 200 }}
-                            />
-                            <Text>Phim lẻ</Text>
-                            <Text>Wreck-It Ralph 2: Phá đảo thế giới ảo</Text>
+                        <View style={styles.rcmContainer}>
+                            {dataRCM.map((item, index) => (
+                                <TouchableOpacity>
+                                    <View
+                                        style={{
+                                            ...styles.rcmFilmItem,
+                                        }}
+                                    >
+                                        <Image
+                                            source={{
+                                                uri: item.image,
+                                            }}
+                                            style={styles.rcmFilmImageContainer}
+                                        />
+                                        <Text
+                                            numberOfLines={2}
+                                            ellipsizeMode="tail"
+                                            style={styles.rcmFilmName}
+                                        >
+                                            {item.name}
+                                        </Text>
+                                        <Text style={styles.rcmFilmSub}>
+                                            {item.isSingle === true
+                                                ? "Phim lẻ"
+                                                : `${item.episode} tập`}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            ))}
+                            {dataRCM.length % 3 !== 0 ? (
+                                <View
+                                    style={{
+                                        ...styles.rcmFilmItem,
+                                    }}
+                                ></View>
+                            ) : undefined}
                         </View>
                     </View>
                 </ScrollView>
