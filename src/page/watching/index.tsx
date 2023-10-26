@@ -168,6 +168,7 @@ export const Watching = ({ navigation }: WatchingScreenProps) => {
     const [isHideDesc, setIsHideDesc] = useState<boolean>(true);
     const [isSaveMovie, setIsSaveMovie] = useState<boolean>(false);
     const [isLikeMovie, setIsLikeMovie] = useState<boolean>(false);
+    const [activeEpisode, setActiveEpisode] = useState<number>(1);
 
     const [index, setIndex] = useState(0);
 
@@ -337,7 +338,9 @@ export const Watching = ({ navigation }: WatchingScreenProps) => {
                         </Text>
                         <ScrollView horizontal style={styles.sectionContent}>
                             {listEpisode.map((episode, index) => (
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() => setActiveEpisode(episode)}
+                                >
                                     <Text
                                         style={{
                                             ...styles.sectionEpisode,
@@ -346,6 +349,10 @@ export const Watching = ({ navigation }: WatchingScreenProps) => {
                                                     ? 0
                                                     : styles.sectionEpisode
                                                           .marginHorizontal,
+                                            color:
+                                                activeEpisode === episode
+                                                    ? "red"
+                                                    : "white",
                                         }}
                                     >
                                         {episode}
