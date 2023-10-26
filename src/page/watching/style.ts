@@ -1,4 +1,5 @@
 import {
+    Dimensions,
     StyleSheet,
 } from "react-native";
 
@@ -74,10 +75,34 @@ export const styles = StyleSheet.create({
     },
     sectionEpisode: {
         color: "white",
-        paddingVertical: 20,
-        paddingHorizontal: 25,
-        backgroundColor: "#cecece",
+        paddingVertical: 25,
+        paddingHorizontal: 30,
+        backgroundColor: "#333333",
         borderRadius: 5,
-        marginHorizontal: 10
-    }
+        marginHorizontal: 5,
+    },
+    rcmContainer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        marginTop: 5,
+    },
+    rcmFilmItem: {
+        position: "relative",
+        width: Dimensions.get("window").width / 3 - 5,
+        marginBottom: 5,
+    },
+    rcmFilmImageContainer: {
+        width: "100%",
+        height: 160,
+        borderRadius: 5,
+        margin: "auto",
+    },
+    rcmFilmSub: {
+        color: "#cecece",
+        fontSize: 12,
+    },
+    rcmFilmName: {
+        color: "white",
+    },
 });
