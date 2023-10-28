@@ -3,8 +3,9 @@ import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { Image } from "@rneui/themed";
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { styles } from "../../page/watching/style";
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { Dimensions } from "react-native";
+import Colors from "../../constants/Colors";
 interface RcmFilm {
   id: number;
   image: string;
@@ -16,6 +17,7 @@ interface RcmFilm {
 // interface IndexProps {
 //   item: RcmFilm;
 // }
+const { width, height } = Dimensions.get("window");
 
 const dataRCM: RcmFilm[] = [
   {
@@ -120,30 +122,30 @@ export const FilmItem = () => {
   };
 
   return (
-    <View style={styles.sectionContainer}>
-      <Text style={styles.sectionTitle}>
+    <View style={styleFilm.sectionContainer}>
+      <Text style={styleFilm.sectionTitle}>
         <Text> Phim đề xuất</Text>
       </Text>
 
-      <View style={styles.rcmContainer}>
+      <View style={styleFilm.rcmContainer}>
         {dataRCM
           .slice(0, showAllFilms ? dataRCM.length : 9)
           .map((item, index) => (
             <TouchableOpacity key={item.id}>
-              <View style={styles.rcmFilmItem}>
+              <View style={styleFilm.rcmFilmItem}>
                 <Image
                   source={{
                     uri: item.image,
                   }}
-                  style={styles.rcmFilmImageContainer}
+                  style={styleFilm.rcmFilmImageContainer}
                 />
-                <Text style={styles.rcmFilmSub}>
+                <Text style={styleFilm.rcmFilmSub}>
                   {item.isSingle === true ? "Phim lẻ" : `${item.episode} tập`}
                 </Text>
                 <Text
                   numberOfLines={2}
                   ellipsizeMode="tail"
-                  style={styles.rcmFilmName}
+                  style={styleFilm.rcmFilmName}
                 >
                   {item.name}
                 </Text>
@@ -154,14 +156,14 @@ export const FilmItem = () => {
       {dataRCM.length > 9 && (
         <TouchableOpacity
           onPress={toggleShowAllFilms}
-          style={styles.buttonMore}
+          style={styleFilm.buttonMore}
         >
           <FontAwesomeIcon
-            style={styles.buttonMoreIcon}
+            style={styleFilm.buttonMoreIcon}
             icon={showAllFilms ? faChevronUp : faChevronDown}
             size={10}
           />
-          <Text style={styles.buttonMoreText}>
+          <Text style={styleFilm.buttonMoreText}>
             {showAllFilms ? "Ẩn đi" : "Khác"}
           </Text>
         </TouchableOpacity>
@@ -169,3 +171,76 @@ export const FilmItem = () => {
     </View>
   );
 };
+
+const styleFilm = StyleSheet.create({
+  sectionContainer: {
+    marginVertical: 20,
+    marginHorizontal: 10,
+  },
+
+  sectionTitle: {
+    color: "white",
+    fontSize: 15,
+    marginBottom: 8,
+  },
+
+  rcmContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginTop: 5,
+  },
+
+  rcmFilmItem: {
+    position: "relative",
+    width: width / 3 - 12,
+    marginBottom: 10,
+  },
+
+  rcmFilmImageContainer: {
+    width: "100%",
+    height: 140,
+    borderRadius: 5,
+    margin: "auto",
+    backgroundColor: "rgba(0, 0, 0, 0.05)",
+  },
+
+  rcmFilmSub: {
+    position: "absolute",
+    color: Colors.WHITE,
+    fontSize: 10,
+    left: "60%",
+    borderTopRightRadius: 5,
+    width: width / 8 - 2,
+    height: height / 48,
+    textAlign: "center",
+    backgroundColor: Colors.ACTIVE,
+  },
+
+  rcmFilmName: {
+    color: Colors.GRAY,
+    fontSize: 12,
+    marginTop: 5,
+  },
+
+  buttonMore: {
+    position: "relative",
+    width: "100%",
+    backgroundColor: "#333333",
+    paddingVertical: 9,
+    borderRadius: 5,
+    marginTop: 4,
+  },
+
+  buttonMoreIcon: {
+    position: "absolute",
+    top: "70%",
+    left: "41%",
+    color: "#a1a1a1",
+  },
+
+  buttonMoreText: {
+    color: "#a1a1a1",
+    textAlign: "center",
+  },
+});

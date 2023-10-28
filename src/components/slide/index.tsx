@@ -23,7 +23,7 @@ interface Movie {
   overview: string;
 }
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 export const Slide = () => {
   const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
