@@ -1,104 +1,88 @@
-import React, {
-    MutableRefObject,
-    RefObject,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
-import {
-    View,
-    Text,
-    SafeAreaView,
-    StyleSheet,
-    Dimensions,
-    TextInput,
-} from "react-native";
-import { Logo } from "../../assets/logo";
-import { SearchBar } from "@rneui/base";
-import { faCrown, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Button, Icon } from "@rneui/themed";
+import { faCrown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { CompositeScreenProps, useNavigation } from "@react-navigation/native";
-import { TabParamList } from "../tab-navigator";
-import { RootStackParamList } from "../../../App";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
+import { SearchBar } from "@rneui/base";
+import { Button } from "@rneui/themed";
+import React, { useState } from "react";
+import { Dimensions, SafeAreaView, StyleSheet, View } from "react-native";
+import { RootStackParamList } from "../../../App";
+import { Logo } from "../../assets/logo";
+import { TabParamList } from "../tab-navigator";
 
 type HomeScreenProp = CompositeScreenProps<
-    BottomTabScreenProps<TabParamList>,
-    StackScreenProps<RootStackParamList>
+  BottomTabScreenProps<TabParamList>,
+  StackScreenProps<RootStackParamList>
 >;
 
-export const Header = ({ navigation, route }: HomeScreenProp) => {
-    const [searchValue, setSearchValue] = useState("");
+const { width } = Dimensions.get("window");
 
-    return (
-        <SafeAreaView>
-            <View style={styles.containerHeader}>
-                <Logo />
-                <View>
-                    <SearchBar
-                        placeholder="Type Here..."
-                        onChangeText={(value) => setSearchValue(value)}
-                        value={searchValue}
-                        containerStyle={styles.searchBarContainer}
-                        inputStyle={styles.inputSearch}
-                        inputContainerStyle={styles.searchBar}
-                        onPressIn={() => {
-                            navigation.navigate("Search");
-                        }}
-                    />
-                </View>
-                <Button
-                    radius={"sm"}
-                    type="solid"
-                    buttonStyle={{
-                        backgroundColor: "#F3BF83",
-                        height: 35,
-                        width: 70,
-                        alignItems: "center",
-                    }}
-                    titleStyle={{
-                        color: "black",
-                        fontSize: 14,
-                        marginTop: -1,
-                    }}
-                    onPress={() =>
-                        navigation.navigate("Watching", { filmId: 1 })
-                    }
-                >
-                    <FontAwesomeIcon
-                        icon={faCrown}
-                        style={{ marginRight: 5 }}
-                    />
-                    VIP
-                </Button>
-            </View>
-        </SafeAreaView>
-    );
+export const Header = ({ navigation, route }: HomeScreenProp) => {
+  const [searchValue, setSearchValue] = useState("");
+
+  return (
+    <SafeAreaView>
+      <View style={styles.containerHeader}>
+        <Logo />
+        <View>
+          <SearchBar
+            placeholder="Type Here..."
+            onChangeText={(value) => setSearchValue(value)}
+            value={searchValue}
+            containerStyle={styles.searchBarContainer}
+            inputStyle={styles.inputSearch}
+            inputContainerStyle={styles.searchBar}
+            onPressIn={() => {
+              navigation.navigate("Search");
+            }}
+          />
+        </View>
+        <Button
+          radius={"sm"}
+          type="solid"
+          buttonStyle={{
+            backgroundColor: "#dca226",
+            height: 30,
+            width: 70,
+            alignItems: "center",
+          }}
+          titleStyle={{
+            color: "black",
+            fontSize: 12,
+            marginTop: -1,
+          }}
+          onPress={() => navigation.navigate("Watching", { filmId: 1 })}
+        >
+          <FontAwesomeIcon icon={faCrown} style={{ marginRight: 5 }} />
+          VIP
+        </Button>
+      </View>
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
-    containerHeader: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        marginTop: 32,
-        justifyContent: "space-between",
-        paddingHorizontal: 5,
-    },
-    searchBarContainer: {
-        width: 250,
-        borderTopWidth: 0,
-        borderBottomWidth: 0,
-        // backgroundColor: "#212121",
-        backgroundColor: "transparent",
-    },
-    inputSearch: {
-        fontSize: 13,
-    },
-    searchBar: {
-        backgroundColor: "#8686861f",
-        height: 35,
-    },
+  containerHeader: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 32,
+    justifyContent: "space-between",
+    paddingHorizontal: 5,
+  },
+  searchBarContainer: {
+    width: width - 200,
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    // backgroundColor: "#212121",
+    backgroundColor: "transparent",
+  },
+  inputSearch: {
+    fontSize: 12,
+  },
+  searchBar: {
+    backgroundColor: "#8686861f",
+    height: 32,
+  },
 });
