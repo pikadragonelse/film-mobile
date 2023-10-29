@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { Image } from "@rneui/themed";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faStar, faPlay } from "@fortawesome/free-solid-svg-icons";
@@ -24,6 +24,7 @@ export interface FilmItemSearch {
 export type FilmItemSearchProps = {
   data: FilmItemSearch;
 };
+const { width, height } = Dimensions.get("window");
 
 export const FilmItemSearch = ({ data }: FilmItemSearchProps) => {
   const [expanded, setExpanded] = useState(false);
@@ -33,15 +34,17 @@ export const FilmItemSearch = ({ data }: FilmItemSearchProps) => {
       <View style={styles.containerItem}>
         <View style={styles.posterItem}>
           <Image source={{ uri: data.poster }} style={styles.poster} />
-          <Text style={styles.filmSub}>
-            {data.vip === true ? (
-              "VIP"
-            ) : (
-              <Text>
-                {data.isSeries === true ? `${data.episode} tập` : "Phim lẻ"}
-              </Text>
-            )}
-          </Text>
+          <View style={styles.filmSub}>
+            <Text style={styles.filmSubText}>
+              {data.vip === true ? (
+                "VIP"
+              ) : (
+                <Text>
+                  {data.isSeries === true ? `${data.episode} tập` : "Phim lẻ"}
+                </Text>
+              )}
+            </Text>
+          </View>
         </View>
         <View style={styles.content}>
           <Text style={styles.name}>{data.name}</Text>
@@ -54,7 +57,8 @@ export const FilmItemSearch = ({ data }: FilmItemSearchProps) => {
             <Text style={styles.evaluate}>{data.evaluate}</Text>
           </View>
           <Text style={styles.info}>
-            {data.yearOfManufacture} | {data.nation} |{data.category.join(", ")}
+            {data.yearOfManufacture} | {data.nation} |{" "}
+            {data.category.join(", ")}
           </Text>
           <Text style={styles.desc}>
             {expanded ? data.desc : data.desc.slice(0, 50)}
@@ -81,12 +85,12 @@ export const FilmItemSearch = ({ data }: FilmItemSearchProps) => {
               type="solid"
               buttonStyle={{
                 backgroundColor: "#cf1a1a",
-                height: 35,
+                height: 31,
                 alignItems: "center",
               }}
               titleStyle={{
                 color: "white",
-                fontSize: 14,
+                fontSize: 11,
                 marginTop: -1,
               }}
               onPress={() => {
@@ -95,6 +99,7 @@ export const FilmItemSearch = ({ data }: FilmItemSearchProps) => {
             >
               <FontAwesomeIcon
                 icon={faPlay}
+                size={15}
                 style={{ marginRight: 5, color: "white" }}
               />
               Xem ngay
@@ -113,13 +118,13 @@ const styles = StyleSheet.create({
   },
   containerItem: {
     width: "100%",
-    height: 180,
+    height: 150,
     backgroundColor: "transparent",
     display: "flex",
     flexDirection: "row",
   },
   posterItem: {
-    flex: 3.6,
+    flex: 3,
     position: "relative",
   },
   poster: {
@@ -128,6 +133,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin: "auto",
     backgroundColor: "rgba(0, 0, 0, 0.05)",
+    overflow: "hidden",
   },
   content: {
     flex: 6,
@@ -137,7 +143,7 @@ const styles = StyleSheet.create({
   },
   name: {
     color: "white",
-    fontSize: 19,
+    fontSize: 16,
     fontWeight: "500",
   },
   evaluateContent: {
@@ -152,16 +158,17 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "500",
     lineHeight: 30,
+    fontSize: 12,
   },
   info: {
     color: "silver",
-    fontSize: 14,
+    fontSize: 12,
   },
   desc: {
     color: "silver",
     lineHeight: 20,
-    fontSize: 14,
-    marginTop: 10,
+    fontSize: 12,
+    marginTop: 6,
   },
   button: {
     position: "absolute",
@@ -170,20 +177,23 @@ const styles = StyleSheet.create({
   },
   readMore: {
     color: "#5983FF",
-    fontSize: 13,
+    fontSize: 12,
   },
+
   filmSub: {
     position: "absolute",
     top: 0,
     right: 0,
-    fontSize: 12,
     height: 20,
-    color: Colors.WHITE,
-    textAlign: "center",
     alignItems: "center",
+    justifyContent: "center",
     borderTopRightRadius: 5,
     borderBottomLeftRadius: 5,
     width: "40%",
     backgroundColor: "#cf1a1a",
+  },
+  filmSubText: {
+    color: "white",
+    fontSize: 10,
   },
 });
