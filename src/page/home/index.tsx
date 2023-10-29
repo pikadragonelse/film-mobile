@@ -17,6 +17,7 @@ import { ItemSeparator } from "../../components/item-separator";
 import { GenreCard } from "../../components/genre-card";
 import { useState, useEffect } from "react";
 import { FilmItem } from "../../components/film-item";
+import { LinearGradient } from "expo-linear-gradient";
 
 type HomeScreenProp = CompositeScreenProps<
   BottomTabScreenProps<TabParamList>,
@@ -36,7 +37,7 @@ export const Home = ({ navigation, route }: HomeScreenProp) => {
     { id: 6, name: "Sci-Fi" },
   ];
   const image = {
-    // uri: "https://image.tmdb.org/t/p/original/fiVW06jE7z9YnO4trhaMEdclSiC.jpg",
+    uri: "https://image.tmdb.org/t/p/original/fiVW06jE7z9YnO4trhaMEdclSiC.jpg",
   };
 
   return (
@@ -69,7 +70,6 @@ export const Home = ({ navigation, route }: HomeScreenProp) => {
           </View>
           <Slide />
         </ImageBackground>
-        <View style={styles.overlay} />
       </View>
       <FilmItem />
     </ScrollView>
@@ -98,11 +98,8 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     justifyContent: "center",
   },
-  overlay: {
-    // ...StyleSheet.absoluteFillObject,
-    // backgroundColor: "rgba(0, 0, 0, 0.1)",
-    // height: 100,
-    // position: "absolute",
-    // top: "100%",
+  linear: {
+    position: "absolute",
+    bottom: 0,
   },
 });
