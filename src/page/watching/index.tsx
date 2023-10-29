@@ -73,7 +73,7 @@ export interface RcmFilm {
     name: string;
 }
 
-const dataRCM: RcmFilm[] = [
+export const dataRCM: RcmFilm[] = [
     {
         id: 1,
         image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
