@@ -25,6 +25,7 @@ import { Rating } from "react-native-ratings";
 import { RootStackParamList } from "../../../App";
 import { VideoPlayerCustom } from "../../components/video-player";
 import { styles } from "./style";
+import { useRoute } from "@react-navigation/native";
 
 const list = [
   {
@@ -165,7 +166,7 @@ const listEpisode = [1, 2, 3, 4, 5, 6, 7, 8];
 export type WatchingScreenProps = StackScreenProps<RootStackParamList>;
 
 export const Watching = ({ navigation }: WatchingScreenProps) => {
-  const [isHideDesc, setIsHideDesc] = useState<boolean>(true);
+  const [isHideDesc, setIsHideDesc] = useState<boolean>(false);
   const [isSaveMovie, setIsSaveMovie] = useState<boolean>(false);
   const [isLikeMovie, setIsLikeMovie] = useState<boolean>(false);
   const [activeEpisode, setActiveEpisode] = useState<number>(1);
