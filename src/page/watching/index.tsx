@@ -62,104 +62,92 @@ export interface RcmFilm {
   name: string;
 }
 
-const dataRCM: RcmFilm[] = [
-  {
-    id: 1,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 2,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 3,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: false,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 4,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 5,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 6,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 7,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 8,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 9,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 10,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 11,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 12,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-];
+export const dataRCM: RcmFilm[] = [
+    {
+        id: 1,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 2,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 3,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: false,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 4,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 5,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 6,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 7,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 8,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 9,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 10,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 11,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+    {
+        id: 12,
+        image: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
+        isSingle: true,
+        episode: 10,
+        name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
+    },
+  ]
 
 const listEpisode = [1, 2, 3, 4, 5, 6, 7, 8];
 
