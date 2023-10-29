@@ -139,9 +139,11 @@ export const FilmItem = () => {
                   }}
                   style={styleFilm.rcmFilmImageContainer}
                 />
-                <Text style={styleFilm.rcmFilmSub}>
-                  {item.isSingle === true ? "Phim lẻ" : `${item.episode} tập`}
-                </Text>
+                <View style={styleFilm.rcmFilmSub}>
+                  <Text style={styleFilm.rcmFilmSubTitle}>
+                    {item.isSingle === true ? "Phim lẻ" : `${item.episode} tập`}
+                  </Text>
+                </View>
                 <Text
                   numberOfLines={2}
                   ellipsizeMode="tail"
@@ -172,7 +174,7 @@ export const FilmItem = () => {
   );
 };
 
-const styleFilm = StyleSheet.create({
+export const styleFilm = StyleSheet.create({
   sectionContainer: {
     marginVertical: 20,
     marginHorizontal: 10,
@@ -207,14 +209,18 @@ const styleFilm = StyleSheet.create({
 
   rcmFilmSub: {
     position: "absolute",
-    color: Colors.WHITE,
-    fontSize: 10,
-    left: "60%",
+    left: "61%",
     borderTopRightRadius: 5,
     width: width / 8 - 2,
     height: height / 48,
-    textAlign: "center",
     backgroundColor: Colors.ACTIVE,
+  },
+
+  rcmFilmSubTitle: {
+    color: Colors.WHITE,
+    fontSize: 10,
+    textAlign: "center",
+    marginTop: 2,
   },
 
   rcmFilmName: {
