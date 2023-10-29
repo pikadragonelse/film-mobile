@@ -1,15 +1,17 @@
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { SearchBar } from "@rneui/base";
-import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Input, SearchBar } from "@rneui/base";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
+import { View, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import { SearchScreenProps } from "../../page/search";
+// import { styles } from "../../page/watching/style";
 
 export const HeaderSearch = ({ navigation, route }: SearchScreenProps) => {
   const [searchValue, setSearchValue] = useState("");
 
   const searchBarRef = useRef<any>(null);
 
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (searchBarRef.current != null) {
       const unsubscribe = navigation.addListener("transitionEnd", () => {
@@ -22,9 +24,8 @@ export const HeaderSearch = ({ navigation, route }: SearchScreenProps) => {
   return (
     <View style={styles.containerHeader}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <FontAwesomeIcon icon={faAngleLeft} style={styles.backIcon} size={35} />
+        <FontAwesomeIcon icon={faAngleLeft} style={styles.backIcon} size={25} />
       </TouchableOpacity>
-
       <SearchBar
         ref={searchBarRef}
         autoFocus
@@ -50,8 +51,10 @@ const styles = StyleSheet.create({
   },
   searchBarContainer: {
     flex: 1,
-    border: "none",
-    backgroundColor: "black",
+    borderTopColor: "transparent",
+    borderBottomColor: "transparent",
+    backgroundColor: "transparent",
+    position: "relative",
   },
   inputSearch: {
     fontSize: 15,
@@ -59,8 +62,9 @@ const styles = StyleSheet.create({
   searchBar: {
     backgroundColor: "#8686861f",
     height: 40,
+    borderRadius: 6,
   },
   backIcon: {
-    color: "white",
+    color: "silver",
   },
 });
