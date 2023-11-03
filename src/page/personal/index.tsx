@@ -1,6 +1,200 @@
+import { faBell } from "@fortawesome/free-regular-svg-icons";
+import {
+  faCrown,
+  faUser,
+  faList,
+  faClockRotateLeft,
+  faAngleRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { useNavigation } from "@react-navigation/native";
+import { Avatar, Badge } from "@rneui/base";
 import React from "react";
-import { View } from "react-native";
+import { useState } from "react";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { AvatarDefault, Logo } from "../../assets/logo";
+import Colors from "../../constants/Colors";
+import { Button } from "@rneui/themed";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamList } from "../../../App";
 
-export const Personal = () => {
-    return <View></View>;
+export interface User {
+  username: string;
+  email: string;
+  avatar: string;
+}
+interface Item {
+  title: string;
+  icon: any;
+  nextIcon: any;
+}
+export type PersonalScreenProps = StackScreenProps<RootStackParamList>;
+
+export const Personal = ({ navigation, route }: PersonalScreenProps) => {
+  const items: Item[] = [
+    {
+      title: "Thông tin cá nhân",
+      icon: <FontAwesomeIcon icon={faUser} color={"#989898"} />,
+      nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
+    },
+    {
+      title: "Gói VIP",
+      icon: <FontAwesomeIcon icon={faCrown} color={"#989898"} />,
+      nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
+    },
+    {
+      title: "Sưu tập của tôi",
+      icon: <FontAwesomeIcon icon={faList} color={"#989898"} />,
+      nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
+    },
+    {
+      title: "Lịch sử xem",
+      icon: <FontAwesomeIcon icon={faClockRotateLeft} color={"#989898"} />,
+      nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
+    },
+  ];
+  const user: User = {
+    username: "username1",
+    email: "user1@gmail.com",
+    avatar: "https://randomuser.me/api/portraits/women/40.jpg",
+  };
+  const [isLogin, setIsLogin] = useState(false);
+  const handleBadgePress = () => {
+    // navigation.navigate('badge');
+  };
+  return (
+    <View style={styles.containerPesonal}>
+      <View style={styles.headerPesonal}>
+        <Logo />
+        <TouchableOpacity onPress={handleBadgePress}>
+          <FontAwesomeIcon icon={faBell} style={styles.badgeIcon} size={25} />
+          <Badge
+            value={10}
+            badgeStyle={{ backgroundColor: "red", borderColor: "red" }}
+            containerStyle={{ position: "absolute", top: -8, left: 10 }}
+          />
+        </TouchableOpacity>
+      </View>
+      {isLogin ? (
+        <View style={styles.infor}>
+          <Avatar rounded size={60} source={{ uri: user.avatar }} />
+          <Text style={styles.usernameTxt}>{user.username}</Text>
+        </View>
+      ) : (
+        <TouchableOpacity
+          style={styles.infor}
+          onPress={() => navigation.navigate("Login")}
+        >
+          <AvatarDefault />
+          <Text style={styles.usernameTxt}>Đăng nhập/Đăng ký</Text>
+        </TouchableOpacity>
+      )}
+      <TouchableOpacity style={styles.containerVIP}>
+        <View>
+          <Text style={styles.titleVIP}>Ưu đãi thành viên mới</Text>
+          <Text style={styles.title}>Tháng đầu chỉ 19.000đ</Text>
+        </View>
+        <Button
+          radius={"sm"}
+          type="solid"
+          buttonStyle={{
+            backgroundColor: "#f7efdb",
+            height: 31,
+            width: 85,
+            alignItems: "center",
+            elevation: 4,
+          }}
+          titleStyle={{
+            color: "black",
+            fontSize: 12,
+            marginTop: -1,
+          }}
+          onPress={() => {}}
+        >
+          <FontAwesomeIcon icon={faCrown} style={{ marginRight: 5 }} />
+          Đ.ký VIP
+        </Button>
+      </TouchableOpacity>
+      <View style={styles.listItems}>
+        {items.map((item, index) => (
+          <TouchableOpacity key={index} style={styles.item}>
+            <View style={styles.itemTitle}>
+              {item.icon}
+              <Text style={styles.textTitle}>{item.title}</Text>
+            </View>
+            {item.nextIcon}
+          </TouchableOpacity>
+        ))}
+      </View>
+    </View>
+  );
 };
+const styles = StyleSheet.create({
+  containerPesonal: {
+    marginTop: 32,
+    paddingHorizontal: 5,
+  },
+  headerPesonal: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 5,
+    position: "relative",
+    paddingRight: 10,
+  },
+  badgeIcon: {
+    color: Colors.WHITE,
+  },
+  infor: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 5,
+    marginTop: 20,
+  },
+  usernameTxt: {
+    marginLeft: 10,
+    color: Colors.WHITE,
+    fontSize: 15,
+  },
+  containerVIP: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    margin: 5,
+    marginTop: 25,
+    padding: 15,
+    borderRadius: 8,
+    backgroundColor: "#F3C673",
+  },
+  titleVIP: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  title: {
+    fontSize: 13,
+  },
+  listItems: {
+    margin: 5,
+    marginTop: 15,
+  },
+  item: {
+    marginBottom: 10,
+    paddingTop: 14,
+    paddingBottom: 14,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  itemTitle: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  textTitle: {
+    marginLeft: 10,
+    color: Colors.WHITE,
+  },
+});

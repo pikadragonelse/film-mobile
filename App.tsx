@@ -11,11 +11,18 @@ import { HeaderSearch } from "./src/components/header-search";
 import { store } from "./src/redux/store";
 import { Provider } from "react-redux";
 import { Watching } from "./src/page/watching";
+import { Rank } from "./src/page/rank";
+import { Personal } from "./src/page/personal";
+import { Login } from "./src/page/login";
 
 export type RootStackParamList = {
-    BottomTabNav: undefined;
-    Search: undefined;
-    Watching: { filmId: number };
+  BottomTabNav: undefined;
+  Search: undefined;
+  Watching: { filmId: number };
+  Rank: undefined;
+  Personal: undefined;
+  Login: undefined;
+
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -30,29 +37,41 @@ export default function App() {
         },
     };
 
-    return (
-        <Provider store={store}>
-            <NavigationContainer theme={MyTheme}>
-                <Stack.Navigator>
-                    <Stack.Screen
-                        name="BottomTabNav"
-                        component={TabNavigator}
-                        options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                        name="Search"
-                        component={SearchScreen}
-                        options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                        name="Watching"
-                        component={Watching}
-                        options={{ headerShown: false }}
-                    />
-                </Stack.Navigator>
-            </NavigationContainer>
-        </Provider>
-    );
+  return (
+    <Provider store={store}>
+      <NavigationContainer theme={MyTheme}>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="BottomTabNav"
+            component={TabNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Search"
+            component={SearchScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Watching"
+            component={Watching}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Rank"
+            component={Rank}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Personal"
+            component={Personal}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="Login" component={Login} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+  );
+
 }
 
 const useStyles = makeStyles((theme) => ({}));
