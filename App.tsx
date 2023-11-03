@@ -11,11 +11,17 @@ import { HeaderSearch } from "./src/components/header-search";
 import { store } from "./src/redux/store";
 import { Provider } from "react-redux";
 import { Watching } from "./src/page/watching";
+import { Rank } from "./src/page/rank";
+import { Personal } from "./src/page/personal";
+import { Login } from "./src/page/login";
 
 export type RootStackParamList = {
   BottomTabNav: undefined;
   Search: undefined;
   Watching: { filmId: number };
+  Rank: undefined;
+  Personal: undefined;
+  Login: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -49,6 +55,17 @@ export default function App() {
             component={Watching}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="Rank"
+            component={Rank}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Personal"
+            component={Personal}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="Login" component={Login} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
