@@ -22,19 +22,20 @@ export type RootStackParamList = {
   Rank: undefined;
   Personal: undefined;
   Login: undefined;
+
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
-  const styles = useStyles();
-  const MyTheme = {
-    ...DefaultTheme,
-    colors: {
-      ...DefaultTheme.colors,
-      background: "#191919",
-    },
-  };
+    const styles = useStyles();
+    const MyTheme = {
+        ...DefaultTheme,
+        colors: {
+            ...DefaultTheme.colors,
+            background: "#191919",
+        },
+    };
 
   return (
     <Provider store={store}>
@@ -70,6 +71,7 @@ export default function App() {
       </NavigationContainer>
     </Provider>
   );
+
 }
 
 const useStyles = makeStyles((theme) => ({}));
