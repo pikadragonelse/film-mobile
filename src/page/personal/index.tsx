@@ -15,6 +15,8 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { AvatarDefault, Logo } from "../../assets/logo";
 import Colors from "../../constants/Colors";
 import { Button } from "@rneui/themed";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamList } from "../../../App";
 
 export interface User {
   username: string;
@@ -26,28 +28,28 @@ interface Item {
   icon: any;
   nextIcon: any;
 }
+export type PersonalScreenProps = StackScreenProps<RootStackParamList>;
 
-export const Personal = () => {
-  const navigation = useNavigation();
+export const Personal = ({ navigation, route }: PersonalScreenProps) => {
   const items: Item[] = [
     {
       title: "Thông tin cá nhân",
-      icon: <FontAwesomeIcon icon={faUser} color={"#E3E0D7"} />,
+      icon: <FontAwesomeIcon icon={faUser} color={"#989898"} />,
       nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
     },
     {
       title: "Gói VIP",
-      icon: <FontAwesomeIcon icon={faCrown} color={"#E3E0D7"} />,
+      icon: <FontAwesomeIcon icon={faCrown} color={"#989898"} />,
       nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
     },
     {
       title: "Sưu tập của tôi",
-      icon: <FontAwesomeIcon icon={faList} color={"#E3E0D7"} />,
+      icon: <FontAwesomeIcon icon={faList} color={"#989898"} />,
       nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
     },
     {
       title: "Lịch sử xem",
-      icon: <FontAwesomeIcon icon={faClockRotateLeft} color={"#E3E0D7"} />,
+      icon: <FontAwesomeIcon icon={faClockRotateLeft} color={"#989898"} />,
       nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
     },
   ];
@@ -149,6 +151,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginLeft: 5,
+    marginTop: 20,
   },
   usernameTxt: {
     marginLeft: 10,
@@ -161,10 +164,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     margin: 5,
-    marginTop: 10,
+    marginTop: 25,
     padding: 15,
     borderRadius: 8,
-    backgroundColor: "#fbd183",
+    backgroundColor: "#F3C673",
   },
   titleVIP: {
     fontSize: 14,
@@ -179,8 +182,8 @@ const styles = StyleSheet.create({
   },
   item: {
     marginBottom: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 14,
+    paddingBottom: 14,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -191,7 +194,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   textTitle: {
-    marginLeft: 5,
+    marginLeft: 10,
     color: Colors.WHITE,
   },
 });
