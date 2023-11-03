@@ -13,46 +13,46 @@ import { Provider } from "react-redux";
 import { Watching } from "./src/page/watching";
 
 export type RootStackParamList = {
-  BottomTabNav: undefined;
-  Search: undefined;
-  Watching: { filmId: number };
+    BottomTabNav: undefined;
+    Search: undefined;
+    Watching: { filmId: number };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
-  const styles = useStyles();
-  const MyTheme = {
-    ...DefaultTheme,
-    colors: {
-      ...DefaultTheme.colors,
-      background: "#191919",
-    },
-  };
+    const styles = useStyles();
+    const MyTheme = {
+        ...DefaultTheme,
+        colors: {
+            ...DefaultTheme.colors,
+            background: "#191919",
+        },
+    };
 
-  return (
-    <Provider store={store}>
-      <NavigationContainer theme={MyTheme}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="BottomTabNav"
-            component={TabNavigator}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Search"
-            component={SearchScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Watching"
-            component={Watching}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
-  );
+    return (
+        <Provider store={store}>
+            <NavigationContainer theme={MyTheme}>
+                <Stack.Navigator>
+                    <Stack.Screen
+                        name="BottomTabNav"
+                        component={TabNavigator}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Search"
+                        component={SearchScreen}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Watching"
+                        component={Watching}
+                        options={{ headerShown: false }}
+                    />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </Provider>
+    );
 }
 
 const useStyles = makeStyles((theme) => ({}));
