@@ -6,7 +6,13 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { SearchBar } from "@rneui/base";
 import { Button } from "@rneui/themed";
 import React, { useState } from "react";
-import { Dimensions, SafeAreaView, StyleSheet, View } from "react-native";
+import {
+  Dimensions,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { RootStackParamList } from "../../../App";
 import { Logo } from "../../assets/logo";
 import { TabParamList } from "../tab-navigator";
@@ -24,7 +30,13 @@ export const Header = ({ navigation, route }: HomeScreenProp) => {
   return (
     <SafeAreaView>
       <View style={styles.containerHeader}>
-        <Logo />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+        >
+          <Logo />
+        </TouchableOpacity>
         <View>
           <SearchBar
             placeholder="Type Here..."

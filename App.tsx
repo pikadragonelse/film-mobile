@@ -14,6 +14,12 @@ import { Watching } from "./src/page/watching";
 import { Rank } from "./src/page/rank";
 import { Personal } from "./src/page/personal";
 import { Login } from "./src/page/login";
+import { Profile } from "./src/page/personal/profile";
+import { Collection } from "./src/page/personal/collection";
+import { HistoryList } from "./src/page/personal/history";
+import { VIPPackage } from "./src/page/personal/VIP-package";
+import { Lovelist } from "./src/page/personal/lovelist";
+import { Register } from "./src/page/register";
 
 export type RootStackParamList = {
   BottomTabNav: undefined;
@@ -22,20 +28,26 @@ export type RootStackParamList = {
   Rank: undefined;
   Personal: undefined;
   Login: undefined;
-
+  VIPPackage: undefined;
+  Profile: undefined;
+  Collection: undefined;
+  History: undefined;
+  Lovelist: undefined;
+  Home: undefined;
+  Register: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
-    const styles = useStyles();
-    const MyTheme = {
-        ...DefaultTheme,
-        colors: {
-            ...DefaultTheme.colors,
-            background: "#191919",
-        },
-    };
+  const styles = useStyles();
+  const MyTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: "#191919",
+    },
+  };
 
   return (
     <Provider store={store}>
@@ -66,12 +78,45 @@ export default function App() {
             component={Personal}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={Register}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="VIPPackage"
+            component={VIPPackage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Collection"
+            component={Collection}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Lovelist"
+            component={Lovelist}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="History"
+            component={HistoryList}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );
-
 }
 
 const useStyles = makeStyles((theme) => ({}));

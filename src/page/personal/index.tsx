@@ -5,10 +5,10 @@ import {
   faList,
   faClockRotateLeft,
   faAngleRight,
+  faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { useNavigation } from "@react-navigation/native";
-import { Avatar, Badge } from "@rneui/base";
+import { Avatar, Badge, CheckBox } from "@rneui/base";
 import React from "react";
 import { useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
@@ -22,11 +22,18 @@ export interface User {
   username: string;
   email: string;
   avatar: string;
+  genre?: string;
+  birthday?: string;
+  password?: string;
+  passwordtest?: string;
+  newPassword?: string;
+  confirmPassword?: string;
 }
 interface Item {
   title: string;
   icon: any;
   nextIcon: any;
+  onPress?: () => void;
 }
 export type PersonalScreenProps = StackScreenProps<RootStackParamList>;
 
@@ -36,21 +43,31 @@ export const Personal = ({ navigation, route }: PersonalScreenProps) => {
       title: "Thông tin cá nhân",
       icon: <FontAwesomeIcon icon={faUser} color={"#989898"} />,
       nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
+      onPress: () => navigation.navigate("Profile"),
     },
     {
       title: "Gói VIP",
       icon: <FontAwesomeIcon icon={faCrown} color={"#989898"} />,
       nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
+      onPress: () => navigation.navigate("VIPPackage"),
     },
     {
       title: "Sưu tập của tôi",
       icon: <FontAwesomeIcon icon={faList} color={"#989898"} />,
       nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
+      onPress: () => navigation.navigate("Collection"),
+    },
+    {
+      title: "Phim yêu thích",
+      icon: <FontAwesomeIcon icon={faHeart} color={"#989898"} />,
+      nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
+      onPress: () => navigation.navigate("Lovelist"),
     },
     {
       title: "Lịch sử xem",
       icon: <FontAwesomeIcon icon={faClockRotateLeft} color={"#989898"} />,
       nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
+      onPress: () => navigation.navigate("History"),
     },
   ];
   const user: User = {
@@ -65,7 +82,13 @@ export const Personal = ({ navigation, route }: PersonalScreenProps) => {
   return (
     <View style={styles.containerPesonal}>
       <View style={styles.headerPesonal}>
-        <Logo />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+        >
+          <Logo />
+        </TouchableOpacity>
         <TouchableOpacity onPress={handleBadgePress}>
           <FontAwesomeIcon icon={faBell} style={styles.badgeIcon} size={25} />
           <Badge
@@ -109,7 +132,7 @@ export const Personal = ({ navigation, route }: PersonalScreenProps) => {
             fontSize: 12,
             marginTop: -1,
           }}
-          onPress={() => {}}
+          onPress={() => navigation.navigate("VIPPackage")}
         >
           <FontAwesomeIcon icon={faCrown} style={{ marginRight: 5 }} />
           Đ.ký VIP
@@ -117,7 +140,11 @@ export const Personal = ({ navigation, route }: PersonalScreenProps) => {
       </TouchableOpacity>
       <View style={styles.listItems}>
         {items.map((item, index) => (
-          <TouchableOpacity key={index} style={styles.item}>
+          <TouchableOpacity
+            key={index}
+            style={styles.item}
+            onPress={item.onPress}
+          >
             <View style={styles.itemTitle}>
               {item.icon}
               <Text style={styles.textTitle}>{item.title}</Text>

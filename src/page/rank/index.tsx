@@ -4,7 +4,7 @@ import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Tab, TabView } from "@rneui/base";
 import React, { useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, Dimensions } from "react-native";
 import { RootStackParamList } from "../../../App";
 import { FilmItemSearch } from "../../components/film-item-search";
 import { GenreCardRank } from "../../components/genre-card-rank";
@@ -137,10 +137,18 @@ export const Rank = ({ navigation, route }: RankProps) => {
   ];
   const tabContents = [
     <View>
-      <ListItemSearch listFilms={rankMonth} />
+      <ListItemSearch
+        listFilms={rankMonth}
+        navigation={navigation}
+        route={route}
+      />
     </View>,
     <View>
-      <ListItemSearch listFilms={rankWeek} />
+      <ListItemSearch
+        listFilms={rankWeek}
+        navigation={navigation}
+        route={route}
+      />
     </View>,
   ];
   return (
@@ -149,9 +157,10 @@ export const Rank = ({ navigation, route }: RankProps) => {
       <Tab
         value={activeTab}
         onChange={handleChangeTab}
-        dense
         indicatorStyle={{
+          width: 100,
           backgroundColor: Colors.ACTIVE,
+          left: (Dimensions.get("window").width / 1.8 / 2 - 80) / 2,
         }}
         style={styles.tab}
         titleStyle={{
@@ -194,7 +203,7 @@ export const Rank = ({ navigation, route }: RankProps) => {
 const styles = StyleSheet.create({
   containerRank: {
     flex: 1,
-    padding: 16,
+    paddingTop: 16,
     paddingBottom: 0,
   },
 
@@ -209,17 +218,17 @@ const styles = StyleSheet.create({
     color: Colors.WHITE,
   },
   tab: {
-    backgroundColor: "#191919",
+    // backgroundColor: "#191919",
     zIndex: 999,
+    width: Dimensions.get("window").width / 1.6,
   },
   genreListContainer: {
     backgroundColor: "#191919",
     paddingVertical: 10,
-    marginBottom: 20,
     marginLeft: -12,
     zIndex: 999,
   },
   listRank: {
-    marginTop: -80,
+    marginTop: -50,
   },
 });

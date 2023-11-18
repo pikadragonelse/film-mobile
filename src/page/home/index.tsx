@@ -43,33 +43,33 @@ export const Home = ({ navigation, route }: HomeScreenProp) => {
   return (
     <ScrollView style={styles.homeContainer}>
       <View>
-        <ImageBackground
+        {/* <ImageBackground
           source={image}
           resizeMode="cover"
           style={styles.image}
           blurRadius={50}
-        >
-          <Header navigation={navigation} route={route} />
-          <View style={styles.genreListContainer}>
-            <FlatList
-              data={genresData}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(item) => item.id.toString()}
-              ItemSeparatorComponent={() => <ItemSeparator width={20} />}
-              ListHeaderComponent={() => <ItemSeparator width={20} />}
-              ListFooterComponent={() => <ItemSeparator width={20} />}
-              renderItem={({ item }) => (
-                <GenreCard
-                  genreName={item.name}
-                  active={item.name === activeGenre}
-                  onPress={() => setActiveGenre(item.name)}
-                />
-              )}
-            />
-          </View>
-          <Slide />
-        </ImageBackground>
+        > */}
+        <Header navigation={navigation} route={route} />
+        <View style={styles.genreListContainer}>
+          <FlatList
+            data={genresData}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item.id.toString()}
+            ItemSeparatorComponent={() => <ItemSeparator width={20} />}
+            ListHeaderComponent={() => <ItemSeparator width={20} />}
+            ListFooterComponent={() => <ItemSeparator width={20} />}
+            renderItem={({ item }) => (
+              <GenreCard
+                genreName={item.name}
+                active={item.name === activeGenre}
+                onPress={() => setActiveGenre(item.name)}
+              />
+            )}
+          />
+        </View>
+        <Slide />
+        {/* </ImageBackground> */}
       </View>
       <FilmItem />
     </ScrollView>
