@@ -4,9 +4,13 @@ import { Image } from "@rneui/themed";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faStar, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@rneui/base";
-import { useNavigation } from "@react-navigation/native";
+import { CompositeScreenProps, useNavigation } from "@react-navigation/native";
 import Colors from "../../constants/Colors";
 import { ScrollView } from "@nandorojo/anchor";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { TabParamList } from "../tab-navigator";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamList } from "../../../App";
 
 export interface FilmItemSearch {
   id: number;
@@ -23,12 +27,18 @@ export interface FilmItemSearch {
 }
 export type FilmItemSearchProps = {
   data: FilmItemSearch;
-};
+} & CompositeScreenProps<
+  BottomTabScreenProps<TabParamList>,
+  StackScreenProps<RootStackParamList>
+>;
 const { width, height } = Dimensions.get("window");
 
-export const FilmItemSearch = ({ data }: FilmItemSearchProps) => {
+export const FilmItemSearch = ({
+  data,
+  navigation,
+  route,
+}: FilmItemSearchProps) => {
   const [expanded, setExpanded] = useState(false);
-  const navigation = useNavigation();
   return (
     <ScrollView style={styles.containerItemSearch}>
       <View style={styles.containerItem}>
@@ -70,7 +80,7 @@ export const FilmItemSearch = ({ data }: FilmItemSearchProps) => {
                   onPress={() => {
                     navigation.navigate("Watching", {
                       filmId: data.id,
-                      scrollToSection: "detailDesc",
+                      // scrollToSection: "detailDesc",
                     });
                   }}
                 >
