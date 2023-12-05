@@ -18,11 +18,14 @@ import { GenreCard } from "../../components/genre-card";
 import { useState, useEffect } from "react";
 import { FilmItem } from "../../components/film-item";
 import { LinearGradient } from "expo-linear-gradient";
+import { request } from "../../utils/request";
+import { Film } from "../../components/model/film";
 
 type HomeScreenProp = CompositeScreenProps<
   BottomTabScreenProps<TabParamList>,
   StackScreenProps<RootStackParamList>
 >;
+
 const Genres = ["All", "Action", "Comedy", "Romance", "Horror", "Sci-Fi"];
 
 export const Home = ({ navigation, route }: HomeScreenProp) => {
@@ -39,6 +42,20 @@ export const Home = ({ navigation, route }: HomeScreenProp) => {
   const image = {
     uri: "https://image.tmdb.org/t/p/original/fiVW06jE7z9YnO4trhaMEdclSiC.jpg",
   };
+  //gọi api
+  const [trendingData, setTrendingData] = useState<Film[]>([]);
+  const fetchTrending = async () => {
+    try {
+      const response = await request.get("movies");
+      const data = response.data;
+      setTrendingData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchTrending();
+  }, []);
 
   return (
     <ScrollView style={styles.homeContainer}>
@@ -71,7 +88,12 @@ export const Home = ({ navigation, route }: HomeScreenProp) => {
         <Slide />
         {/* </ImageBackground> */}
       </View>
-      <FilmItem />
+      <FilmItem
+        title="Phim hot"
+        dataRCM={trendingData}
+        navigation={navigation}
+        route={route}
+      />
     </ScrollView>
   );
 };

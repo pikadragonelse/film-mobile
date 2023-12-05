@@ -11,18 +11,19 @@ import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { TabParamList } from "../tab-navigator";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../App";
+import moment from "moment";
 
 export interface FilmItemSearch {
   id: number;
-  poster: string;
+  posterURL: string;
   isSeries?: boolean;
-  yearOfManufacture: number;
-  category: Array<string>;
+  releaseDate: string;
+  category?: Array<string>;
   episode?: number;
-  evaluate: number;
+  averageRating: number;
   nation: string;
-  desc: string;
-  name: string;
+  description: string;
+  title: string;
   vip: boolean;
 }
 export type FilmItemSearchProps = {
@@ -43,7 +44,7 @@ export const FilmItemSearch = ({
     <ScrollView style={styles.containerItemSearch}>
       <View style={styles.containerItem}>
         <View style={styles.posterItem}>
-          <Image source={{ uri: data.poster }} style={styles.poster} />
+          <Image source={{ uri: data.posterURL }} style={styles.poster} />
           <View style={styles.filmSub}>
             <Text style={styles.filmSubText}>
               {data.vip === true ? (
@@ -57,30 +58,35 @@ export const FilmItemSearch = ({
           </View>
         </View>
         <View style={styles.content}>
-          <Text style={styles.name}>{data.name}</Text>
+          <Text style={styles.name}>{data.title}</Text>
           <View style={styles.evaluateContent}>
             <FontAwesomeIcon
               style={styles.starIcon}
               icon={faStar}
               color={"#fbbc04"}
             />
-            <Text style={styles.evaluate}>{data.evaluate}</Text>
+            <Text style={styles.evaluate}>{data.averageRating}</Text>
           </View>
-          <Text style={styles.info}>
-            {data.yearOfManufacture} | {data.nation} |{" "}
-            {data.category.join(", ")}
-          </Text>
+          {data.category ? (
+            <Text style={styles.info}>
+              {moment(data.releaseDate).format("YYYY")} | {data.nation} |{" "}
+              {data.category.join(", ")}
+            </Text>
+          ) : (
+            <Text style={styles.info}>
+              {moment(data.releaseDate).format("YYYY")} | {data.nation}
+            </Text>
+          )}
           <Text style={styles.desc}>
-            {expanded ? data.desc : data.desc.slice(0, 50)}
-            {data.desc.length > 50 && !expanded && (
+            {expanded ? data.description : data.description.slice(0, 50)}
+            {data.description.length > 50 && !expanded && (
               <Text>
                 ...
                 <Text
                   style={styles.readMore}
                   onPress={() => {
                     navigation.navigate("Watching", {
-                      filmId: data.id,
-                      // scrollToSection: "detailDesc",
+                      movieId: data.id,
                     });
                   }}
                 >
@@ -104,7 +110,9 @@ export const FilmItemSearch = ({
                 marginTop: -1,
               }}
               onPress={() => {
-                navigation.navigate("Watching", { filmId: data.id });
+                navigation.navigate("Watching", {
+                  movieId: data.id,
+                });
               }}
             >
               <FontAwesomeIcon

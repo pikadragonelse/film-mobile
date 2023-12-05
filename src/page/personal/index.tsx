@@ -17,6 +17,8 @@ import Colors from "../../constants/Colors";
 import { Button } from "@rneui/themed";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../App";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 export interface User {
   username: string;
@@ -75,7 +77,7 @@ export const Personal = ({ navigation, route }: PersonalScreenProps) => {
     email: "user1@gmail.com",
     avatar: "https://randomuser.me/api/portraits/women/40.jpg",
   };
-  const [isLogin, setIsLogin] = useState(false);
+  const isUserLogged = useSelector((state: RootState) => state.user.isLogin);
   const handleBadgePress = () => {
     // navigation.navigate('badge');
   };
@@ -98,7 +100,7 @@ export const Personal = ({ navigation, route }: PersonalScreenProps) => {
           />
         </TouchableOpacity>
       </View>
-      {isLogin ? (
+      {isUserLogged ? (
         <View style={styles.infor}>
           <Avatar rounded size={60} source={{ uri: user.avatar }} />
           <Text style={styles.usernameTxt}>{user.username}</Text>

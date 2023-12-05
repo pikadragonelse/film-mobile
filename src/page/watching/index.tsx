@@ -10,22 +10,32 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Avatar, Image, ListItem } from "@rneui/themed";
-import React, { useState } from "react";
+import { Avatar, Button, Image, Input, ListItem } from "@rneui/themed";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   ScrollView,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import Collapsible from "react-native-collapsible";
 import { Rating } from "react-native-ratings";
 import { RootStackParamList } from "../../../App";
+import { FilmItem } from "../../components/film-item";
+import { ListComment } from "../../components/list-cmt";
+import { Film } from "../../components/model/film";
+import { TabParamList } from "../../components/tab-navigator";
 import { VideoPlayerCustom } from "../../components/video-player";
+import Colors from "../../constants/Colors";
+import { request } from "../../utils/request";
 import { styles } from "./style";
 
+const moment = require("moment");
 const list = [
   {
     name: "Amy Farha 123123",
@@ -52,125 +62,188 @@ const list = [
     subtitle: "Vice Chairman",
   },
 ];
-
-export interface RcmFilm {
-  id: number;
-  image: string;
-  isSingle: boolean;
-  episode: number;
-  name: string;
+export interface UserProps {
+  user_id: number;
+  gender: string;
+  avatar_url: string;
 }
+export interface listCommentsProps {
+  id: number;
+  avatar: string;
+  username: string;
+  createdAt: string;
+  updatedAt?: string;
+  content: string;
+  numLike: number;
+  user?: UserProps;
+  subcomments?: Array<listCommentsProps>;
+}
+interface Episodes {
+  episodeId?: number;
+  movieId?: number;
+  title: string;
+  releaseDate?: string;
+  posterURL?: string;
+  movieURL: string;
+  numView: string;
+  duration: number;
+  episodeNo?: number;
+  titleFilm?: string;
+}
+export interface CurrentUser {
+  username: string;
+  email: string;
+  avatar: string;
+}
+const currentUser = {
+  username: "username1",
+  email: "user1@gmail.com",
+  avatar: "https://randomuser.me/api/portraits/women/40.jpg",
+};
 
-export const dataRCM: RcmFilm[] = [
-  {
-    id: 1,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 2,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 3,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: false,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 4,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 5,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 6,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 7,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 8,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 9,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 10,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 11,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-  {
-    id: 12,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: true,
-    episode: 10,
-    name: "aksjdfkadsfkadskajdsfk;aldsfjakldsjakls;djfa;lkdsjfa",
-  },
-];
+export type WatchingScreenProps = CompositeScreenProps<
+  BottomTabScreenProps<TabParamList>,
+  StackScreenProps<RootStackParamList>
+>;
 
-const listEpisode = [1, 2, 3, 4, 5, 6, 7, 8];
+export const Watching = ({ navigation, route }: WatchingScreenProps) => {
+  //api bộ phim
+  const defaultFilm = {
+    movieId: 0,
+    title: "",
+    description: "",
+    releaseDate: "",
+    nation: "",
+    posterURL: "",
+    trailerURL: "",
+    averageRating: "",
+    episodeNum: 0,
+    level: 0,
+    genres: [],
+    actors: [],
+    episodes: [],
+  };
+  const defaultEpisode = {
+    episodeId: 0,
+    movieId: 0,
+    title: "",
+    releaseDate: "",
+    posterURL: "",
+    movieURL: "",
+    numView: "",
+    duration: 0,
+    episodeNo: 0,
+  };
+  const [watchingData, setWatchingData] = useState<Film>(defaultFilm);
+  const [episodeId, setEpisodeId] = useState<number | undefined>(undefined);
+  const { movieId } = route.params || {
+    movieId: 0,
+  };
 
-export type WatchingScreenProps = StackScreenProps<RootStackParamList>;
+  const fetchData = async () => {
+    try {
+      const response = await request.get(`movies/${movieId}`);
+      const data = response.data;
+      setEpisodeId(
+        data.episodes.length > 0 ? data.episodes[0].episode_id : undefined
+      );
+      setActiveEpisode(episodeId);
+      setWatchingData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, [movieId]);
+  // api từng tập
+  const [dataEpisode, setDataEpisode] = useState<Episodes>(defaultEpisode);
+  const fetchDataEpisode = async () => {
+    try {
+      const response = await request.get(`episode/${episodeId}`);
+      const data = response.data;
+      if (watchingData.movieId !== data.movieId) {
+        await fetchData();
+      }
+      setDataEpisode(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchDataEpisode();
+  }, [episodeId]);
+  //api cmt
+  const listComment = [
+    {
+      id: 0,
+      avatar: "",
+      username: "",
+      createdAt: "",
+      content: "",
+      numLike: 0,
+      subcomments: [],
+    },
+  ];
+  const [listComments, setListComments] =
+    useState<Array<listCommentsProps>>(listComment);
+  const fetchDataCmt = async () => {
+    try {
+      const response = await request.get(`episode/${episodeId}/comments`);
+      const data = response.data.comments;
+      setListComments(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchDataCmt();
+  }, [episodeId]);
 
-export const Watching = ({ navigation }: WatchingScreenProps) => {
+  const year = moment(watchingData.releaseDate).format("YYYY");
+  const genres = watchingData?.genres.map((genre) => genre.name + " ") || [];
+  // const actor = watchingData?.actors
+  //   .map((actor) => actor.name.concat(", "))
+  //   .concat("...") || [""];
   const [isHideDesc, setIsHideDesc] = useState<boolean>(false);
   const [isSaveMovie, setIsSaveMovie] = useState<boolean>(false);
   const [isLikeMovie, setIsLikeMovie] = useState<boolean>(false);
-  const [activeEpisode, setActiveEpisode] = useState<number>(1);
+  const [activeEpisode, setActiveEpisode] = useState<number | undefined>(
+    episodeId
+  );
+  const scrollViewRef = useRef<ScrollView>(null);
+  const [showPostCmt, setShowPostCmt] = useState(false);
 
-  const [index, setIndex] = useState(0);
+  const handleScroll = (event: any) => {
+    const { y } = event.nativeEvent.contentOffset;
+    setShowPostCmt(y > 700);
+  };
+  const [commentText, setCommentText] = useState("");
+
+  const handleSubmitComment = () => {
+    console.log("comment:", commentText);
+    setCommentText("");
+  };
+  //gọi api
+  const [trendingData, setTrendingData] = useState<Film[]>([]);
+  const fetchTrending = async () => {
+    try {
+      const response = await request.get("movies/home/trending?", {
+        params: {
+          page: 1,
+          pageSize: 1,
+        },
+      });
+      const data = response.data;
+      setTrendingData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTrending();
+  }, []);
 
   return (
     <>
@@ -189,10 +262,17 @@ export const Watching = ({ navigation }: WatchingScreenProps) => {
             size={30}
           />
         </TouchableOpacity>
-        <VideoPlayerCustom sourceURI="https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4" />
-        <ScrollView>
+        {/* <VideoPlayerCustom sourceURI={dataEpisode.movieURL} /> */}
+        {/* <VideoPlayerCustom sourceURI={watchingData.trailerURL} /> */}
+        <ScrollView
+          ref={scrollViewRef}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+        >
           <View style={styles.containerInfo}>
-            <Text style={styles.nameFilm}>One piece</Text>
+            <Text style={styles.nameFilm}>
+              {watchingData.title}-{dataEpisode.title}
+            </Text>
             <View style={styles.ratingContainer}>
               <Rating
                 ratingColor="red"
@@ -201,7 +281,9 @@ export const Watching = ({ navigation }: WatchingScreenProps) => {
                 imageSize={15}
                 tintColor="#191919"
               />
-              <Text style={styles.ratingText}>3.5/5</Text>
+              <Text style={styles.ratingText}>
+                {watchingData.averageRating}
+              </Text>
             </View>
             <View style={styles.hashtagContainer}>
               <Text
@@ -210,16 +292,16 @@ export const Watching = ({ navigation }: WatchingScreenProps) => {
                   paddingLeft: 0,
                 }}
               >
-                2023
+                {year}
               </Text>
-              <Text style={styles.hashtagItem}>Phụ đề</Text>
+              <Text style={styles.hashtagItem}>{genres}</Text>
               <Text
                 style={{
                   ...styles.hashtagItem,
                   borderRightWidth: 0,
                 }}
               >
-                Trung Quốc đại lục
+                {watchingData.nation}
               </Text>
               <TouchableOpacity
                 style={styles.infoIcon}
@@ -232,18 +314,7 @@ export const Watching = ({ navigation }: WatchingScreenProps) => {
               </TouchableOpacity>
             </View>
             <Collapsible collapsed={isHideDesc}>
-              <Text style={styles.desc}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged. It was
-                popularised in the 1960s with the release of Letraset sheets
-                containing Lorem Ipsum passages, and more recently with desktop
-                publishing software like Aldus PageMaker including versions of
-                Lorem Ipsum.
-              </Text>
+              <Text style={styles.desc}>{watchingData.description}</Text>
             </Collapsible>
           </View>
           <ScrollView
@@ -312,8 +383,14 @@ export const Watching = ({ navigation }: WatchingScreenProps) => {
               Cập nhật vào 20h Chủ Nhật hàng tuần
             </Text>
             <ScrollView horizontal style={styles.sectionContent}>
-              {listEpisode.map((episode, index) => (
-                <TouchableOpacity onPress={() => setActiveEpisode(episode)}>
+              {watchingData.episodes.map((episode, index) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    setActiveEpisode(episode.episode_id);
+                    setEpisodeId(episode.episode_id);
+                  }}
+                  key={episode.episode_id}
+                >
                   <Text
                     style={{
                       ...styles.sectionEpisode,
@@ -321,10 +398,11 @@ export const Watching = ({ navigation }: WatchingScreenProps) => {
                         index === 0
                           ? 0
                           : styles.sectionEpisode.marginHorizontal,
-                      color: activeEpisode === episode ? "red" : "white",
+                      color:
+                        activeEpisode === episode.episode_id ? "red" : "white",
                     }}
                   >
-                    {episode}
+                    {episode.title}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -333,44 +411,46 @@ export const Watching = ({ navigation }: WatchingScreenProps) => {
           <View style={styles.sectionContainer}>
             <Text style={styles.sectionTitle}>Phim đề xuất</Text>
             <View style={styles.rcmContainer}>
-              {dataRCM.map((item, index) => (
-                <TouchableOpacity>
-                  <View
-                    style={{
-                      ...styles.rcmFilmItem,
-                    }}
-                  >
-                    <Image
-                      source={{
-                        uri: item.image,
-                      }}
-                      style={styles.rcmFilmImageContainer}
-                    />
-                    <Text
-                      numberOfLines={2}
-                      ellipsizeMode="tail"
-                      style={styles.rcmFilmName}
-                    >
-                      {item.name}
-                    </Text>
-                    <Text style={styles.rcmFilmSub}>
-                      {item.isSingle === true
-                        ? "Phim lẻ"
-                        : `${item.episode} tập`}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-              {dataRCM.length % 3 !== 0 ? (
-                <View
-                  style={{
-                    ...styles.rcmFilmItem,
-                  }}
-                ></View>
-              ) : undefined}
+              <FilmItem
+                dataRCM={trendingData}
+                navigation={navigation}
+                route={route}
+              />
             </View>
           </View>
+          <View>
+            <ListComment listComment={listComments} />
+          </View>
         </ScrollView>
+        {showPostCmt && (
+          <View style={styles.postCmt}>
+            <Avatar
+              rounded
+              size={40}
+              source={{ uri: currentUser.avatar }}
+              avatarStyle={{ paddingTop: 5 }}
+            />
+            <TextInput
+              placeholder="Post a comment"
+              value={commentText}
+              onChangeText={(text) => setCommentText(text)}
+              style={styles.postText}
+            />
+
+            <Button
+              buttonStyle={{
+                backgroundColor: "transparent",
+                alignItems: "center",
+              }}
+              titleStyle={{
+                color: Colors.ACTIVE,
+              }}
+              onPress={handleSubmitComment}
+            >
+              Submit
+            </Button>
+          </View>
+        )}
       </View>
     </>
   );

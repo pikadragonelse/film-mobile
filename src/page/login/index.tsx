@@ -10,10 +10,16 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  KeyboardAvoidingView,
+  AsyncStorage,
 } from "react-native";
+import { useDispatch } from "react-redux";
 import { RootStackParamList } from "../../../App";
 import { Logo } from "../../assets/logo";
 import Colors from "../../constants/Colors";
+import { setIslogin, setUsername } from "../../redux/reducer/isLogin";
+import { request } from "../../utils/request";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type LoginScreenProp = StackScreenProps<RootStackParamList>;
 export const Login = ({ navigation, route }: LoginScreenProp) => {
@@ -22,8 +28,60 @@ export const Login = ({ navigation, route }: LoginScreenProp) => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+  const handleChange = (name: string, value: string) => {
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+  const saveUserDataToStorage = async (userData: any) => {
+    try {
+      const expirationTime = new Date().getTime() + 24 * 60 * 60 * 1000; // 1 day
+      const dataToStore = {
+        ...userData,
+        expires: expirationTime,
+      };
+
+      await AsyncStorage.setItem("userData", JSON.stringify(dataToStore));
+    } catch (error) {
+      console.error("Lỗi khi lưu thông tin người dùng:", error);
+    }
+  };
+  const handleLogin = async () => {
+    try {
+      if (!formData.username || !formData.password) {
+        alert("Vui lòng nhập username và mật khẩu.");
+        return;
+      }
+      const loginData = {
+        username: formData.username,
+        password: formData.password,
+      };
+      const response = await request.post("auth/login", loginData);
+
+      console.log("Login successful:", response.data);
+      dispatch(setIslogin(true));
+      if (loginData.username) {
+        dispatch(setUsername(loginData.username));
+        await saveUserDataToStorage({ username: loginData.username });
+      }
+
+      alert("Đăng nhập tài khoản thành công");
+      navigation.navigate("Home");
+    } catch (error) {
+      console.error(
+        "Login failed:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+  const dispatch = useDispatch();
   return (
-    <ScrollView>
+    <KeyboardAvoidingView>
       <View style={styles.containerLogin}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <FontAwesomeIcon
@@ -51,6 +109,8 @@ export const Login = ({ navigation, route }: LoginScreenProp) => {
             style={styles.usernameText}
             placeholder="Tên đăng nhập"
             placeholderTextColor="grey"
+            onChangeText={(text) => handleChange("username", text)}
+            value={formData.username}
           />
         </View>
         <View style={styles.password}>
@@ -59,6 +119,8 @@ export const Login = ({ navigation, route }: LoginScreenProp) => {
             placeholder="Mật khẩu"
             placeholderTextColor="grey"
             secureTextEntry={!showPassword}
+            onChangeText={(text) => handleChange("password", text)}
+            value={formData.password}
           />
           <TouchableOpacity
             onPress={togglePasswordVisibility}
@@ -76,7 +138,7 @@ export const Login = ({ navigation, route }: LoginScreenProp) => {
             />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.btnLogin}>
+        <TouchableOpacity style={styles.btnLogin} onPress={handleLogin}>
           <Text style={styles.loginText}>Đăng nhập</Text>
         </TouchableOpacity>
       </View>
@@ -91,7 +153,7 @@ export const Login = ({ navigation, route }: LoginScreenProp) => {
           <Text style={styles.new}>Đăng ký ngay</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

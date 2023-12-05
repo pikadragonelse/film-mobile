@@ -1,122 +1,29 @@
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
-
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { StackScreenProps } from "@react-navigation/stack";
 import { Image } from "@rneui/themed";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { Dimensions } from "react-native";
+import { RootStackParamList } from "../../../App";
 import Colors from "../../constants/Colors";
-interface RcmFilm {
-  id: number;
-  image: string;
-  isSingle: boolean;
-  episode: number;
-  name: string;
-}
+import { Film } from "../model/film";
+import { CompositeScreenProps } from "@react-navigation/native";
+import { TabParamList } from "../tab-navigator";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
-// interface IndexProps {
-//   item: RcmFilm;
-// }
+type IndexProps = {
+  title?: string;
+  dataRCM: Array<Film>;
+} & CompositeScreenProps<
+  BottomTabScreenProps<TabParamList>,
+  StackScreenProps<RootStackParamList>
+>;
+
 const { width, height } = Dimensions.get("window");
 
-const dataRCM: RcmFilm[] = [
-  {
-    id: 1,
-    image:
-      "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
-    isSingle: true,
-    episode: 10,
-    name: "Vân Chi Vũ",
-  },
-  {
-    id: 2,
-    image:
-      "https://image.tmdb.org/t/p/original/oE7xtGDqZnr7tFHfwb8oM9iRW6H.jpg",
-    isSingle: true,
-    episode: 10,
-    name: "Vân Chi Vũ",
-  },
-  {
-    id: 3,
-    image:
-      "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQUhXY9o56Aexeb2XZ1ik04MmoqaC131vNxQsuANkLROs3JxlN",
-    isSingle: false,
-    episode: 30,
-    name: "Vân Chi Vũ",
-  },
-  {
-    id: 4,
-    image: "https://image.tmdb.org/t/p/original/NNxYkU70HPurnNCSiCjYAmacwm.jpg",
-    isSingle: false,
-    episode: 10,
-    name: "Vân Chi Vũ",
-  },
-  {
-    id: 5,
-    image:
-      "https://image.tmdb.org/t/p/original/A4j8S6moJS2zNtRR8oWF08gRnL5.jpg",
-    isSingle: true,
-    episode: 15,
-    name: "Vân Chi Vũ",
-  },
-  {
-    id: 6,
-    image:
-      "https://image.tmdb.org/t/p/original/1eKWqTHp4OgKdx1QX1O9LxKHr1M.jpg",
-    isSingle: false,
-    episode: 15,
-    name: "Vân Chi Vũ",
-  },
-  {
-    id: 7,
-    image:
-      "https://image.tmdb.org/t/p/original/A4j8S6moJS2zNtRR8oWF08gRnL5.jpg",
-    isSingle: true,
-    episode: 10,
-    name: "Vân Chi Vũ",
-  },
-  {
-    id: 8,
-    image:
-      "https://image.tmdb.org/t/p/original/1eKWqTHp4OgKdx1QX1O9LxKHr1M.jpg",
-    isSingle: true,
-    episode: 10,
-    name: "Vân Chi Vũ",
-  },
-  {
-    id: 9,
-    image: "https://image.tmdb.org/t/p/original/NNxYkU70HPurnNCSiCjYAmacwm.jpg",
-    isSingle: false,
-    episode: 10,
-    name: "Vân Chi Vũ",
-  },
-  {
-    id: 10,
-    image:
-      "https://image.tmdb.org/t/p/original/qA5kPYZA7FkVvqcEfJRoOy4kpHg.jpg",
-    isSingle: false,
-    episode: 20,
-    name: "Vân Chi Vũ",
-  },
-  {
-    id: 11,
-    image: "https://image.tmdb.org/t/p/original/NNxYkU70HPurnNCSiCjYAmacwm.jpg",
-    isSingle: false,
-    episode: 10,
-    name: "Vân Chi Vũ",
-  },
-  {
-    id: 12,
-    image:
-      "https://image.tmdb.org/t/p/original/fiVW06jE7z9YnO4trhaMEdclSiC.jpg",
-    isSingle: false,
-    episode: 20,
-    name: "Vân Chi Vũ",
-  },
-];
-export const FilmItem = () => {
+export const FilmItem = ({ title, dataRCM, navigation, route }: IndexProps) => {
   const [showAllFilms, setShowAllFilms] = useState(false);
-
   const toggleShowAllFilms = () => {
     setShowAllFilms(!showAllFilms);
   };
@@ -124,36 +31,43 @@ export const FilmItem = () => {
   return (
     <View style={styleFilm.sectionContainer}>
       <Text style={styleFilm.sectionTitle}>
-        <Text> Phim đề xuất</Text>
+        <Text> {title}</Text>
       </Text>
 
       <View style={styleFilm.rcmContainer}>
-        {dataRCM
-          .slice(0, showAllFilms ? dataRCM.length : 9)
-          .map((item, index) => (
-            <TouchableOpacity key={item.id}>
-              <View style={styleFilm.rcmFilmItem}>
-                <Image
-                  source={{
-                    uri: item.image,
-                  }}
-                  style={styleFilm.rcmFilmImageContainer}
-                />
-                <View style={styleFilm.rcmFilmSub}>
-                  <Text style={styleFilm.rcmFilmSubTitle}>
-                    {item.isSingle === true ? "Phim lẻ" : `${item.episode} tập`}
-                  </Text>
-                </View>
-                <Text
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
-                  style={styleFilm.rcmFilmName}
-                >
-                  {item.name}
+        {dataRCM.slice(0, showAllFilms ? dataRCM.length : 9).map((item) => (
+          <TouchableOpacity
+            key={item.movieId}
+            onPress={() => {
+              navigation.navigate("Watching", {
+                movieId: item.movieId,
+              });
+            }}
+          >
+            <View style={styleFilm.rcmFilmItem}>
+              <Image
+                source={{
+                  uri: item.posterURL,
+                }}
+                style={styleFilm.rcmFilmImageContainer}
+              />
+              <View style={styleFilm.rcmFilmSub}>
+                <Text style={styleFilm.rcmFilmSubTitle}>
+                  {item.isSingle === true
+                    ? "Phim lẻ"
+                    : `${item.episodeNum} tập`}
                 </Text>
               </View>
-            </TouchableOpacity>
-          ))}
+              <Text
+                numberOfLines={2}
+                ellipsizeMode="tail"
+                style={styleFilm.rcmFilmName}
+              >
+                {item.title}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ))}
       </View>
       {dataRCM.length > 9 && (
         <TouchableOpacity

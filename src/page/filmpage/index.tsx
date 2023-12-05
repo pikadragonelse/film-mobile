@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -17,8 +17,10 @@ import { RootStackParamList } from "../../../App";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Tab, TabView, Image } from "@rneui/themed";
 import { FilterFilm, Section } from "../../components/filter-film";
-import { dataRCM } from "../watching";
 import { styles as stylesWatching } from "../watching/style";
+import { FilmItem } from "../../components/film-item";
+import { request } from "../../utils/request";
+import { Film } from "../../components/model/film";
 
 type FilmScreenProp = CompositeScreenProps<
   BottomTabScreenProps<TabParamList>,
@@ -63,13 +65,26 @@ const sections: Section[] = [
   { index: 3, title: "Hello", data: [listOption3] },
 ];
 
-export const Film = ({ navigation, route }: FilmScreenProp) => {
+export const FilmPage = ({ navigation, route }: FilmScreenProp) => {
   const [index, setIndex] = useState(0);
   const [activeNation, setActiveNation] = useState<number>(1);
   const [activeGenre, setActiveGenre] = useState<number>(1);
   const [activeFee, setActiveFee] = useState<number>(1);
   const [activeYear, setActiveYear] = useState<number>(1);
-
+  //gọi api
+  const [trendingData, setTrendingData] = useState<Film[]>([]);
+  const fetchTrending = async () => {
+    try {
+      const response = await request.get("movies/home/trending");
+      const data = response.data;
+      setTrendingData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchTrending();
+  }, []);
   return (
     <>
       <Header navigation={navigation} route={route} />
@@ -112,41 +127,12 @@ export const Film = ({ navigation, route }: FilmScreenProp) => {
                 marginTop: 20,
               }}
             >
-              {dataRCM.map((item, index) => (
-                <TouchableOpacity>
-                  <View
-                    style={{
-                      ...stylesWatching.rcmFilmItem,
-                    }}
-                  >
-                    <Image
-                      source={{
-                        uri: item.image,
-                      }}
-                      style={stylesWatching.rcmFilmImageContainer}
-                    />
-                    <Text
-                      numberOfLines={2}
-                      ellipsizeMode="tail"
-                      style={stylesWatching.rcmFilmName}
-                    >
-                      {item.name}
-                    </Text>
-                    <Text style={stylesWatching.rcmFilmSub}>
-                      {item.isSingle === true
-                        ? "Phim lẻ"
-                        : `${item.episode} tập`}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-              {dataRCM.length % 3 !== 0 ? (
-                <View
-                  style={{
-                    ...stylesWatching.rcmFilmItem,
-                  }}
-                ></View>
-              ) : undefined}
+              <FilmItem
+                title="Phim hot"
+                dataRCM={trendingData}
+                navigation={navigation}
+                route={route}
+              />
             </View>
           </ScrollView>
         </TabView.Item>

@@ -10,12 +10,14 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
 import DatePicker from "@react-native-community/datetimepicker";
 import { RootStackParamList } from "../../../App";
 import { Logo } from "../../assets/logo";
 import Colors from "../../constants/Colors";
 import DropDownPicker from "react-native-dropdown-picker";
+import { request } from "../../utils/request";
 
 export type RegisterScreenProp = StackScreenProps<RootStackParamList>;
 export const Register = ({ navigation, route }: RegisterScreenProp) => {
@@ -55,15 +57,35 @@ export const Register = ({ navigation, route }: RegisterScreenProp) => {
       [name]: value,
     });
   };
-  const handleRegistration = () => {
-    if (formData.password !== formData.confirm) {
-      alert("Mật khẩu và xác nhận mật khẩu không khớp");
-      return;
+
+  const handleRegistration = async () => {
+    try {
+      if (formData.password !== formData.confirm) {
+        alert("Mật khẩu và xác nhận mật khẩu không khớp");
+        return;
+      }
+      const registrationData = {
+        email: formData.email,
+        dateOfBirth: formData.birthday,
+        gender: formData.gender,
+        username: formData.username,
+        password: formData.password,
+      };
+      const response = await request.post("auth/register", registrationData);
+
+      console.log("Registration successful:", response.data);
+      alert("Đăng kí tài khoản thành công");
+      navigation.navigate("Login");
+    } catch (error) {
+      console.error(
+        "Registration failed:",
+        error.response ? error.response.data : error.message
+      );
     }
-    console.log(formData);
   };
+
   return (
-    <ScrollView>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
       <View style={styles.containerLogin}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <FontAwesomeIcon
@@ -247,7 +269,7 @@ export const Register = ({ navigation, route }: RegisterScreenProp) => {
           <Text style={styles.new}>Đăng nhập ngay</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
