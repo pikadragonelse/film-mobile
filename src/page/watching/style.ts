@@ -75,8 +75,8 @@ export const styles = StyleSheet.create({
     },
     sectionEpisode: {
         color: "white",
-        paddingVertical: 25,
-        paddingHorizontal: 30,
+        paddingVertical: 10,
+        paddingHorizontal: 25,
         backgroundColor: "#333333",
         borderRadius: 5,
         marginHorizontal: 5,
@@ -85,7 +85,7 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent: "space-between",
-        marginTop: 5,
+        marginTop: -40,
     },
     rcmFilmItem: {
         position: "relative",
@@ -105,4 +105,18 @@ export const styles = StyleSheet.create({
     rcmFilmName: {
         color: "white",
     },
+    postCmt:{
+        flexDirection: 'row',
+        width: '100%',
+        marginBottom:-30,
+        marginTop:10,
+    },
+    postText:{
+        color:'white',
+        width:'70%',
+        backgroundColor:'#202020',
+        borderRadius:5,
+        marginLeft:7,
+        marginRight:7,
+    }
 });

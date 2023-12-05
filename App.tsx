@@ -7,7 +7,6 @@ import { Icon, makeStyles } from "@rneui/themed";
 import { TabNavigator } from "./src/components/tab-navigator";
 import { Header } from "./src/components/header";
 import { SearchScreen } from "./src/page/search";
-import { HeaderSearch } from "./src/components/header-search";
 import { store } from "./src/redux/store";
 import { Provider } from "react-redux";
 import { Watching } from "./src/page/watching";
@@ -24,7 +23,7 @@ import { Register } from "./src/page/register";
 export type RootStackParamList = {
   BottomTabNav: undefined;
   Search: undefined;
-  Watching: { filmId: number };
+  Watching: { movieId: number };
   Rank: undefined;
   Personal: undefined;
   Login: undefined;
@@ -66,6 +65,7 @@ export default function App() {
           <Stack.Screen
             name="Watching"
             component={Watching}
+            initialParams={{ movieId: 0 }}
             options={{ headerShown: false }}
           />
           <Stack.Screen

@@ -12,10 +12,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { StyleSheet, Text } from "react-native";
 import { RootStackParamList } from "../../../App";
-import { Film } from "../../page/film";
 import { Home } from "../../page/home";
 import { Personal } from "../../page/personal";
 import { Rank } from "../../page/rank";
+import { FilmPage } from "../../page/filmpage";
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +46,7 @@ export const TabNavigator = ({ navigation }: PropsStackBottomTabNav) => {
       label: "Home",
       component: Home,
     },
-    { name: "Films", icon: faFilm, label: "Films", component: Film },
+    { name: "Films", icon: faFilm, label: "Films", component: FilmPage },
     { name: "Rank", icon: faRankingStar, label: "Rank", component: Rank },
     {
       name: "Personal",
