@@ -33,6 +33,8 @@ import { TabParamList } from "../../components/tab-navigator";
 import { VideoPlayerCustom } from "../../components/video-player";
 import Colors from "../../constants/Colors";
 import { request } from "../../utils/request";
+import { getToken } from "../auth";
+import { FilmItemForyouType } from "../personal/history";
 import { styles } from "./style";
 
 const moment = require("moment");
@@ -244,6 +246,181 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
   useEffect(() => {
     fetchTrending();
   }, []);
+  //check
+  const [dataCollect, setDataCollect] = useState<FilmItemForyouType[]>([]);
+
+  const fetchWatchLaterList = async () => {
+    const accessToken = await getToken();
+    try {
+      const response = await request.get(
+        "user/get-watch-movie-list?page=1&pageSize=100",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const data = response.data.data.ListMovie;
+      setDataCollect(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const checkFilmDetailsInCollections = (
+    data: Film,
+    dataCollect: FilmItemForyouType[]
+  ) => {
+    if (data && data.movieId) {
+      const isFilmDetailInWatchLater = dataCollect.some(
+        (item: FilmItemForyouType) => item.id === data.movieId
+      );
+      setIsSaveMovie(isFilmDetailInWatchLater);
+    }
+  };
+  const fetchDataAndWatchLaterList = async () => {
+    console.log(dataCollect);
+    checkFilmDetailsInCollections(watchingData, dataCollect);
+  };
+  //check love
+  const [dataLove, setDataLove] = useState<FilmItemForyouType[]>([]);
+  const fetchLoveList = async () => {
+    const accessToken = await getToken();
+    try {
+      const response = await request.get(
+        "user/get-favorite-movie-list?page=1&pageSize=100",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const data = response.data.data.ListMovie;
+      setDataLove(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const checkFilmDetailsInLove = (
+    data: Film,
+    dataLove: FilmItemForyouType[]
+  ) => {
+    if (data && data.movieId) {
+      const isFilmDetailInLove = dataLove.some(
+        (item: FilmItemForyouType) => item.id === data.movieId
+      );
+      setIsLikeMovie(isFilmDetailInLove);
+    }
+  };
+
+  const fetchDataAndLoveList = async () => {
+    console.log(dataLove);
+    checkFilmDetailsInLove(watchingData, dataLove);
+  };
+  useEffect(() => {
+    fetchData();
+    fetchWatchLaterList();
+    fetchLoveList();
+  }, [movieId, isSaveMovie, isLikeMovie]);
+
+  useEffect(() => {
+    fetchDataAndWatchLaterList();
+    fetchDataAndLoveList();
+  }, [movieId, watchingData, dataCollect, dataLove]);
+
+  //add bộ sưu tập
+  const handleAddToCollection = async () => {
+    const accessToken = await getToken();
+    if (watchingData && watchingData.movieId) {
+      const isFilmDetailInWatchLater = dataCollect.some(
+        (item: FilmItemForyouType) => item.id === watchingData.movieId
+      );
+      if (!isFilmDetailInWatchLater) {
+        try {
+          const response = await request.get(
+            `user/add-watch-list?movieId=${movieId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          if (response.data.status === "Ok!") {
+            const isFilmDetailInCollection = true;
+            setIsSaveMovie(isFilmDetailInCollection);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      if (isFilmDetailInWatchLater) {
+        try {
+          const response = await request.get(
+            `user/delete-watch-list?movieId=${movieId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          if (response.data.status === "Ok!") {
+            const isFilmDetailInCollection = true;
+            setIsSaveMovie(isFilmDetailInCollection);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+        setIsSaveMovie(false);
+      }
+    }
+  };
+  //add love
+  const handleAddToLove = async () => {
+    const accessToken = await getToken();
+    if (watchingData && watchingData.movieId) {
+      const isFilmDetailInLove = dataLove.some(
+        (item: FilmItemForyouType) => item.id === watchingData.movieId
+      );
+      if (!isFilmDetailInLove) {
+        try {
+          const response = await request.get(
+            `user/add-favorite-movie?movieId=${movieId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          if (response.data.status === "Ok!") {
+            const addedToLove = true;
+            setIsLikeMovie(addedToLove);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      if (isFilmDetailInLove) {
+        try {
+          const response = await request.get(
+            `user/delete-favorite-movie?movieId=${movieId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          if (response.data.status === "Ok!") {
+            const addedToLove = true;
+            setIsLikeMovie(addedToLove);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+        setIsLikeMovie(false);
+      }
+    }
+  };
 
   return (
     <>
@@ -353,7 +530,7 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
             ))}
           </ScrollView>
           <View style={styles.containerFeature}>
-            <TouchableOpacity onPress={() => setIsLikeMovie(!isLikeMovie)}>
+            <TouchableOpacity onPress={handleAddToLove}>
               <FontAwesomeIcon
                 style={styles.feature}
                 icon={isLikeMovie === true ? faHeart : faHeartRegular}
@@ -361,7 +538,7 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
                 color={isLikeMovie === true ? "red" : "white"}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setIsSaveMovie(!isSaveMovie)}>
+            <TouchableOpacity onPress={handleAddToCollection}>
               <FontAwesomeIcon
                 style={styles.feature}
                 icon={isSaveMovie === true ? faBookmark : faBookmarkRegular}

@@ -19,14 +19,12 @@ export type FilmItemForyouProps = {
 };
 
 export const ListFilmItemFouyou = ({
-  dataList: initialDataList,
+  dataList,
   title,
   isEditing,
 }: FilmItemForyouProps) => {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [selectedAll, setSelectedAll] = useState<boolean>(false);
-  const [dataList, setDataList] =
-    useState<Array<FilmItemForyouType>>(initialDataList);
   const toggleItemSelection = (itemId: number) => {
     if (selectedItems.includes(itemId)) {
       setSelectedItems(selectedItems.filter((id) => id !== itemId));
@@ -35,19 +33,19 @@ export const ListFilmItemFouyou = ({
     }
   };
 
-  const deleteSelectedItems = () => {
-    const updatedDataList = dataList.filter(
-      (item) => !selectedItems.includes(item.id)
-    );
-    setDataList(updatedDataList);
-    setSelectedItems([]);
-  };
+  // const deleteSelectedItems = () => {
+  //   const updatedDataList = dataList.filter(
+  //     (item) => !selectedItems.includes(item.id)
+  //   );
+  //   setDataList(updatedDataList);
+  //   setSelectedItems([]);
+  // };
+
   const selectedAllItems = () => {
     const allItemIds = dataList.map((item) => item.id);
     setSelectedItems(selectedAll ? [] : allItemIds);
     setSelectedAll(!selectedAll);
   };
-
   return (
     <ScrollView style={styles.containerListItem}>
       {title ? (
@@ -67,7 +65,7 @@ export const ListFilmItemFouyou = ({
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.selectedItem}
-                  onPress={deleteSelectedItems}
+                  // onPress={deleteSelectedItems}
                 >
                   {selectedItems.length > 0 ? (
                     <Text style={styles.selectedActiveText}>
@@ -86,6 +84,7 @@ export const ListFilmItemFouyou = ({
               <FilmItemHistory
                 key={data.id}
                 data={data}
+                title={data.title}
                 isEditing={isEditing}
                 isSelected={selectedItems.includes(data.id)}
                 toggleItemSelection={() => toggleItemSelection(data.id)}
@@ -110,7 +109,7 @@ export const ListFilmItemFouyou = ({
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.selectedItem}
-                  onPress={deleteSelectedItems}
+                  // onPress={deleteSelectedItems}
                 >
                   {selectedItems.length > 0 ? (
                     <Text style={styles.selectedActiveText}>

@@ -15,6 +15,7 @@ type FilmItemHistoryProps = {
   isEditing: boolean;
   isSelected: boolean;
   toggleItemSelection: () => void;
+  title: string;
 };
 
 export const FilmItemHistory = ({
@@ -22,18 +23,21 @@ export const FilmItemHistory = ({
   isEditing,
   isSelected,
   toggleItemSelection,
+  title,
 }: FilmItemHistoryProps) => {
+  console.log(title);
   return (
     <ScrollView style={stylesForyou.containerItemForyou}>
       <View style={stylesForyou.ctnItem}>
         <View style={stylesForyou.poster}>
           <Image
             source={{
-              uri: data.poster,
+              uri: data.posterURL,
             }}
             style={stylesForyou.posterimg}
           />
-          <Text style={stylesForyou.duration}>{data.duration}</Text>
+          <Text style={stylesForyou.duration}></Text>
+          {/* <Text style={stylesForyou.duration}>{data.duration}</Text> */}
         </View>
         <View style={stylesForyou.content}>
           <Text
@@ -41,7 +45,8 @@ export const FilmItemHistory = ({
             numberOfLines={2}
             ellipsizeMode="tail"
           >
-            {data.name} tập {data.episode}
+            {/* {data.title} tập {data.episodeNum} */}
+            {title}
           </Text>
           {/* <Text style={stylesForyou.nameFilm}>
             {data.category.map((cate) => cate.concat(", ")) || [""]}

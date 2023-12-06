@@ -16,120 +16,121 @@ import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 export type HistoryScreenProp = StackScreenProps<RootStackParamList>;
 export interface FilmItemForyouType {
   id: number;
-  poster: string;
-  category: Array<string>;
-  episode: number;
-  nation: string;
-  name: string;
-  duration?: string;
+  title: string;
+  posterURL: string;
+  averageRating: string;
+  episodeNum: number;
+  numFavorite: number;
+  level: number;
+  // genres?:Array<genres>
   status?: number;
 }
-const dataWeek: FilmItemForyouType[] = [
-  {
-    id: 1,
-    poster:
-      "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
-    category: ["Hành động", "Tình cảm"],
-    episode: 1,
-    nation: "Trung Quốc",
-    name: "Vân Chi VũVân Chi VũVân Chi VũVân Chi VũVân Chi",
-    duration: "47:45",
-    status: 23,
-  },
-  {
-    id: 2,
-    poster:
-      "https://image.tmdb.org/t/p/original/mXLOHHc1Zeuwsl4xYKjKh2280oL.jpg",
-    category: ["Hành động"],
-    episode: 4,
-    nation: "Trung Quốc",
-    name: "Vân Chi Vũ Trung Quốc Trung Quốc Trung Quốc",
-    duration: "47:45",
-    status: 100,
-  },
-  {
-    id: 3,
-    poster:
-      "https://image.tmdb.org/t/p/original/oUmmY7QWWn7OhKlcPOnirHJpP1F.jpg",
-    category: ["Hành động"],
-    episode: 10,
-    nation: "Trung Quốc",
-    name: "Vân Chi Vũ",
-    duration: "47:45",
-  },
-  {
-    id: 4,
-    poster:
-      "https://image.tmdb.org/t/p/original/yF1eOkaYvwiORauRCPWznV9xVvi.jpg",
-    category: ["Hành động"],
-    episode: 10,
-    nation: "Trung Quốc",
-    name: "Vân Chi Vũ",
-    duration: "47:45",
-  },
-  {
-    id: 5,
-    poster:
-      "https://image.tmdb.org/t/p/original/c6Splshb8lb2Q9OvUfhpqXl7uP0.jpg",
-    category: ["Hành động"],
-    episode: 10,
-    nation: "Trung Quốc",
-    name: "Vân Chi Vũ",
-    duration: "47:45",
-  },
-  {
-    id: 11,
-    poster:
-      "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
-    category: ["Hành động", "Tình cảm"],
-    episode: 1,
-    nation: "Trung Quốc",
-    name: "Vân Chi Vũ",
-    duration: "47:45",
-    status: 23,
-  },
-  {
-    id: 12,
-    poster:
-      "https://image.tmdb.org/t/p/original/mXLOHHc1Zeuwsl4xYKjKh2280oL.jpg",
-    category: ["Hành động"],
-    episode: 4,
-    nation: "Trung Quốc",
-    name: "Vân Chi Vũ",
-    duration: "47:45",
-    status: 100,
-  },
-  {
-    id: 13,
-    poster:
-      "https://image.tmdb.org/t/p/original/oUmmY7QWWn7OhKlcPOnirHJpP1F.jpg",
-    category: ["Hành động"],
-    episode: 10,
-    nation: "Trung Quốc",
-    name: "Vân Chi Vũ",
-    duration: "47:45",
-  },
-  {
-    id: 14,
-    poster:
-      "https://image.tmdb.org/t/p/original/yF1eOkaYvwiORauRCPWznV9xVvi.jpg",
-    category: ["Hành động"],
-    episode: 10,
-    nation: "Trung Quốc",
-    name: "Vân Chi Vũ",
-    duration: "47:45",
-  },
-  {
-    id: 15,
-    poster:
-      "https://image.tmdb.org/t/p/original/c6Splshb8lb2Q9OvUfhpqXl7uP0.jpg",
-    category: ["Hành động"],
-    episode: 10,
-    nation: "Trung Quốc",
-    name: "Vân Chi Vũ",
-    duration: "47:45",
-  },
-];
+// const dataWeek: FilmItemForyouType[] = [
+//   {
+//     id: 1,
+//     poster:
+//       "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
+//     category: ["Hành động", "Tình cảm"],
+//     episode: 1,
+//     nation: "Trung Quốc",
+//     name: "Vân Chi VũVân Chi VũVân Chi VũVân Chi VũVân Chi",
+//     duration: "47:45",
+//     status: 23,
+//   },
+//   {
+//     id: 2,
+//     poster:
+//       "https://image.tmdb.org/t/p/original/mXLOHHc1Zeuwsl4xYKjKh2280oL.jpg",
+//     category: ["Hành động"],
+//     episode: 4,
+//     nation: "Trung Quốc",
+//     name: "Vân Chi Vũ Trung Quốc Trung Quốc Trung Quốc",
+//     duration: "47:45",
+//     status: 100,
+//   },
+//   {
+//     id: 3,
+//     poster:
+//       "https://image.tmdb.org/t/p/original/oUmmY7QWWn7OhKlcPOnirHJpP1F.jpg",
+//     category: ["Hành động"],
+//     episode: 10,
+//     nation: "Trung Quốc",
+//     name: "Vân Chi Vũ",
+//     duration: "47:45",
+//   },
+//   {
+//     id: 4,
+//     poster:
+//       "https://image.tmdb.org/t/p/original/yF1eOkaYvwiORauRCPWznV9xVvi.jpg",
+//     category: ["Hành động"],
+//     episode: 10,
+//     nation: "Trung Quốc",
+//     name: "Vân Chi Vũ",
+//     duration: "47:45",
+//   },
+//   {
+//     id: 5,
+//     poster:
+//       "https://image.tmdb.org/t/p/original/c6Splshb8lb2Q9OvUfhpqXl7uP0.jpg",
+//     category: ["Hành động"],
+//     episode: 10,
+//     nation: "Trung Quốc",
+//     name: "Vân Chi Vũ",
+//     duration: "47:45",
+//   },
+//   {
+//     id: 11,
+//     poster:
+//       "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
+//     category: ["Hành động", "Tình cảm"],
+//     episode: 1,
+//     nation: "Trung Quốc",
+//     name: "Vân Chi Vũ",
+//     duration: "47:45",
+//     status: 23,
+//   },
+//   {
+//     id: 12,
+//     poster:
+//       "https://image.tmdb.org/t/p/original/mXLOHHc1Zeuwsl4xYKjKh2280oL.jpg",
+//     category: ["Hành động"],
+//     episode: 4,
+//     nation: "Trung Quốc",
+//     name: "Vân Chi Vũ",
+//     duration: "47:45",
+//     status: 100,
+//   },
+//   {
+//     id: 13,
+//     poster:
+//       "https://image.tmdb.org/t/p/original/oUmmY7QWWn7OhKlcPOnirHJpP1F.jpg",
+//     category: ["Hành động"],
+//     episode: 10,
+//     nation: "Trung Quốc",
+//     name: "Vân Chi Vũ",
+//     duration: "47:45",
+//   },
+//   {
+//     id: 14,
+//     poster:
+//       "https://image.tmdb.org/t/p/original/yF1eOkaYvwiORauRCPWznV9xVvi.jpg",
+//     category: ["Hành động"],
+//     episode: 10,
+//     nation: "Trung Quốc",
+//     name: "Vân Chi Vũ",
+//     duration: "47:45",
+//   },
+//   {
+//     id: 15,
+//     poster:
+//       "https://image.tmdb.org/t/p/original/c6Splshb8lb2Q9OvUfhpqXl7uP0.jpg",
+//     category: ["Hành động"],
+//     episode: 10,
+//     nation: "Trung Quốc",
+//     name: "Vân Chi Vũ",
+//     duration: "47:45",
+//   },
+// ];
 // const dataToday: FilmItemForyouType[] = [];
 export const HistoryList = ({ navigation, route }: HistoryScreenProp) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -159,11 +160,11 @@ export const HistoryList = ({ navigation, route }: HistoryScreenProp) => {
         </View>
       </SafeAreaView>
       {/* <ListFilmItemFouyou title="Hôm nay" dataList={dataToday} /> */}
-      <ListFilmItemFouyou
+      {/* <ListFilmItemFouyou
         title="Trong 1 tuần"
         dataList={dataWeek}
         isEditing={isEditing}
-      />
+      /> */}
     </View>
   );
 };
