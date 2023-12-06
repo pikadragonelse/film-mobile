@@ -11,7 +11,6 @@ import {
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
-  AsyncStorage,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { RootStackParamList } from "../../../App";
@@ -19,7 +18,8 @@ import { Logo } from "../../assets/logo";
 import Colors from "../../constants/Colors";
 import { setIslogin, setUsername } from "../../redux/reducer/isLogin";
 import { request } from "../../utils/request";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storeToken } from "../auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type LoginScreenProp = StackScreenProps<RootStackParamList>;
 export const Login = ({ navigation, route }: LoginScreenProp) => {
@@ -63,7 +63,13 @@ export const Login = ({ navigation, route }: LoginScreenProp) => {
       };
       const response = await request.post("auth/login", loginData);
 
-      console.log("Login successful:", response.data);
+      const authToken = response.data.result.token;
+      try {
+        await storeToken(authToken);
+      } catch (error) {
+        console.error("Error storing token:", error);
+      }
+
       dispatch(setIslogin(true));
       if (loginData.username) {
         dispatch(setUsername(loginData.username));
