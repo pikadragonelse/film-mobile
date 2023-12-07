@@ -47,7 +47,7 @@ export const Home = ({ navigation, route }: HomeScreenProp) => {
   const fetchTrending = async () => {
     try {
       const response = await request.get("movies");
-      const data = response.data;
+      const data = response.data.movies;
       setTrendingData(data);
     } catch (error) {
       console.error(error);
