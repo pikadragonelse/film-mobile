@@ -29,18 +29,18 @@ export const FilmItemCollection = ({
         <View style={stylesColection.poster}>
           <Image
             source={{
-              uri: data.poster,
+              uri: data.posterURL,
             }}
             style={stylesColection.posterimg}
           />
-          {data.duration ? (
+          {/* {data.duration ? (
             <Text style={stylesColection.duration}>{data.duration}</Text>
           ) : (
             <Text></Text>
-          )}
+          )} */}
         </View>
         <View style={stylesColection.Txt}>
-          <Text style={stylesColection.nameFilm}>{data.name}</Text>
+          <Text style={stylesColection.nameFilm}>{data.title}</Text>
 
           <View style={stylesColection.ctnsubtxt}>
             {data.status && (
@@ -48,11 +48,11 @@ export const FilmItemCollection = ({
                 Xem đến tập {data.status}
               </Text>
             )}
-            {data.episode && (
+            {/* {data.episode && (
               <Text style={stylesColection.subtxt}>
                 Cập nhật đến tập {data.episode}
               </Text>
-            )}
+            )} */}
           </View>
         </View>
         <View style={stylesColection.checkbox}>

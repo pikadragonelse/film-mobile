@@ -38,6 +38,7 @@ export const Home = ({ navigation, route }: HomeScreenProp) => {
     try {
       const response = await request.get("movies/home/trending");
       const data = response.data;
+
       setTrendingData(data);
     } catch (error) {
       console.error(error);
