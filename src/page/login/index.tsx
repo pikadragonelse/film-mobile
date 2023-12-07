@@ -1,16 +1,16 @@
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  ScrollView,
   KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { RootStackParamList } from "../../../App";
@@ -19,7 +19,6 @@ import Colors from "../../constants/Colors";
 import { setIslogin, setUsername } from "../../redux/reducer/isLogin";
 import { request } from "../../utils/request";
 import { storeToken } from "../auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type LoginScreenProp = StackScreenProps<RootStackParamList>;
 export const Login = ({ navigation, route }: LoginScreenProp) => {

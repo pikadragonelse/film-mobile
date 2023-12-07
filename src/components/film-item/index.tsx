@@ -1,16 +1,21 @@
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Image } from "@rneui/themed";
-import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
-import { Dimensions } from "react-native";
+import React, { useState } from "react";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { RootStackParamList } from "../../../App";
 import Colors from "../../constants/Colors";
 import { Film } from "../model/film";
-import { CompositeScreenProps } from "@react-navigation/native";
 import { TabParamList } from "../tab-navigator";
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 type IndexProps = {
   title?: string;
@@ -35,7 +40,7 @@ export const FilmItem = ({ title, dataRCM, navigation, route }: IndexProps) => {
       </Text>
 
       <View style={styleFilm.rcmContainer}>
-        {dataRCM.slice(0, showAllFilms ? dataRCM.length : 9).map((item) => (
+        {dataRCM.slice(0, showAllFilms ? dataRCM.length : 6).map((item) => (
           <TouchableOpacity
             key={item.movieId}
             onPress={() => {
@@ -126,7 +131,7 @@ export const styleFilm = StyleSheet.create({
     left: "61%",
     borderTopRightRadius: 5,
     width: width / 8 - 2,
-    height: height / 48,
+    height: height / 46,
     backgroundColor: Colors.ACTIVE,
   },
 
@@ -134,7 +139,7 @@ export const styleFilm = StyleSheet.create({
     color: Colors.WHITE,
     fontSize: 10,
     textAlign: "center",
-    marginTop: 2,
+    marginTop: 1,
   },
 
   rcmFilmName: {

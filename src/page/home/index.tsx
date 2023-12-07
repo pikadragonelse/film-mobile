@@ -1,43 +1,33 @@
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import React from "react";
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  FlatList,
-  ImageBackground,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { RootStackParamList } from "../../../App";
+import { FilmItem } from "../../components/film-item";
+import { GenreCard } from "../../components/genre-card";
 import { Header } from "../../components/header";
+import { ItemSeparator } from "../../components/item-separator";
+import { Film } from "../../components/model/film";
 import { Slide } from "../../components/slide";
 import { TabParamList } from "../../components/tab-navigator";
-import { ItemSeparator } from "../../components/item-separator";
-import { GenreCard } from "../../components/genre-card";
-import { useState, useEffect } from "react";
-import { FilmItem } from "../../components/film-item";
-import { LinearGradient } from "expo-linear-gradient";
 import { request } from "../../utils/request";
-import { Film } from "../../components/model/film";
 
 type HomeScreenProp = CompositeScreenProps<
   BottomTabScreenProps<TabParamList>,
   StackScreenProps<RootStackParamList>
 >;
 
-const Genres = ["All", "Action", "Comedy", "Romance", "Horror", "Sci-Fi"];
-
 export const Home = ({ navigation, route }: HomeScreenProp) => {
-  const [activeGenre, setActiveGenre] = useState("All");
+  const [activeGenre, setActiveGenre] = useState("Tất cả");
 
   const genresData = [
-    { id: 1, name: "All" },
-    { id: 2, name: "Action" },
-    { id: 3, name: "Comedy" },
-    { id: 4, name: "Romance" },
-    { id: 5, name: "Horror" },
-    { id: 6, name: "Sci-Fi" },
+    { id: 1, name: "Tất cả" },
+    { id: 2, name: "Hành động" },
+    { id: 3, name: "Hài hước" },
+    { id: 4, name: "Lãng mạng" },
+    { id: 5, name: "Ngôn tình" },
+    { id: 6, name: "Hình sự" },
   ];
   const image = {
     uri: "https://image.tmdb.org/t/p/original/fiVW06jE7z9YnO4trhaMEdclSiC.jpg",
@@ -46,8 +36,9 @@ export const Home = ({ navigation, route }: HomeScreenProp) => {
   const [trendingData, setTrendingData] = useState<Film[]>([]);
   const fetchTrending = async () => {
     try {
-      const response = await request.get("movies");
-      const data = response.data.movies;
+      const response = await request.get("movies/home/trending");
+      const data = response.data;
+
       setTrendingData(data);
     } catch (error) {
       console.error(error);

@@ -13,40 +13,38 @@ import {
 } from "react-native";
 import Carousel from "react-native-snap-carousel";
 import Colors from "../../constants/Colors";
-
-interface Movie {
-  id: number;
-  poster_path: string;
-  original_title: string;
-  release_date: string;
-  vote_average: number;
-  overview: string;
-}
+import { Film } from "../model/film";
+import { request } from "../../utils/request";
 
 const { width } = Dimensions.get("window");
 
 export const Slide = () => {
-  const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
+  const [popularMovies, setPopularMovies] = useState<Film[]>([]);
 
+  const fetchTrending = async () => {
+    try {
+      const response = await request.get("movies");
+      const data = response.data;
+      setPopularMovies(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
-    fetch(
-      "https://api.themoviedb.org/3/movie/popular?api_key=4e44d9029b1270a757cddc766a1bcb63&language=en-US"
-    )
-      .then((res) => res.json())
-      .then((data) => setPopularMovies(data.results));
+    fetchTrending();
   }, []);
 
   return (
     <View>
       <Carousel
         data={popularMovies}
-        renderItem={({ item }: { item: Movie }) => (
+        renderItem={({ item }: { item: Film }) => (
           <View>
-            <TouchableOpacity onPress={() => {}} key={item.id}>
+            <TouchableOpacity onPress={() => {}} key={item.movieId}>
               <View style={{ position: "relative" }}>
                 <Image
                   source={{
-                    uri: `https://image.tmdb.org/t/p/original${item.poster_path}`,
+                    uri: item.posterURL,
                   }}
                   style={styles.main}
                 />
@@ -65,19 +63,19 @@ export const Slide = () => {
               ellipsizeMode="tail"
               style={styles.titleMovie}
             >
-              {item.original_title}
+              {item.title}
             </Text>
             <View style={styles.voteAccount}>
               <Text style={{ color: "#ccc", fontSize: 11.5 }}>
-                English | (U)
+                {item.nation} | (U)
               </Text>
               <Text style={{ color: "#ccc", fontSize: 11 }}>
                 <Ionicons
                   name="heart"
                   style={styles.heartActiveIcon}
                   size={15}
-                />{" "}
-                {(item.vote_average * 10).toFixed(1)}%
+                />
+                {(Number(item.averageRating) * 10).toFixed(1)}%
               </Text>
             </View>
           </View>
