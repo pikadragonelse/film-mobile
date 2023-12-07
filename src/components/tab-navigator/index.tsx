@@ -43,15 +43,15 @@ export const TabNavigator = ({ navigation }: PropsStackBottomTabNav) => {
     {
       name: "Home",
       icon: faHome,
-      label: "Home",
+      label: "Trang chủ",
       component: Home,
     },
-    { name: "Films", icon: faFilm, label: "Films", component: FilmPage },
-    { name: "Rank", icon: faRankingStar, label: "Rank", component: Rank },
+    { name: "Films", icon: faFilm, label: "Phim", component: FilmPage },
+    { name: "Rank", icon: faRankingStar, label: "Xếp hạng", component: Rank },
     {
       name: "Personal",
       icon: faUser,
-      label: "Personal",
+      label: "Cá nhân",
       component: Personal,
     },
   ];

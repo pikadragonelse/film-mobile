@@ -78,7 +78,7 @@ export const SearchScreen = ({ navigation, route }: SearchScreenProps) => {
         <SearchBar
           ref={searchBarRef}
           autoFocus
-          placeholder="Type Here..."
+          placeholder="Nhập vào đây..."
           onChangeText={(value) => setSearchValue(value)}
           value={searchValue}
           containerStyle={styles.searchBarContainer}

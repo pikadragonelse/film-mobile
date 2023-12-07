@@ -39,7 +39,7 @@ export const Header = ({ navigation, route }: HomeScreenProp) => {
         </TouchableOpacity>
         <View>
           <SearchBar
-            placeholder="Type Here..."
+            placeholder="Nhập vào đây..."
             onChangeText={(value) => setSearchValue(value)}
             value={searchValue}
             containerStyle={styles.searchBarContainer}

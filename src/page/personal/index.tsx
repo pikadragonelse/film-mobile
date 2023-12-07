@@ -6,6 +6,7 @@ import {
   faClockRotateLeft,
   faAngleRight,
   faHeart,
+  faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { Avatar, Badge, CheckBox } from "@rneui/base";
@@ -70,6 +71,12 @@ export const Personal = ({ navigation, route }: PersonalScreenProps) => {
       icon: <FontAwesomeIcon icon={faClockRotateLeft} color={"#989898"} />,
       nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
       onPress: () => navigation.navigate("History"),
+    },
+    {
+      title: "Đăng xuất",
+      icon: <FontAwesomeIcon icon={faRightFromBracket} color={"#989898"} />,
+      nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
+      onPress: () => navigation.navigate("Home"),
     },
   ];
   const user: User = {

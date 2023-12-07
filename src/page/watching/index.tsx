@@ -223,7 +223,6 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
   const [commentText, setCommentText] = useState("");
 
   const handleSubmitComment = () => {
-    console.log("comment:", commentText);
     setCommentText("");
   };
   //gọi api
@@ -279,7 +278,6 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
     }
   };
   const fetchDataAndWatchLaterList = async () => {
-    console.log(dataCollect);
     checkFilmDetailsInCollections(watchingData, dataCollect);
   };
   //check love
@@ -315,7 +313,6 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
   };
 
   const fetchDataAndLoveList = async () => {
-    console.log(dataLove);
     checkFilmDetailsInLove(watchingData, dataLove);
   };
   useEffect(() => {
