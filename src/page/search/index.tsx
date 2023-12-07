@@ -51,7 +51,7 @@ export const SearchScreen = ({ navigation, route }: SearchScreenProps) => {
       try {
         setLoading(true);
         const response = await request.get(`movies?search=${value}`);
-        const data = response.data;
+        const data = response.data.movies;
         setSearchResults(data);
       } catch (error) {
         console.log(error);
