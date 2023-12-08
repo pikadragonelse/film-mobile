@@ -23,7 +23,7 @@ const listOption = [
 export interface Section {
   index: number;
   title: string;
-  data: Array<any>;
+  data: string[] | number[] | any[];
 }
 
 export type FilterFilm = {

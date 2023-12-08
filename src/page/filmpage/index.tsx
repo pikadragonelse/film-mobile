@@ -21,56 +21,78 @@ import { styles as stylesWatching } from "../watching/style";
 import { FilmItem } from "../../components/film-item";
 import { request } from "../../utils/request";
 import { Film } from "../../components/model/film";
+import { ListItemSearch } from "../../components/list-film-item-search";
+import { FilmItemSearch } from "../../components/film-item-search";
+import Colors from "../../constants/Colors";
 
 type FilmScreenProp = CompositeScreenProps<
   BottomTabScreenProps<TabParamList>,
   StackScreenProps<RootStackParamList>
 >;
 
-const tabItemList = ["Phim bộ", "Phim lẻ"];
-const listOption = [
-  "Toàn bộ quốc gia",
-  "Việt Nam",
-  "Nga",
-  "Mỹ",
-  "Pháp",
-  "Anh",
-  "Nhật Bản",
-];
-const listOption1 = [
-  "Toàn bộ thể loại",
-  "Hành động",
-  "Tình cảm",
-  "Kịch tính",
-  "Hài hước",
-  "Lãng mạn",
-];
-
-const listOption3 = [
-  "Toàn bộ các năm",
-  "2023",
-  "2022",
-  "2021",
-  "2015-2020",
-  "2000-2014",
-  "Khác",
-];
-
+interface Genre {
+  genre_id: number;
+  name: string;
+}
 const listOption2 = ["Toàn bộ các loại trả phí", "Miễn phí", "VIP"];
 
-const sections: Section[] = [
-  { index: 0, title: "Hello", data: [listOption] },
-  { index: 1, title: "Hello", data: [listOption1] },
-  { index: 2, title: "Hello", data: [listOption2] },
-  { index: 3, title: "Hello", data: [listOption3] },
-];
-
 export const FilmPage = ({ navigation, route }: FilmScreenProp) => {
+  //api nation
+  const [nation, setNation] = useState<string[]>([]);
+  const listOption = async () => {
+    try {
+      const response = await request.get("movies/get/nations");
+      const data = response.data;
+      setNation(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  //api genre
+  const [genres, setGenres] = useState<Genre[]>([]);
+
+  const listOption1 = async () => {
+    try {
+      const response = await request.get("genres");
+      const genreData = response.data;
+      setGenres(genreData.map((genre: Genre) => genre.name));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //api year
+  const [year, setYear] = useState<string[]>([]);
+  const listOption3 = async () => {
+    try {
+      const response = await request.get("movies/get/years");
+      const data = response.data;
+      setYear(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    listOption();
+    listOption1();
+    listOption3();
+  }, []);
+  const sections: Section[] = [
+    { index: 0, title: "Hello", data: [nation] },
+    {
+      index: 1,
+      title: "Hello",
+      data: [genres],
+    },
+    { index: 2, title: "Hello", data: [listOption2] },
+    { index: 3, title: "Hello", data: [year] },
+  ];
+
   const [index, setIndex] = useState(0);
-  const [activeNation, setActiveNation] = useState<number>(1);
-  const [activeGenre, setActiveGenre] = useState<number>(1);
-  const [activeFee, setActiveFee] = useState<number>(1);
-  const [activeYear, setActiveYear] = useState<number>(1);
+  const [activeNation, setActiveNation] = useState<number>(0);
+  const [activeGenre, setActiveGenre] = useState<number>(0);
+  const [activeFee, setActiveFee] = useState<number>(0);
+  const [activeYear, setActiveYear] = useState<number>(0);
   //gọi api
   const [trendingData, setTrendingData] = useState<Film[]>([]);
   const fetchTrending = async () => {
@@ -85,26 +107,89 @@ export const FilmPage = ({ navigation, route }: FilmScreenProp) => {
   useEffect(() => {
     fetchTrending();
   }, []);
+  const tabItemList = ["Phim bộ", "Phim lẻ"];
+  const [activeTab, setActiveTab] = React.useState(0);
+  const handleChangeTab = (newvalue: number) => {
+    setActiveTab(newvalue);
+  };
+  //api lọc
+  const [isSeriesMovies, setIsSeriesMovies] = useState<FilmItemSearch[]>([]);
+  const [notIsSeriesMovies, setNotIsSeriesMovies] = useState<FilmItemSearch[]>(
+    []
+  );
+  useEffect(() => {
+    if (nation.length > 0 && genres.length > 0 && year.length > 0) {
+      const isSeries = activeTab === 0;
+      const apiParams = {
+        nation: nation[activeNation],
+        genre: activeGenre + 1,
+        year: parseInt(year[activeYear]),
+        // fee: activeFee,
+      };
+
+      const fetchData = async () => {
+        try {
+          const response = await request.get("movies", {
+            params: { isSeries, ...apiParams },
+          });
+          const data = response.data.movies;
+
+          if (isSeries) {
+            setIsSeriesMovies(data);
+          } else {
+            setNotIsSeriesMovies(data);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [activeNation, activeGenre, activeFee, activeYear, activeTab]);
+
+  const tabContents = [
+    <View>
+      <ListItemSearch
+        listFilms={isSeriesMovies}
+        navigation={navigation}
+        route={route}
+      />
+    </View>,
+    <View>
+      <ListItemSearch
+        listFilms={notIsSeriesMovies}
+        navigation={navigation}
+        route={route}
+      />
+    </View>,
+  ];
   return (
     <>
       <Header navigation={navigation} route={route} />
       <Tab
-        value={index}
-        onChange={(e) => setIndex(e)}
+        value={activeTab}
+        onChange={handleChangeTab}
         indicatorStyle={{
-          backgroundColor: "red",
           width: 100,
+          backgroundColor: Colors.ACTIVE,
           left: (Dimensions.get("window").width / 1.8 / 2 - 80) / 2,
         }}
-        style={{
-          width: Dimensions.get("window").width / 1.6,
+        style={styles.tab}
+        titleStyle={{
+          color: Colors.ACTIVE,
         }}
       >
-        {tabItemList.map((tabItem) => (
-          <Tab.Item
-            title={tabItem}
-            titleStyle={{ fontSize: 14, color: "white" }}
-          />
+        {tabItemList.map((tabItem, index) => (
+          <Tab.Item key={index} variant="default">
+            <Text
+              style={
+                activeTab === index ? styles.activeTabItem : styles.tabItem
+              }
+            >
+              {tabItem}
+            </Text>
+          </Tab.Item>
         ))}
       </Tab>
 
@@ -121,6 +206,17 @@ export const FilmPage = ({ navigation, route }: FilmScreenProp) => {
                 setActiveYear,
               ]}
             />
+            <Text
+              style={{
+                color: "white",
+                marginLeft: 10,
+                marginTop: 20,
+                fontSize: 15,
+              }}
+            >
+              Kết quả tìm kiếm
+            </Text>
+            <View style={styles.listRank}>{tabContents[activeTab]}</View>
             <View
               style={{
                 ...stylesWatching.rcmContainer,
@@ -136,9 +232,6 @@ export const FilmPage = ({ navigation, route }: FilmScreenProp) => {
             </View>
           </ScrollView>
         </TabView.Item>
-        <TabView.Item style={{ width: "100%" }}>
-          <Text style={{ color: "white" }}>Favorite</Text>
-        </TabView.Item>
       </TabView>
     </>
   );
@@ -149,5 +242,24 @@ const styles = StyleSheet.create({
     // backgroundColor: "#212121",
     backgroundColor: "transparent",
     paddingBottom: 10,
+  },
+  activeTabItem: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: Colors.ACTIVE,
+  },
+  tabItem: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: Colors.WHITE,
+  },
+  tab: {
+    // backgroundColor: "#191919",
+    zIndex: 999,
+    width: Dimensions.get("window").width / 1.6,
+  },
+  listRank: {
+    marginTop: -50,
+    marginBottom: -20,
   },
 });
