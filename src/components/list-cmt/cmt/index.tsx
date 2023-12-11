@@ -11,18 +11,26 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { commentsProps, UserProps } from "..";
-import Colors from "../../../constants/Colors";
+import { getToken } from "../../../page/auth";
+import { CurrentUser, listCommentsProps } from "../../../page/watching";
+import { request } from "../../../utils/request";
+import { WriteCmt } from "../write-cmt";
+import * as jwtDecode from "jwt-decode";
 
-const currentUser = {
-  username: "username1",
-  email: "user1@gmail.com",
-  avatar: "https://randomuser.me/api/portraits/women/40.jpg",
-};
 interface listCommentProps {
-  comment: commentsProps;
+  comment: listCommentsProps;
+  onReplySubmit?: (commentId: number, replyText: string) => void;
+  replyCommentId?: number | null;
+  setReplyCommentId?: (commentId: number | null) => void;
+  deleteCommentById?: (commentId: number, replyId?: number) => void;
 }
-export const Comment = ({ comment }: listCommentProps) => {
+export const Comment = ({
+  comment,
+  onReplySubmit,
+  replyCommentId,
+  setReplyCommentId,
+  deleteCommentById,
+}: listCommentProps) => {
   const getTimeDifference = (commentDateTime: string) => {
     const commentDate = new Date(commentDateTime);
     const currentDate = new Date();
@@ -52,25 +60,74 @@ export const Comment = ({ comment }: listCommentProps) => {
       return `${seconds} giây trước`;
     }
   };
-  //subcomment
-  const textInputRef = useRef<TextInput | null>(null);
-  const [commentText, setCommentText] = useState("");
-  const [showPostCmt, setShowPostCmt] = useState(false);
-  useEffect(() => {
-    if (showPostCmt && textInputRef.current) {
-      textInputRef.current.focus();
+  const [currentUser, setCurrentUser] = useState<CurrentUser>({
+    username: "",
+    email: "",
+    avatarURL: "",
+  });
+  const fetchDataCurrentUser = async () => {
+    const accessToken = await getToken();
+    try {
+      const response = await request.get("user/get-self-information", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = response.data;
+      setCurrentUser(data);
+    } catch (error) {
+      console.error(error);
     }
-  }, [showPostCmt]);
-  const handleSubmitComment = () => {
-    console.log("Submitted comment:", commentText);
-    setCommentText("");
   };
+  useEffect(() => {
+    fetchDataCurrentUser();
+  }, []);
+  // const token = await getToken();
+  // let isCurrentUserComment = false;
+  // if (token) {
+  //   isCurrentUserComment =
+  //     comment.user?.user_id === JSON.parse(atob(token.split(".")[1])).userId;
+  // }
+  // console.log(token);
+  const [isCurrentUserComment, setIsCurrentUserComment] =
+    useState<boolean>(false);
 
-  const handleFeedbackPress = () => {
-    setShowPostCmt(!showPostCmt);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const token = await getToken();
+  //       if (token) {
+  //         let decoded = jwtDecode(token);
+  //         const currentUserID = decoded.userId;
+  //         setIsCurrentUserComment(comment.user?.user_id === currentUserID);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [comment.user?.user_id]);
+
+  //subcomment
+  const [isReplying, setIsReplying] = useState<boolean>(true);
+
+  const handleCancelReply = () => {
+    setIsReplying(false);
+  };
+  useEffect(() => {
+    if (!isReplying && setReplyCommentId) {
+      setReplyCommentId(null);
+    }
+  }, [isReplying]);
+
+  const handleReply = () => {
+    setIsReplying(true);
+    if (setReplyCommentId) {
+      setReplyCommentId(replyCommentId === comment.id ? null : comment.id);
+    }
   };
   //like
-  // const [likes, setLikes] = useState<Number>(comment.numLike);
   const [isLiked, setIsLiked] = useState(false);
 
   const handleLike = () => {
@@ -94,14 +151,14 @@ export const Comment = ({ comment }: listCommentProps) => {
       <Avatar
         rounded
         size={40}
-        source={{ uri: comment.avatar }}
+        source={{ uri: comment.user?.avatar_url }}
         avatarStyle={{ paddingTop: 5 }}
       />
 
       <View key={comment.id} style={styles.cmtContain}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text style={{ marginRight: 1, color: "silver" }}>
-            {comment.username}
+            {comment.user?.email}
           </Text>
           <Text>{" · "}</Text>
           <Text style={{ fontSize: 12 }}>
@@ -144,7 +201,7 @@ export const Comment = ({ comment }: listCommentProps) => {
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleFeedbackPress}>
+          <TouchableOpacity onPress={handleReply}>
             <View
               style={{
                 flexDirection: "row",
@@ -164,7 +221,7 @@ export const Comment = ({ comment }: listCommentProps) => {
             </View>
           </TouchableOpacity>
 
-          {currentUser && (
+          {isCurrentUserComment && (
             <TouchableOpacity>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text
@@ -180,38 +237,18 @@ export const Comment = ({ comment }: listCommentProps) => {
             </TouchableOpacity>
           )}
         </View>
-        {showPostCmt && (
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.postCmt}
-          >
-            <Avatar
-              rounded
-              size={40}
-              source={{ uri: currentUser.avatar }}
-              avatarStyle={{ paddingTop: 5 }}
-            />
-            <TextInput
-              ref={textInputRef}
-              placeholder="Post a comment"
-              value={commentText}
-              onChangeText={(text) => setCommentText(text)}
-              style={styles.postText}
-            />
-
-            <Button
-              buttonStyle={{
-                backgroundColor: "transparent",
-                alignItems: "center",
-              }}
-              titleStyle={{
-                color: Colors.ACTIVE,
-              }}
-              onPress={handleSubmitComment}
-            >
-              Submit
-            </Button>
-          </KeyboardAvoidingView>
+        {isReplying && replyCommentId === comment.id && (
+          <WriteCmt
+            currentUser={currentUser}
+            onSubmitComment={(replyText) => {
+              if (onReplySubmit) {
+                onReplySubmit(comment.id, replyText);
+                setIsReplying(false);
+              }
+            }}
+            placeholder={`Trả lời ${comment.user?.email}`}
+            onCancel={handleCancelReply}
+          />
         )}
       </View>
     </View>
