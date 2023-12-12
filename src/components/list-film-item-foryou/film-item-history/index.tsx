@@ -9,6 +9,11 @@ import {
 import { Image, CheckBox } from "@rneui/themed";
 import { FilmItemForyouType } from "../../../page/personal/history";
 import Colors from "../../../constants/Colors";
+import { CompositeScreenProps } from "@react-navigation/native";
+import { StackScreenProps } from "@react-navigation/stack";
+import { TabParamList } from "../../tab-navigator";
+import { RootStackParamList } from "../../../../App";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 type FilmItemHistoryProps = {
   data: FilmItemForyouType;
@@ -16,7 +21,10 @@ type FilmItemHistoryProps = {
   isSelected: boolean;
   toggleItemSelection: () => void;
   title: string;
-};
+} & CompositeScreenProps<
+  BottomTabScreenProps<TabParamList>,
+  StackScreenProps<RootStackParamList>
+>;
 
 export const FilmItemHistory = ({
   data,
@@ -24,37 +32,47 @@ export const FilmItemHistory = ({
   isSelected,
   toggleItemSelection,
   title,
+  navigation,
+  route,
 }: FilmItemHistoryProps) => {
   console.log(title);
   return (
     <ScrollView style={stylesForyou.containerItemForyou}>
       <View style={stylesForyou.ctnItem}>
-        <View style={stylesForyou.poster}>
-          <Image
-            source={{
-              uri: data.posterURL,
-            }}
-            style={stylesForyou.posterimg}
-          />
-          <Text style={stylesForyou.duration}></Text>
-          {/* <Text style={stylesForyou.duration}>{data.duration}</Text> */}
-        </View>
-        <View style={stylesForyou.content}>
-          <Text
-            style={stylesForyou.nameFilm}
-            numberOfLines={2}
-            ellipsizeMode="tail"
-          >
-            {/* {data.title} tập {data.episodeNum} */}
-            {title}
-          </Text>
-          {/* <Text style={stylesForyou.nameFilm}>
-            {data.category.map((cate) => cate.concat(", ")) || [""]}
-          </Text> */}
-          {data.status && (
-            <Text style={stylesForyou.subtxt}> Đã xem {data.status}%</Text>
-          )}
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Watching", {
+              movieId: data.id,
+            });
+          }}
+        >
+          <View style={stylesForyou.poster}>
+            <Image
+              source={{
+                uri: data.posterURL,
+              }}
+              style={stylesForyou.posterimg}
+            />
+            <Text style={stylesForyou.duration}></Text>
+            {/* <Text style={stylesForyou.duration}>{data.duration}</Text> */}
+          </View>
+          <View style={stylesForyou.content}>
+            <Text
+              style={stylesForyou.nameFilm}
+              numberOfLines={2}
+              ellipsizeMode="tail"
+            >
+              {/* {data.title} tập {data.episodeNum} */}
+              {title}
+            </Text>
+            {/* <Text style={stylesForyou.nameFilm}>
+              {data.category.map((cate) => cate.concat(", ")) || [""]}
+            </Text> */}
+            {data.status && (
+              <Text style={stylesForyou.subtxt}> Đã xem {data.status}%</Text>
+            )}
+          </View>
+        </TouchableOpacity>
         <View style={stylesForyou.checkbox}>
           {isEditing && (
             <CheckBox

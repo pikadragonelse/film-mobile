@@ -17,57 +17,77 @@ import Colors from "../../../constants/Colors";
 import { ScrollView } from "@nandorojo/anchor";
 import DatePicker from "@react-native-community/datetimepicker";
 import { Input } from "@rneui/themed";
+import { CurrentUser } from "../../watching";
+import { getToken } from "../../auth";
+import { request } from "../../../utils/request";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import DropDownPicker from "react-native-dropdown-picker";
 
-const user: User = {
-  username: "username1",
-  email: "user1@gmail.com",
-  avatar: "https://randomuser.me/api/portraits/women/40.jpg",
-  genre: "Nam",
-  birthday: "02/06/2001",
-  password: "12345",
-  passwordtest: "",
-  newPassword: "",
-  confirmPassword: "",
-};
 export type ProfileScreenProp = StackScreenProps<RootStackParamList>;
 
 export const Profile = ({ navigation, route }: ProfileScreenProp) => {
-  const [showPicker, setShowPicker] = useState<boolean>(false);
-  const [date, setDate] = useState<Date>(new Date(user.birthday as string));
-  const [userInfo, setUserInfo] = useState({
-    avatar: user.avatar,
-    username: user.username,
-    email: user.email,
-    genre: user.genre,
-    birthday: date,
-    passwordtest: user.passwordtest,
-    newPassword: user.newPassword,
-    confirmPassword: user.confirmPassword,
-  });
+  const isUserLogged = useSelector((state: RootState) => state.user.isLogin);
+  const currentUser: CurrentUser | undefined = route.params?.currentUser;
 
+  const [open, setOpen] = useState<boolean>(false);
+  const [value, setValue] = useState<any>(currentUser?.gender);
+  type GenderOption = { label: string; value: string };
+  const [items, setItems] = useState<GenderOption[]>([
+    { label: "Nam", value: "Male" },
+    { label: "Nữ", value: "Female" },
+    { label: "Khác", value: "Other" },
+  ]);
+
+  const [showPicker, setShowPicker] = useState<boolean>(false);
+  const [date, setDate] = useState<Date>(
+    new Date(currentUser?.dateOfBirth as string)
+  );
+  const [userInfo, setUserInfo] = useState({
+    userId: currentUser?.userId,
+    avatar: currentUser?.avatarURL,
+    username: currentUser?.username,
+    email: currentUser?.email,
+    genre: currentUser?.gender,
+    dayOfBirth: date,
+  });
   const hashPassword = (password?: string) => {
     return password;
   };
   const handleInputChange = (key: string, value: string) => {
     setUserInfo((prev) => ({ ...prev, [key]: value }));
-    if (key === "birthday") {
+    if (key === "dateOfBirth") {
       setDate(new Date(value));
     }
   };
-  const handleSave = () => {
-    if (userInfo.newPassword || userInfo.confirmPassword) {
-      if (hashPassword(userInfo.passwordtest) !== user.password) {
-        alert("Mật khẩu hiện tại chưa đúng");
-        return;
-      }
+  const handleSave = async () => {
+    // if (userInfo.newPassword || userInfo.confirmPassword) {
+    //   if (hashPassword(userInfo.passwordtest) !== user.password) {
+    //     alert("Mật khẩu hiện tại chưa đúng");
+    //     return;
+    //   }
 
-      if (userInfo.newPassword !== userInfo.confirmPassword) {
-        alert("Mật khẩu và xác nhận mật khẩu không khớp");
-        return;
+    //   if (userInfo.newPassword !== userInfo.confirmPassword) {
+    //     alert("Mật khẩu và xác nhận mật khẩu không khớp");
+    //     return;
+    //   }
+    // }
+    const accessToken = await getToken();
+    userInfo.userId = currentUser?.userId;
+    const editProfileUser = async () => {
+      try {
+        await request.put("user/update-user", userInfo, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        alert("Lưu thông tin thành công");
+        navigation.goBack();
+      } catch (error) {
+        console.error(error);
       }
-    }
-
-    console.log("Lưu thông tin người dùng:", userInfo);
+    };
+    editProfileUser();
   };
 
   //thay avt
@@ -87,111 +107,154 @@ export const Profile = ({ navigation, route }: ProfileScreenProp) => {
 
   return (
     <View>
-      <SafeAreaView>
-        <View style={styles.containerHeaderProfile}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <FontAwesomeIcon
-              icon={faAngleLeft}
-              style={styles.backIcon}
-              size={25}
-            />
-          </TouchableOpacity>
-          <View style={styles.subHeader}>
-            <Text style={styles.titleText}>Thông tin cá nhân</Text>
-            <TouchableOpacity>
-              <Text onPress={handleSave} style={styles.subTitle}>
-                Lưu lại
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </SafeAreaView>
-      <ScrollView>
-        <View style={styles.avatar}>
-          {/* <TouchableOpacity onPress={handleUploadAvatar}> */}
-          <Avatar rounded size={70} source={{ uri: user.avatar }} />
-          {/* </TouchableOpacity> */}
-        </View>
-        <View style={styles.inforUser}>
-          <Text style={styles.titleItem}>Tên tài khoản</Text>
-          <TextInput
-            style={styles.inputItem}
-            value={userInfo.username}
-            onChangeText={(text) => handleInputChange("username", text)}
-          />
-          <Text style={styles.titleItem}>Email</Text>
-          <TextInput
-            style={styles.inputItem}
-            value={userInfo.email}
-            onChangeText={(text) => handleInputChange("email", text)}
-          />
-          <Text style={styles.titleItem}>Giới tính</Text>
-          <TextInput
-            style={styles.inputItem}
-            value={userInfo.genre}
-            onChangeText={(text) => handleInputChange("genre", text)}
-          />
-          <Text style={styles.titleItem}>Ngày sinh</Text>
+      {isUserLogged ? (
+        <View>
+          <SafeAreaView>
+            <View style={styles.containerHeaderProfile}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <FontAwesomeIcon
+                  icon={faAngleLeft}
+                  style={styles.backIcon}
+                  size={25}
+                />
+              </TouchableOpacity>
+              <View style={styles.subHeader}>
+                <Text style={styles.titleText}>Thông tin cá nhân</Text>
+                <TouchableOpacity>
+                  <Text onPress={handleSave} style={styles.subTitle}>
+                    Lưu lại
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </SafeAreaView>
+          <ScrollView>
+            <View style={styles.avatar}>
+              {/* <TouchableOpacity onPress={handleUploadAvatar}> */}
+              <Avatar
+                rounded
+                size={70}
+                source={{ uri: currentUser?.avatarURL }}
+              />
+              {/* </TouchableOpacity> */}
+            </View>
+            <View style={styles.inforUser}>
+              <Text style={styles.titleItem}>Tên tài khoản</Text>
+              <TextInput
+                style={styles.inputItem}
+                value={userInfo.username}
+                onChangeText={(text) => handleInputChange("username", text)}
+              />
+              <Text style={styles.titleItem}>Email</Text>
+              <TextInput
+                style={styles.inputItem}
+                value={userInfo.email}
+                editable={false}
+              />
+              <Text style={styles.titleItem}>Giới tính</Text>
+              <DropDownPicker
+                open={open}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setValue={(value: any) => {
+                  const selectedValue =
+                    typeof value === "function" ? value() : value;
+                  setValue(selectedValue);
+                  handleInputChange("gender", selectedValue);
+                }}
+                setItems={setItems}
+                searchable={false}
+                textStyle={{
+                  fontSize: 15,
+                  color: "grey",
+                }}
+                style={{
+                  backgroundColor: "transparent",
+                  borderColor: "#202020",
+                }}
+              />
 
-          <TouchableOpacity
-            onPress={() => {
-              setShowPicker(true);
+              <Text style={styles.titleItem}>Ngày sinh</Text>
+
+              <TouchableOpacity
+                onPress={() => {
+                  setShowPicker(true);
+                }}
+              >
+                <TextInput
+                  style={styles.inputItem}
+                  value={date.toLocaleDateString()}
+                  editable={false}
+                />
+                <FontAwesomeIcon
+                  icon={faCalendarDays}
+                  size={16}
+                  style={{
+                    color: "grey",
+                    position: "absolute",
+                    right: 10,
+                    top: 8,
+                  }}
+                />
+              </TouchableOpacity>
+
+              {showPicker && (
+                <DatePicker
+                  value={date}
+                  mode={"date"}
+                  onChange={(event, selectedDate) => {
+                    const currentDate = selectedDate || new Date();
+                    setShowPicker(false);
+                    setDate(currentDate);
+                    handleInputChange(
+                      "dateOfBirth",
+                      currentDate.toLocaleDateString()
+                    );
+                  }}
+                />
+              )}
+            </View>
+            <View style={styles.inforPassword}>
+              <Text style={styles.titleItem}>Mật khẩu hiện tại</Text>
+              <TextInput
+                style={styles.inputItem}
+                // value={userInfo.passwordtest}
+                secureTextEntry={true}
+                onChangeText={(text) => handleInputChange("passwordtest", text)}
+              />
+              <Text style={styles.titleItem}>Mật khẩu mới</Text>
+              <TextInput
+                style={styles.inputItem}
+                // value={userInfo.newPassword}
+                secureTextEntry={true}
+                onChangeText={(text) => handleInputChange("newPassword", text)}
+              />
+              <Text style={styles.titleItem}>Xác nhận lại mật khẩu mới</Text>
+              <TextInput
+                style={styles.inputItem}
+                // value={userInfo.confirmPassword}
+                secureTextEntry={true}
+                onChangeText={(text) =>
+                  handleInputChange("confirmPassword", text)
+                }
+              />
+            </View>
+          </ScrollView>
+        </View>
+      ) : (
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <Text
+            style={{
+              color: "white",
+              paddingTop: 50,
+              paddingLeft: 70,
             }}
           >
-            <TextInput
-              style={styles.inputItem}
-              value={date.toLocaleDateString()}
-              editable={false}
-            />
-            <FontAwesomeIcon
-              icon={faCalendarDays}
-              size={16}
-              style={{
-                color: "grey",
-                position: "absolute",
-                right: 10,
-                top: 8,
-              }}
-            />
-          </TouchableOpacity>
-
-          {showPicker && (
-            <DatePicker
-              value={date}
-              mode={"date"}
-              onChange={(event, selectedDate) => {
-                const currentDate = selectedDate || new Date();
-                setShowPicker(false);
-                setDate(currentDate);
-                handleInputChange("birthday", currentDate.toLocaleDateString());
-              }}
-            />
-          )}
-        </View>
-        <View style={styles.inforPassword}>
-          <Text style={styles.titleItem}>Mật khẩu hiện tại</Text>
-          <TextInput
-            style={styles.inputItem}
-            value={userInfo.passwordtest}
-            secureTextEntry={true}
-            onChangeText={(text) => handleInputChange("passwordtest", text)}
-          />
-          <Text style={styles.titleItem}>Mật khẩu mới</Text>
-          <TextInput
-            style={styles.inputItem}
-            value={userInfo.newPassword}
-            secureTextEntry={true}
-            onChangeText={(text) => handleInputChange("newPassword", text)}
-          />
-          <Text style={styles.titleItem}>Xác nhận lại mật khẩu mới</Text>
-          <TextInput
-            style={styles.inputItem}
-            value={userInfo.confirmPassword}
-            secureTextEntry={true}
-            onChangeText={(text) => handleInputChange("confirmPassword", text)}
-          />
-        </View>
-      </ScrollView>
+            Đăng nhập xem thông tin của bạn.
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

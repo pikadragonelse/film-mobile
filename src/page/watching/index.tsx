@@ -97,9 +97,12 @@ interface Episodes {
   titleFilm?: string;
 }
 export interface CurrentUser {
+  userId?: number;
   username: string;
   email: string;
   avatarURL: string;
+  dateOfBirth?: string;
+  gender?: string;
 }
 
 export type WatchingScreenProps = CompositeScreenProps<
