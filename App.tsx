@@ -9,7 +9,7 @@ import { Header } from "./src/components/header";
 import { SearchScreen } from "./src/page/search";
 import { store } from "./src/redux/store";
 import { Provider } from "react-redux";
-import { Watching } from "./src/page/watching";
+import { CurrentUser, Watching } from "./src/page/watching";
 import { Rank } from "./src/page/rank";
 import { Personal } from "./src/page/personal";
 import { Login } from "./src/page/login";
@@ -28,7 +28,8 @@ export type RootStackParamList = {
   Personal: undefined;
   Login: undefined;
   VIPPackage: undefined;
-  Profile: undefined;
+  // Profile: undefined;
+  Profile: { currentUser: CurrentUser };
   Collection: undefined;
   History: undefined;
   Lovelist: undefined;
