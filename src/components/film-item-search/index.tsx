@@ -14,7 +14,7 @@ import { RootStackParamList } from "../../../App";
 import moment from "moment";
 
 export interface FilmItemSearch {
-  id: number;
+  movieId: number;
   posterURL: string;
   isSeries?: boolean;
   releaseDate: string;
@@ -86,7 +86,7 @@ export const FilmItemSearch = ({
                   style={styles.readMore}
                   onPress={() => {
                     navigation.navigate("Watching", {
-                      movieId: data.id,
+                      movieId: data.movieId,
                     });
                   }}
                 >
@@ -111,7 +111,7 @@ export const FilmItemSearch = ({
               }}
               onPress={() => {
                 navigation.navigate("Watching", {
-                  movieId: data.id,
+                  movieId: data.movieId,
                 });
               }}
             >
