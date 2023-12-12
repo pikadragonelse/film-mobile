@@ -109,7 +109,7 @@ export const Personal = ({ navigation, route }: PersonalScreenProps) => {
   };
   useEffect(() => {
     fetchDataCurrentUser();
-  }, []);
+  }, [isUserLogged]);
   return (
     <View style={styles.containerPesonal}>
       <View style={styles.headerPesonal}>

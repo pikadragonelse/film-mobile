@@ -82,33 +82,8 @@ export const Comment = ({
   useEffect(() => {
     fetchDataCurrentUser();
   }, []);
-  // const token = await getToken();
-  // let isCurrentUserComment = false;
-  // if (token) {
-  //   isCurrentUserComment =
-  //     comment.user?.user_id === JSON.parse(atob(token.split(".")[1])).userId;
-  // }
-  // console.log(token);
-  const [isCurrentUserComment, setIsCurrentUserComment] =
-    useState<boolean>(false);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const token = await getToken();
-  //       if (token) {
-  //         let decoded = jwtDecode(token);
-  //         const currentUserID = decoded.userId;
-  //         setIsCurrentUserComment(comment.user?.user_id === currentUserID);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [comment.user?.user_id]);
-
+  const isCurrentUserComment = comment.user?.user_id === currentUser.userId;
   //subcomment
   const [isReplying, setIsReplying] = useState<boolean>(true);
 
@@ -222,7 +197,7 @@ export const Comment = ({
           </TouchableOpacity>
 
           {isCurrentUserComment && (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => deleteCommentById?.(comment.id)}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text
                   style={{
