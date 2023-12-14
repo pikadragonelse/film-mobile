@@ -1,8 +1,19 @@
 import { ScrollView } from "@nandorojo/anchor";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { CompositeScreenProps } from "@react-navigation/native";
+import { StackScreenProps } from "@react-navigation/stack";
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import { RootStackParamList } from "../../../App";
 import Colors from "../../constants/Colors";
 import { FilmItemForyouType } from "../../page/personal/history";
+import { TabParamList } from "../tab-navigator";
 import { FilmItemCollection } from "./film-item-collection";
 import { FilmItemHistory } from "./film-item-history";
 
@@ -10,12 +21,17 @@ export type FilmItemForyouProps = {
   dataList: Array<FilmItemForyouType>;
   title?: string;
   isEditing: boolean;
-};
+} & CompositeScreenProps<
+  BottomTabScreenProps<TabParamList>,
+  StackScreenProps<RootStackParamList>
+>;
 
 export const ListFilmItemFouyou = ({
   dataList,
   title,
   isEditing,
+  navigation,
+  route,
 }: FilmItemForyouProps) => {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [selectedAll, setSelectedAll] = useState<boolean>(false);
@@ -75,14 +91,24 @@ export const ListFilmItemFouyou = ({
               <Text style={styles.titleForyou}>{title}</Text>
             </View>
             {dataList.map((data) => (
-              <FilmItemHistory
-                key={data.id}
-                data={data}
-                title={data.title}
-                isEditing={isEditing}
-                isSelected={selectedItems.includes(data.id)}
-                toggleItemSelection={() => toggleItemSelection(data.id)}
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("Watching", {
+                    movieId: data.id,
+                  });
+                }}
+              >
+                <FilmItemHistory
+                  key={data.id}
+                  data={data}
+                  title={data.title}
+                  isEditing={isEditing}
+                  isSelected={selectedItems.includes(data.id)}
+                  toggleItemSelection={() => toggleItemSelection(data.id)}
+                  navigation={navigation}
+                  route={route}
+                />
+              </TouchableOpacity>
             ))}
           </View>
         </View>
@@ -117,13 +143,21 @@ export const ListFilmItemFouyou = ({
             )}
           </View>
           {dataList.map((data) => (
-            <FilmItemCollection
-              key={data.id}
-              data={data}
-              isEditing={isEditing}
-              isSelected={selectedItems.includes(data.id)}
-              toggleItemSelection={() => toggleItemSelection(data.id)}
-            />
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Watching", {
+                  movieId: data.id,
+                });
+              }}
+            >
+              <FilmItemCollection
+                key={data.id}
+                data={data}
+                isEditing={isEditing}
+                isSelected={selectedItems.includes(data.id)}
+                toggleItemSelection={() => toggleItemSelection(data.id)}
+              />
+            </TouchableOpacity>
           ))}
         </View>
       )}

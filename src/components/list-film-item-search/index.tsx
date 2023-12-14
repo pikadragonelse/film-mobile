@@ -25,7 +25,7 @@ export const ListItemSearch = ({
       <Text style={styles.title}>{title}</Text>
       {listFilms.map((data) => (
         <FilmItemSearch
-          key={data.id}
+          key={data.movieId}
           data={data}
           navigation={navigation}
           route={route}

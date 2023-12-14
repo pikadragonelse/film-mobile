@@ -1,5 +1,7 @@
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import {
@@ -9,15 +11,22 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSelector } from "react-redux";
 import { RootStackParamList } from "../../../../App";
 import { ListFilmItemFouyou } from "../../../components/list-film-item-foryou";
+import { TabParamList } from "../../../components/tab-navigator";
+import { RootState } from "../../../redux/store";
 import { request } from "../../../utils/request";
 import { getToken } from "../../auth";
 import { FilmItemForyouType } from "../history";
 
-export type LovelistScreenProp = StackScreenProps<RootStackParamList>;
+export type LovelistScreenProp = CompositeScreenProps<
+  BottomTabScreenProps<TabParamList>,
+  StackScreenProps<RootStackParamList>
+>;
 
 export const Lovelist = ({ navigation, route }: LovelistScreenProp) => {
+  const isUserLogged = useSelector((state: RootState) => state.user.isLogin);
   const [dataLovelist, setDataLovelist] = useState<FilmItemForyouType[]>([]);
   useEffect(() => {
     const fetchDataLove = async () => {
@@ -51,26 +60,47 @@ export const Lovelist = ({ navigation, route }: LovelistScreenProp) => {
   };
   return (
     <View>
-      <SafeAreaView>
-        <View style={stylesLovelist.containerHeaderForyou}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <FontAwesomeIcon
-              icon={faAngleLeft}
-              style={stylesLovelist.backIcon}
-              size={20}
-            />
-          </TouchableOpacity>
-          <View style={stylesLovelist.subHeaderForyou}>
-            <Text style={stylesLovelist.titleText}>Phim yêu thích </Text>
-            <TouchableOpacity onPress={toggleEditing}>
-              <Text style={stylesLovelist.subTitle}>
-                {isEditing ? "Hủy bỏ" : "Chỉnh sửa"}
-              </Text>
-            </TouchableOpacity>
-          </View>
+      {isUserLogged ? (
+        <View>
+          <SafeAreaView>
+            <View style={stylesLovelist.containerHeaderForyou}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <FontAwesomeIcon
+                  icon={faAngleLeft}
+                  style={stylesLovelist.backIcon}
+                  size={25}
+                />
+              </TouchableOpacity>
+              <View style={stylesLovelist.subHeaderForyou}>
+                <Text style={stylesLovelist.titleText}>Phim yêu thích </Text>
+                <TouchableOpacity onPress={toggleEditing}>
+                  <Text style={stylesLovelist.subTitle}>
+                    {isEditing ? "Hủy bỏ" : "Chỉnh sửa"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </SafeAreaView>
+          <ListFilmItemFouyou
+            dataList={dataLovelist}
+            isEditing={isEditing}
+            navigation={navigation}
+            route={route}
+          />
         </View>
-      </SafeAreaView>
-      <ListFilmItemFouyou dataList={dataLovelist} isEditing={isEditing} />
+      ) : (
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <Text
+            style={{
+              color: "white",
+              paddingTop: 50,
+              paddingLeft: 40,
+            }}
+          >
+            Đăng nhập xem danh sách yêu thích của bạn.
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

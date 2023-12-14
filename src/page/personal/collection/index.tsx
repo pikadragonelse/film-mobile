@@ -1,5 +1,7 @@
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import {
@@ -9,15 +11,23 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { useSelector } from "react-redux";
 import { RootStackParamList } from "../../../../App";
 import { ListFilmItemFouyou } from "../../../components/list-film-item-foryou";
+import { TabParamList } from "../../../components/tab-navigator";
+import { RootState } from "../../../redux/store";
 import { request } from "../../../utils/request";
 import { getToken } from "../../auth";
 import { FilmItemForyouType } from "../history";
 
-export type CollectionScreenProp = StackScreenProps<RootStackParamList>;
+export type CollectionScreenProp = CompositeScreenProps<
+  BottomTabScreenProps<TabParamList>,
+  StackScreenProps<RootStackParamList>
+>;
 
 export const Collection = ({ navigation, route }: CollectionScreenProp) => {
+  const isUserLogged = useSelector((state: RootState) => state.user.isLogin);
+
   const [dataCollection, setDataCollection] = useState<FilmItemForyouType[]>(
     []
   );
@@ -52,26 +62,47 @@ export const Collection = ({ navigation, route }: CollectionScreenProp) => {
   };
   return (
     <View>
-      <SafeAreaView>
-        <View style={stylesCollection.containerHeaderForyou}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <FontAwesomeIcon
-              icon={faAngleLeft}
-              style={stylesCollection.backIcon}
-              size={20}
-            />
-          </TouchableOpacity>
-          <View style={stylesCollection.subHeaderForyou}>
-            <Text style={stylesCollection.titleText}>Bộ sưu tập </Text>
-            <TouchableOpacity onPress={toggleEditing}>
-              <Text style={stylesCollection.subTitle}>
-                {isEditing ? "Hủy bỏ" : "Chỉnh sửa"}
-              </Text>
-            </TouchableOpacity>
-          </View>
+      {isUserLogged ? (
+        <View>
+          <SafeAreaView>
+            <View style={stylesCollection.containerHeaderForyou}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <FontAwesomeIcon
+                  icon={faAngleLeft}
+                  style={stylesCollection.backIcon}
+                  size={25}
+                />
+              </TouchableOpacity>
+              <View style={stylesCollection.subHeaderForyou}>
+                <Text style={stylesCollection.titleText}>Bộ sưu tập </Text>
+                <TouchableOpacity onPress={toggleEditing}>
+                  <Text style={stylesCollection.subTitle}>
+                    {isEditing ? "Hủy bỏ" : "Chỉnh sửa"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </SafeAreaView>
+          <ListFilmItemFouyou
+            dataList={dataCollection}
+            isEditing={isEditing}
+            navigation={navigation}
+            route={route}
+          />
         </View>
-      </SafeAreaView>
-      <ListFilmItemFouyou dataList={dataCollection} isEditing={isEditing} />
+      ) : (
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <Text
+            style={{
+              color: "white",
+              paddingTop: 50,
+              paddingLeft: 40,
+            }}
+          >
+            Đăng nhập xem danh sách xem sau của bạn.
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

@@ -109,14 +109,15 @@ export const styles = StyleSheet.create({
     postCmt:{
         flexDirection: 'row',
         width: '100%',
-        marginBottom:-30,
+        marginBottom:-15,
         marginTop:10,
     },
     postText:{
         color:'white',
-        width:'70%',
+        width:'65%',
         backgroundColor:'#202020',
         borderRadius:5,
+        paddingLeft:5,
         marginLeft:7,
         marginRight:7,
     }

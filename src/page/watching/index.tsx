@@ -26,12 +26,15 @@ import {
 } from "react-native";
 import Collapsible from "react-native-collapsible";
 import { Rating } from "react-native-ratings";
+import { useSelector } from "react-redux";
 import { RootStackParamList } from "../../../App";
 import { FilmItem } from "../../components/film-item";
 import { ListComment } from "../../components/list-cmt";
+import { WriteCmt } from "../../components/list-cmt/write-cmt";
 import { Film } from "../../components/model/film";
 import { TabParamList } from "../../components/tab-navigator";
 import Colors from "../../constants/Colors";
+import { RootState } from "../../redux/store";
 import { request } from "../../utils/request";
 import { getToken } from "../auth";
 import { FilmItemForyouType } from "../personal/history";
@@ -68,6 +71,7 @@ export interface UserProps {
   user_id: number;
   gender: string;
   avatar_url: string;
+  email: string;
 }
 export interface listCommentsProps {
   id: number;
@@ -93,15 +97,13 @@ interface Episodes {
   titleFilm?: string;
 }
 export interface CurrentUser {
+  userId?: number;
   username: string;
   email: string;
-  avatar: string;
+  avatarURL: string;
+  dateOfBirth?: string;
+  gender?: string;
 }
-const currentUser = {
-  username: "username1",
-  email: "user1@gmail.com",
-  avatar: "https://randomuser.me/api/portraits/women/40.jpg",
-};
 
 export type WatchingScreenProps = CompositeScreenProps<
   BottomTabScreenProps<TabParamList>,
@@ -109,6 +111,28 @@ export type WatchingScreenProps = CompositeScreenProps<
 >;
 
 export const Watching = ({ navigation, route }: WatchingScreenProps) => {
+  const [currentUser, setCurrentUser] = useState<CurrentUser>({
+    username: "",
+    email: "",
+    avatarURL: "",
+  });
+  const fetchDataCurrentUser = async () => {
+    const accessToken = await getToken();
+    try {
+      const response = await request.get("user/get-self-information", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = response.data;
+      setCurrentUser(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchDataCurrentUser();
+  }, []);
   //api bộ phim
   const defaultFilm = {
     movieId: 0,
@@ -215,16 +239,13 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
   );
   const scrollViewRef = useRef<ScrollView>(null);
   const [showPostCmt, setShowPostCmt] = useState(false);
+  const isLogin = useSelector((state: RootState) => state.user.isLogin);
 
   const handleScroll = (event: any) => {
     const { y } = event.nativeEvent.contentOffset;
     setShowPostCmt(y > 700);
   };
-  const [commentText, setCommentText] = useState("");
 
-  const handleSubmitComment = () => {
-    setCommentText("");
-  };
   //gọi api
   const [trendingData, setTrendingData] = useState<Film[]>([]);
   const fetchTrending = async () => {
@@ -247,7 +268,6 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
   }, []);
   //check
   const [dataCollect, setDataCollect] = useState<FilmItemForyouType[]>([]);
-
   const fetchWatchLaterList = async () => {
     const accessToken = await getToken();
     try {
@@ -285,6 +305,7 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
   const [dataLove, setDataLove] = useState<FilmItemForyouType[]>([]);
   const fetchLoveList = async () => {
     const accessToken = await getToken();
+
     try {
       const response = await request.get(
         "user/get-favorite-movie-list?page=1&pageSize=100",
@@ -316,17 +337,6 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
   const fetchDataAndLoveList = async () => {
     checkFilmDetailsInLove(watchingData, dataLove);
   };
-  useEffect(() => {
-    fetchData();
-    fetchWatchLaterList();
-    fetchLoveList();
-  }, [movieId, isSaveMovie, isLikeMovie]);
-
-  useEffect(() => {
-    fetchDataAndWatchLaterList();
-    fetchDataAndLoveList();
-  }, [movieId, watchingData, dataCollect, dataLove]);
-
   //add bộ sưu tập
   const handleAddToCollection = async () => {
     const accessToken = await getToken();
@@ -345,8 +355,7 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
             }
           );
           if (response.data.status === "Ok!") {
-            const isFilmDetailInCollection = true;
-            setIsSaveMovie(isFilmDetailInCollection);
+            setIsSaveMovie(true);
           }
         } catch (error) {
           console.error(error);
@@ -354,18 +363,11 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
       }
       if (isFilmDetailInWatchLater) {
         try {
-          const response = await request.get(
-            `user/delete-watch-list?movieId=${movieId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-          if (response.data.status === "Ok!") {
-            const isFilmDetailInCollection = true;
-            setIsSaveMovie(isFilmDetailInCollection);
-          }
+          await request.delete(`user/delete-watch-list?movieId=${movieId}`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
         } catch (error) {
           console.error(error);
         }
@@ -391,8 +393,7 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
             }
           );
           if (response.data.status === "Ok!") {
-            const addedToLove = true;
-            setIsLikeMovie(addedToLove);
+            setIsLikeMovie(true);
           }
         } catch (error) {
           console.error(error);
@@ -400,7 +401,7 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
       }
       if (isFilmDetailInLove) {
         try {
-          const response = await request.get(
+          await request.delete(
             `user/delete-favorite-movie?movieId=${movieId}`,
             {
               headers: {
@@ -408,16 +409,59 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
               },
             }
           );
-          if (response.data.status === "Ok!") {
-            const addedToLove = true;
-            setIsLikeMovie(addedToLove);
-          }
         } catch (error) {
           console.error(error);
         }
         setIsLikeMovie(false);
       }
     }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  useEffect(() => {
+    fetchWatchLaterList();
+  }, [isSaveMovie]);
+  useEffect(() => {
+    fetchLoveList();
+  }, [isLikeMovie]);
+
+  useEffect(() => {
+    fetchDataAndWatchLaterList();
+    fetchDataAndLoveList();
+  }, [movieId, watchingData, dataCollect, dataLove]);
+  //
+  const [refreshData, setRefreshData] = useState(false);
+  useEffect(() => {
+    fetchDataCmt();
+    setRefreshData(false);
+  }, [episodeId, refreshData]);
+
+  const postData = async (content: string) => {
+    const accessToken = await getToken();
+    try {
+      await request.post(
+        "comments/create",
+        {
+          episodeId: `${episodeId}`,
+          content: content,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setRefreshData(true);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleCommentSubmit = async (content: string) => {
+    await postData(content);
   };
 
   return (
@@ -437,8 +481,7 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
             size={20}
           />
         </TouchableOpacity>
-        {/* <VideoPlayerCustom sourceURI={dataEpisode.movieURL} /> */}
-        {/* <VideoPlayerCustom sourceURI={watchingData.trailerURL} /> */}
+        <VideoPlayerCustom sourceURI={dataEpisode.movieURL} />
         <ScrollView
           ref={scrollViewRef}
           onScroll={handleScroll}
@@ -594,37 +637,27 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
             </View>
           </View>
           <View>
-            <ListComment listComment={listComments} />
+            <ListComment
+              listComment={listComments}
+              setListComment={setListComments}
+              episodeId={episodeId}
+            />
           </View>
         </ScrollView>
-        {showPostCmt && (
-          <View style={styles.postCmt}>
-            <Avatar
-              rounded
-              size={40}
-              source={{ uri: currentUser.avatar }}
-              avatarStyle={{ paddingTop: 5 }}
+        {isLogin ? (
+          showPostCmt && (
+            <WriteCmt
+              currentUser={currentUser}
+              onSubmitComment={handleCommentSubmit}
+              placeholder="Write a comment..."
             />
-            <TextInput
-              placeholder="Post a comment"
-              value={commentText}
-              onChangeText={(text) => setCommentText(text)}
-              style={styles.postText}
-            />
-
-            <Button
-              buttonStyle={{
-                backgroundColor: "transparent",
-                alignItems: "center",
-              }}
-              titleStyle={{
-                color: Colors.ACTIVE,
-              }}
-              onPress={handleSubmitComment}
-            >
-              Submit
-            </Button>
-          </View>
+          )
+        ) : (
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <Text style={{ color: "white", paddingTop: 15 }}>
+              Đăng nhập để bình luận
+            </Text>
+          </TouchableOpacity>
         )}
       </View>
     </>

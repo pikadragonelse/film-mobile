@@ -10,15 +10,20 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Avatar, Badge } from "@rneui/base";
 import { Button } from "@rneui/themed";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { RootStackParamList } from "../../../App";
+import { Avatar, Badge, CheckBox } from "@rneui/base";
+import React, { useEffect } from "react";
+import { useState } from "react";
 import { AvatarDefault, Logo } from "../../assets/logo";
 import Colors from "../../constants/Colors";
 import { RootState } from "../../redux/store";
+import { CurrentUser } from "../watching";
+import { getToken } from "../auth";
+import { request } from "../../utils/request";
 
 export interface User {
   username: string;
@@ -45,7 +50,7 @@ export const Personal = ({ navigation, route }: PersonalScreenProps) => {
       title: "Thông tin cá nhân",
       icon: <FontAwesomeIcon icon={faUser} color={"#989898"} />,
       nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
-      onPress: () => navigation.navigate("Profile"),
+      onPress: () => navigation.navigate("Profile", { currentUser }),
     },
     {
       title: "Gói VIP",
@@ -78,15 +83,34 @@ export const Personal = ({ navigation, route }: PersonalScreenProps) => {
       onPress: () => navigation.navigate("Home"),
     },
   ];
-  const user: User = {
-    username: "username1",
-    email: "user1@gmail.com",
-    avatar: "https://randomuser.me/api/portraits/women/40.jpg",
-  };
+
   const isUserLogged = useSelector((state: RootState) => state.user.isLogin);
   const handleBadgePress = () => {
     // navigation.navigate('badge');
   };
+  const [currentUser, setCurrentUser] = useState<CurrentUser>({
+    username: "",
+    email: "",
+    avatarURL: "",
+  });
+  const fetchDataCurrentUser = async () => {
+    const accessToken = await getToken();
+    console.log(accessToken);
+    try {
+      const response = await request.get("user/get-self-information", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = response.data;
+      setCurrentUser(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchDataCurrentUser();
+  }, [isUserLogged]);
   return (
     <View style={styles.containerPesonal}>
       <View style={styles.headerPesonal}>
@@ -108,8 +132,8 @@ export const Personal = ({ navigation, route }: PersonalScreenProps) => {
       </View>
       {isUserLogged ? (
         <View style={styles.infor}>
-          <Avatar rounded size={60} source={{ uri: user.avatar }} />
-          <Text style={styles.usernameTxt}>{user.username}</Text>
+          <Avatar rounded size={60} source={{ uri: currentUser.avatarURL }} />
+          <Text style={styles.usernameTxt}>{currentUser.username}</Text>
         </View>
       ) : (
         <TouchableOpacity

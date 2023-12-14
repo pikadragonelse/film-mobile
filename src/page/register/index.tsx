@@ -37,9 +37,9 @@ export const Register = ({ navigation, route }: RegisterScreenProp) => {
   const [value, setValue] = useState<string | null>("");
   type GenderOption = { label: string; value: string };
   const [items, setItems] = useState<GenderOption[]>([
-    { label: "Nam", value: "1" },
-    { label: "Nữ", value: "2" },
-    { label: "Khác", value: "3" },
+    { label: "Nam", value: "Male" },
+    { label: "Nữ", value: "Female" },
+    { label: "Khác", value: "Other" },
   ]);
 
   //api

@@ -60,9 +60,13 @@ export const Login = ({ navigation, route }: LoginScreenProp) => {
         username: formData.username,
         password: formData.password,
       };
-      const response = await request.post("auth/login", loginData);
+      const response = await request.post("auth/login", loginData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      const authToken = response.data.result.token;
+      const authToken = response.data.result.token.accessToken;
       try {
         await storeToken(authToken);
       } catch (error) {
