@@ -12,10 +12,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { StyleSheet, Text } from "react-native";
 import { RootStackParamList } from "../../../App";
+import { FilmPage } from "../../page/filmpage";
 import { Home } from "../../page/home";
 import { Personal } from "../../page/personal";
 import { Rank } from "../../page/rank";
-import { FilmPage } from "../../page/filmpage";
 
 const Tab = createBottomTabNavigator();
 

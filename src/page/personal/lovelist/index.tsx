@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
   SafeAreaView,
-  TouchableOpacity,
   StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { RootStackParamList } from "../../../../App";
 import { ListFilmItemFouyou } from "../../../components/list-film-item-foryou";
@@ -57,7 +57,7 @@ export const Lovelist = ({ navigation, route }: LovelistScreenProp) => {
             <FontAwesomeIcon
               icon={faAngleLeft}
               style={stylesLovelist.backIcon}
-              size={25}
+              size={20}
             />
           </TouchableOpacity>
           <View style={stylesLovelist.subHeaderForyou}>

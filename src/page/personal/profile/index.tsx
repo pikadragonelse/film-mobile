@@ -1,22 +1,21 @@
 import { faAngleLeft, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { ScrollView } from "@nandorojo/anchor";
+import DatePicker from "@react-native-community/datetimepicker";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Avatar } from "@rneui/base";
-import React, { memo, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  View,
-  Text,
   SafeAreaView,
-  TouchableOpacity,
   StyleSheet,
+  Text,
   TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { User } from "..";
 import { RootStackParamList } from "../../../../App";
 import Colors from "../../../constants/Colors";
-import { ScrollView } from "@nandorojo/anchor";
-import DatePicker from "@react-native-community/datetimepicker";
-import { Input } from "@rneui/themed";
 
 const user: User = {
   username: "username1",
@@ -93,7 +92,7 @@ export const Profile = ({ navigation, route }: ProfileScreenProp) => {
             <FontAwesomeIcon
               icon={faAngleLeft}
               style={styles.backIcon}
-              size={25}
+              size={20}
             />
           </TouchableOpacity>
           <View style={styles.subHeader}>

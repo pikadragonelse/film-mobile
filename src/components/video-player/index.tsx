@@ -1,15 +1,9 @@
-import React, { useRef, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
 import { ResizeMode } from "expo-av";
-import VideoPlayer from "expo-video-player";
-import { setStatusBarHidden } from "expo-status-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { setStatusBarHidden } from "expo-status-bar";
+import VideoPlayer from "expo-video-player";
+import React, { useRef, useState } from "react";
+import { Dimensions } from "react-native";
 
 export type VideoPlayerCustom = { sourceURI: string };
 export const VideoPlayerCustom = ({ sourceURI }: VideoPlayerCustom) => {

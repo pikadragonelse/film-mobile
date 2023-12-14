@@ -58,7 +58,7 @@ export const Collection = ({ navigation, route }: CollectionScreenProp) => {
             <FontAwesomeIcon
               icon={faAngleLeft}
               style={stylesCollection.backIcon}
-              size={25}
+              size={20}
             />
           </TouchableOpacity>
           <View style={stylesCollection.subHeaderForyou}>

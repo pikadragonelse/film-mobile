@@ -1,12 +1,6 @@
 import { ScrollView } from "@nandorojo/anchor";
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Colors from "../../constants/Colors";
 import { FilmItemForyouType } from "../../page/personal/history";
 import { FilmItemCollection } from "./film-item-collection";

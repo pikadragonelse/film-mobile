@@ -1,17 +1,16 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
-import { Image } from "@rneui/themed";
+import { faPlay, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faStar, faPlay } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "@rneui/base";
-import { CompositeScreenProps, useNavigation } from "@react-navigation/native";
-import Colors from "../../constants/Colors";
 import { ScrollView } from "@nandorojo/anchor";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { TabParamList } from "../tab-navigator";
+import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamList } from "../../../App";
+import { Button } from "@rneui/base";
+import { Image } from "@rneui/themed";
 import moment from "moment";
+import React, { useState } from "react";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { RootStackParamList } from "../../../App";
+import { TabParamList } from "../tab-navigator";
 
 export interface FilmItemSearch {
   id: number;

@@ -64,7 +64,8 @@ export const Header = ({ navigation, route }: HomeScreenProp) => {
             fontSize: 12,
             marginTop: -1,
           }}
-          onPress={() => navigation.navigate("Watching", { filmId: 1 })}
+          // Chưa fix ?
+          onPress={() => navigation.navigate("Watching", { movieId: 1 })}
         >
           <FontAwesomeIcon icon={faCrown} style={{ marginRight: 5 }} />
           VIP

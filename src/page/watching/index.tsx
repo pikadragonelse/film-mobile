@@ -4,6 +4,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import {
   faAngleDown,
+  faAngleLeft,
   faAngleUp,
   faArrowUpFromBracket,
   faBookmark,
@@ -13,7 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Avatar, Button, Image, Input, ListItem } from "@rneui/themed";
+import { Avatar, Button, ListItem } from "@rneui/themed";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
@@ -30,7 +31,6 @@ import { FilmItem } from "../../components/film-item";
 import { ListComment } from "../../components/list-cmt";
 import { Film } from "../../components/model/film";
 import { TabParamList } from "../../components/tab-navigator";
-import { VideoPlayerCustom } from "../../components/video-player";
 import Colors from "../../constants/Colors";
 import { request } from "../../utils/request";
 import { getToken } from "../auth";
@@ -260,6 +260,7 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
         }
       );
       const data = response.data.data.ListMovie;
+
       setDataCollect(data);
     } catch (error) {
       console.error(error);
@@ -432,8 +433,8 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <FontAwesomeIcon
             style={styles.backIcon}
-            icon={faAngleDown}
-            size={30}
+            icon={faAngleLeft}
+            size={20}
           />
         </TouchableOpacity>
         {/* <VideoPlayerCustom sourceURI={dataEpisode.movieURL} /> */}
@@ -586,7 +587,7 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
             <Text style={styles.sectionTitle}>Phim đề xuất</Text>
             <View style={styles.rcmContainer}>
               <FilmItem
-                dataRCM={trendingData}
+                data={trendingData}
                 navigation={navigation}
                 route={route}
               />
