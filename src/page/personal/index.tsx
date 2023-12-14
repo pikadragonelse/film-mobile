@@ -1,24 +1,25 @@
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import {
-  faCrown,
-  faUser,
-  faList,
-  faClockRotateLeft,
   faAngleRight,
+  faClockRotateLeft,
+  faCrown,
   faHeart,
+  faList,
   faRightFromBracket,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { StackScreenProps } from "@react-navigation/stack";
+import { Button } from "@rneui/themed";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useSelector } from "react-redux";
+import { RootStackParamList } from "../../../App";
 import { Avatar, Badge, CheckBox } from "@rneui/base";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { AvatarDefault, Logo } from "../../assets/logo";
 import Colors from "../../constants/Colors";
-import { Button } from "@rneui/themed";
-import { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamList } from "../../../App";
-import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { CurrentUser } from "../watching";
 import { getToken } from "../auth";

@@ -5,11 +5,12 @@ import {
 
 export const styles = StyleSheet.create({
     watchingContainer: {
-        marginTop: 25,
+        marginTop: 30,
         position: "relative",
     },
     backIcon: {
         color: "white",
+        marginLeft:6,
     },
     containerInfo: {
         paddingHorizontal: 10,

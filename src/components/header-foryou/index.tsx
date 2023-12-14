@@ -23,7 +23,7 @@ export const HeaderForyou = ({
   <SafeAreaView>
     <View style={styles.containerHeaderForyou}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <FontAwesomeIcon icon={faAngleLeft} style={styles.backIcon} size={25} />
+        <FontAwesomeIcon icon={faAngleLeft} style={styles.backIcon} size={20} />
       </TouchableOpacity>
       <View style={styles.subHeaderForyou}>
         <Text style={styles.titleText}>{title}</Text>

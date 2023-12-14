@@ -91,7 +91,7 @@ export const Register = ({ navigation, route }: RegisterScreenProp) => {
           <FontAwesomeIcon
             icon={faAngleLeft}
             style={styles.backIcon}
-            size={25}
+            size={20}
           />
         </TouchableOpacity>
         <TouchableOpacity

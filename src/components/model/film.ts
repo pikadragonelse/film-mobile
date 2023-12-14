@@ -39,5 +39,6 @@ export type Film = {
     genres: Array<Genres>,
     actors: Array<Actors>,
     episodes:Array<Episodes>
-    isSingle?:boolean,
+    isSeries?:boolean,
+    
 }

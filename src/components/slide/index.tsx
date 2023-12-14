@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React, { useEffect, useState } from "react";
@@ -15,15 +14,27 @@ import Carousel from "react-native-snap-carousel";
 import Colors from "../../constants/Colors";
 import { Film } from "../model/film";
 import { request } from "../../utils/request";
-
+import { CompositeScreenProps } from "@react-navigation/native";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { TabParamList } from "../tab-navigator";
+import { RootStackParamList } from "../../../App";
+import { StackScreenProps } from "@react-navigation/stack";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
 const { width } = Dimensions.get("window");
 
-export const Slide = () => {
+type IndexProps = {
+  data: Array<Film>;
+} & CompositeScreenProps<
+  BottomTabScreenProps<TabParamList>,
+  StackScreenProps<RootStackParamList>
+>;
+
+export const Slide: React.FC<IndexProps> = ({ data, navigation, route }) => {
   const [popularMovies, setPopularMovies] = useState<Film[]>([]);
 
   const fetchTrending = async () => {
     try {
-      const response = await request.get("movies");
+      const response = await request.get("movies/home/trending");
       const data = response.data;
       setPopularMovies(data);
     } catch (error) {
@@ -53,7 +64,14 @@ export const Slide = () => {
                   icon={faHeart}
                   size={25}
                 />
-                <TouchableOpacity style={styles.buttonPlay}>
+                <TouchableOpacity
+                  style={styles.buttonPlay}
+                  onPress={() => {
+                    navigation.navigate("Watching", {
+                      movieId: item.movieId,
+                    });
+                  }}
+                >
                   <FontAwesomeIcon icon={faPlay} style={{ color: "white" }} />
                 </TouchableOpacity>
               </View>
@@ -115,7 +133,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginTop: 10,
   },
-
   containButton: {
     alignItems: "center",
     flexDirection: "row",
@@ -125,12 +142,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: -15,
   },
-
   buttonAdd: {
     marginRight: 34,
     marginLeft: 10,
   },
-
   buttonPlay: {
     position: "absolute",
     top: "81%",
@@ -158,3 +173,5 @@ const styles = StyleSheet.create({
     color: Colors.HEART,
   },
 });
+
+export default Slide;

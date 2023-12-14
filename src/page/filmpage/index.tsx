@@ -1,29 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  SectionList,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
-import { Header } from "../../components/header";
-import { CompositeScreenProps, useNavigation } from "@react-navigation/native";
-import { Button, TabItemProps, TabProps } from "@rneui/base";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { TabParamList } from "../../components/tab-navigator";
-import { RootStackParamList } from "../../../App";
+import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Tab, TabView, Image } from "@rneui/themed";
-import { FilterFilm, Section } from "../../components/filter-film";
-import { styles as stylesWatching } from "../watching/style";
+import { Tab, TabView } from "@rneui/themed";
+import React, { useEffect, useState } from "react";
+import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
+import { RootStackParamList } from "../../../App";
 import { FilmItem } from "../../components/film-item";
-import { request } from "../../utils/request";
-import { Film } from "../../components/model/film";
-import { ListItemSearch } from "../../components/list-film-item-search";
 import { FilmItemSearch } from "../../components/film-item-search";
+import { FilterFilm, Section } from "../../components/filter-film";
+import { Header } from "../../components/header";
+import { ListItemSearch } from "../../components/list-film-item-search";
+import { Film } from "../../components/model/film";
+import { TabParamList } from "../../components/tab-navigator";
 import Colors from "../../constants/Colors";
+import { request } from "../../utils/request";
+import { styles as stylesWatching } from "../watching/style";
 
 type FilmScreenProp = CompositeScreenProps<
   BottomTabScreenProps<TabParamList>,
@@ -225,7 +216,7 @@ export const FilmPage = ({ navigation, route }: FilmScreenProp) => {
             >
               <FilmItem
                 title="Phim hot"
-                dataRCM={trendingData}
+                data={trendingData}
                 navigation={navigation}
                 route={route}
               />

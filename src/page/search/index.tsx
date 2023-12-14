@@ -6,22 +6,21 @@ import {
 } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Input, SearchBar } from "@rneui/base";
+import { SearchBar } from "@rneui/base";
+import debounce from "lodash/debounce";
 import React, { useEffect, useRef, useState } from "react";
 import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
   ScrollView,
+  StyleSheet,
   Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { RootStackParamList } from "../../../App";
 import { FilmItemSearch } from "../../components/film-item-search";
 import { ListItemSearch } from "../../components/list-film-item-search";
 import { TabParamList } from "../../components/tab-navigator";
 import { request } from "../../utils/request";
-import debounce from "lodash/debounce";
 
 export type SearchScreenProps = CompositeScreenProps<
   BottomTabScreenProps<TabParamList>,
@@ -72,7 +71,7 @@ export const SearchScreen = ({ navigation, route }: SearchScreenProps) => {
           <FontAwesomeIcon
             icon={faAngleLeft}
             style={styles.backIcon}
-            size={25}
+            size={20}
           />
         </TouchableOpacity>
         <SearchBar

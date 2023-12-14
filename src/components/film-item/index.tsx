@@ -19,7 +19,7 @@ import { TabParamList } from "../tab-navigator";
 
 type IndexProps = {
   title?: string;
-  dataRCM: Array<Film>;
+  data: Array<Film>;
 } & CompositeScreenProps<
   BottomTabScreenProps<TabParamList>,
   StackScreenProps<RootStackParamList>
@@ -27,7 +27,7 @@ type IndexProps = {
 
 const { width, height } = Dimensions.get("window");
 
-export const FilmItem = ({ title, dataRCM, navigation, route }: IndexProps) => {
+export const FilmItem = ({ title, data, navigation, route }: IndexProps) => {
   const [showAllFilms, setShowAllFilms] = useState(false);
   const toggleShowAllFilms = () => {
     setShowAllFilms(!showAllFilms);
@@ -40,7 +40,7 @@ export const FilmItem = ({ title, dataRCM, navigation, route }: IndexProps) => {
       </Text>
 
       <View style={styleFilm.rcmContainer}>
-        {dataRCM.slice(0, showAllFilms ? dataRCM.length : 6).map((item) => (
+        {data.slice(0, showAllFilms ? data.length : 6).map((item) => (
           <TouchableOpacity
             key={item.movieId}
             onPress={() => {
@@ -56,13 +56,13 @@ export const FilmItem = ({ title, dataRCM, navigation, route }: IndexProps) => {
                 }}
                 style={styleFilm.rcmFilmImageContainer}
               />
-              <View style={styleFilm.rcmFilmSub}>
-                <Text style={styleFilm.rcmFilmSubTitle}>
-                  {item.isSingle === true
-                    ? "Phim lẻ"
-                    : `${item.episodeNum} tập`}
-                </Text>
-              </View>
+              {item.level === 1 ? (
+                <View style={styleFilm.rcmFilmSub}>
+                  <Text style={styleFilm.rcmFilmSubTitle}>VIP</Text>
+                </View>
+              ) : (
+                ""
+              )}
               <Text
                 numberOfLines={2}
                 ellipsizeMode="tail"
@@ -74,7 +74,7 @@ export const FilmItem = ({ title, dataRCM, navigation, route }: IndexProps) => {
           </TouchableOpacity>
         ))}
       </View>
-      {dataRCM.length > 9 && (
+      {data.length > 9 && (
         <TouchableOpacity
           onPress={toggleShowAllFilms}
           style={styleFilm.buttonMore}
@@ -101,8 +101,9 @@ export const styleFilm = StyleSheet.create({
 
   sectionTitle: {
     color: "white",
-    fontSize: 15,
+    fontSize: 16,
     marginBottom: 8,
+    fontWeight: "bold",
   },
 
   rcmContainer: {
@@ -120,7 +121,7 @@ export const styleFilm = StyleSheet.create({
 
   rcmFilmImageContainer: {
     width: "100%",
-    height: 140,
+    height: 160,
     borderRadius: 5,
     margin: "auto",
     backgroundColor: "rgba(0, 0, 0, 0.05)",
@@ -133,6 +134,7 @@ export const styleFilm = StyleSheet.create({
     width: width / 8 - 2,
     height: height / 46,
     backgroundColor: Colors.ACTIVE,
+    borderBottomLeftRadius: 5,
   },
 
   rcmFilmSubTitle: {

@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  ScrollView,
-  View,
-  Dimensions,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
   FlatList,
   SectionList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
 } from "react-native";
 
 const listOption = [

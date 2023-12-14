@@ -96,7 +96,7 @@ export const Login = ({ navigation, route }: LoginScreenProp) => {
           <FontAwesomeIcon
             icon={faAngleLeft}
             style={styles.backIcon}
-            size={25}
+            size={20}
           />
         </TouchableOpacity>
         <TouchableOpacity

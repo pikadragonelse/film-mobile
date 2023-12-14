@@ -106,7 +106,7 @@ export const VIPPackage = ({ navigation, route }: VIPScreenProp) => {
             <FontAwesomeIcon
               icon={faAngleLeft}
               style={styles.backIcon}
-              size={25}
+              size={20}
             />
           </TouchableOpacity>
           <View style={styles.subHeader}>

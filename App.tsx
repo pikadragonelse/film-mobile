@@ -1,24 +1,25 @@
-import React, { ReactNode } from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { View, Text, Dimensions } from "react-native";
-import { Icon, makeStyles } from "@rneui/themed";
-import { TabNavigator } from "./src/components/tab-navigator";
-import { Header } from "./src/components/header";
-import { SearchScreen } from "./src/page/search";
-import { store } from "./src/redux/store";
+import { makeStyles } from "@rneui/themed";
+import React from "react";
 import { Provider } from "react-redux";
+import { ActorDetail } from "./src/components/actor-detail/intex";
+import { TabNavigator } from "./src/components/tab-navigator";
 import { CurrentUser, Watching } from "./src/page/watching";
 import { Rank } from "./src/page/rank";
 import { Personal } from "./src/page/personal";
 import { Login } from "./src/page/login";
-import { Profile } from "./src/page/personal/profile";
+import { Personal } from "./src/page/personal";
+import { VIPPackage } from "./src/page/personal/VIP-package";
 import { Collection } from "./src/page/personal/collection";
 import { HistoryList } from "./src/page/personal/history";
-import { VIPPackage } from "./src/page/personal/VIP-package";
 import { Lovelist } from "./src/page/personal/lovelist";
+import { Profile } from "./src/page/personal/profile";
+import { Rank } from "./src/page/rank";
 import { Register } from "./src/page/register";
+import { SearchScreen } from "./src/page/search";
+import { Watching } from "./src/page/watching";
+import { store } from "./src/redux/store";
 
 export type RootStackParamList = {
   BottomTabNav: undefined;
@@ -35,6 +36,7 @@ export type RootStackParamList = {
   Lovelist: undefined;
   Home: undefined;
   Register: undefined;
+  Actor: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -112,6 +114,11 @@ export default function App() {
           <Stack.Screen
             name="History"
             component={HistoryList}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Actor"
+            component={ActorDetail}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
