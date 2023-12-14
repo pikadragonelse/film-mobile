@@ -33,6 +33,7 @@ import { ListComment } from "../../components/list-cmt";
 import { WriteCmt } from "../../components/list-cmt/write-cmt";
 import { Film } from "../../components/model/film";
 import { TabParamList } from "../../components/tab-navigator";
+import { VideoPlayerCustom } from "../../components/video-player";
 import Colors from "../../constants/Colors";
 import { RootState } from "../../redux/store";
 import { request } from "../../utils/request";

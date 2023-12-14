@@ -150,6 +150,13 @@ export const Login = ({ navigation, route }: LoginScreenProp) => {
         <TouchableOpacity style={styles.btnLogin} onPress={handleLogin}>
           <Text style={styles.loginText}>Đăng nhập</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("ForgetPassword");
+          }}
+        >
+          <Text style={styles.forget}>Quên mật khẩu</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.btnNewAcc}>
@@ -260,5 +267,12 @@ const styles = StyleSheet.create({
   new: {
     fontSize: 16,
     color: Colors.ACTIVE,
+  },
+  forget: {
+    marginTop: 14,
+    fontSize: 15,
+    color: Colors.ACTIVE,
+    textDecorationLine: "underline",
+    textAlign: "right",
   },
 });

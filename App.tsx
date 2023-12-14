@@ -9,17 +9,15 @@ import { CurrentUser, Watching } from "./src/page/watching";
 import { Rank } from "./src/page/rank";
 import { Personal } from "./src/page/personal";
 import { Login } from "./src/page/login";
-import { Personal } from "./src/page/personal";
 import { VIPPackage } from "./src/page/personal/VIP-package";
 import { Collection } from "./src/page/personal/collection";
 import { HistoryList } from "./src/page/personal/history";
 import { Lovelist } from "./src/page/personal/lovelist";
 import { Profile } from "./src/page/personal/profile";
-import { Rank } from "./src/page/rank";
 import { Register } from "./src/page/register";
 import { SearchScreen } from "./src/page/search";
-import { Watching } from "./src/page/watching";
 import { store } from "./src/redux/store";
+import { ForgetPassword } from "./src/page/forgetPassword";
 
 export type RootStackParamList = {
   BottomTabNav: undefined;
@@ -37,6 +35,7 @@ export type RootStackParamList = {
   Home: undefined;
   Register: undefined;
   Actor: undefined;
+  ForgetPassword: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -119,6 +118,11 @@ export default function App() {
           <Stack.Screen
             name="Actor"
             component={ActorDetail}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ForgetPassword"
+            component={ForgetPassword}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

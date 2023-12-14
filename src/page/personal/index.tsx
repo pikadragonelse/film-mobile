@@ -11,7 +11,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Button } from "@rneui/themed";
-import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { RootStackParamList } from "../../../App";

@@ -16,8 +16,6 @@ import {
 import { User } from "..";
 import { RootStackParamList } from "../../../../App";
 import Colors from "../../../constants/Colors";
-import { ScrollView } from "@nandorojo/anchor";
-import DatePicker from "@react-native-community/datetimepicker";
 import { Input } from "@rneui/themed";
 import { CurrentUser } from "../../watching";
 import { getToken } from "../../auth";
