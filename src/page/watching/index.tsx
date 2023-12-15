@@ -162,10 +162,12 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
     episodeNo: 0,
   };
   const [watchingData, setWatchingData] = useState<Film>(defaultFilm);
-  const [episodeId, setEpisodeId] = useState<number | undefined>(undefined);
-  const { movieId } = route.params || {
+  const { movieId, episodeId: id } = route.params || {
     movieId: 0,
+    episodeId: 0,
   };
+
+  const [episodeId, setEpisodeId] = useState<number | undefined>(id);
 
   const fetchData = async () => {
     try {
@@ -193,6 +195,12 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
         await fetchData();
       }
       setDataEpisode(data);
+      //
+      if (startTime) {
+        const elapsedMinutes = calculateElapsedTime();
+        saveWatchingHistory(data.episodeId, elapsedMinutes);
+      }
+      setStartTime(Date.now());
     } catch (error) {
       console.error(error);
     }
@@ -463,6 +471,33 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
 
   const handleCommentSubmit = async (content: string) => {
     await postData(content);
+  };
+  //api history
+  const saveWatchingHistory = async (episodeId: number, duration: number) => {
+    const accessToken = await getToken();
+    try {
+      const response = await request.get(
+        `user/add-movie-history?episodeId=${episodeId}&duration=${duration}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      console.log("API Response:", response.data);
+    } catch (error) {
+      console.error("API Error:", error);
+    }
+  };
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const calculateElapsedTime = () => {
+    if (startTime) {
+      const endTime = Date.now();
+      const elapsedMinutes = Math.floor((endTime - startTime) / (1000 * 60));
+      return elapsedMinutes;
+    }
+    return 0;
   };
 
   return (
