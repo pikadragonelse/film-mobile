@@ -94,7 +94,8 @@ export const ListFilmItemFouyou = ({
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("Watching", {
-                    movieId: data.id,
+                    movieId: data.movieId,
+                    episodeId: data.id,
                   });
                 }}
               >

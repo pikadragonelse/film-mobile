@@ -22,7 +22,7 @@ import { ForgetPassword } from "./src/page/forgetPassword";
 export type RootStackParamList = {
   BottomTabNav: undefined;
   Search: undefined;
-  Watching: { movieId: number };
+  Watching: { movieId?: number; episodeId?: number };
   Rank: undefined;
   Personal: undefined;
   Login: undefined;
@@ -67,7 +67,7 @@ export default function App() {
           <Stack.Screen
             name="Watching"
             component={Watching}
-            initialParams={{ movieId: 0 }}
+            initialParams={{ movieId: 0, episodeId: 0 }}
             options={{ headerShown: false }}
           />
           <Stack.Screen

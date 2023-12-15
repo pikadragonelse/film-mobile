@@ -35,44 +35,35 @@ export const FilmItemHistory = ({
   navigation,
   route,
 }: FilmItemHistoryProps) => {
-  console.log(title);
   return (
     <ScrollView style={stylesForyou.containerItemForyou}>
       <View style={stylesForyou.ctnItem}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Watching", {
-              movieId: data.id,
-            });
-          }}
-        >
-          <View style={stylesForyou.poster}>
-            <Image
-              source={{
-                uri: data.posterURL,
-              }}
-              style={stylesForyou.posterimg}
-            />
-            <Text style={stylesForyou.duration}></Text>
-            {/* <Text style={stylesForyou.duration}>{data.duration}</Text> */}
-          </View>
-          <View style={stylesForyou.content}>
-            <Text
-              style={stylesForyou.nameFilm}
-              numberOfLines={2}
-              ellipsizeMode="tail"
-            >
-              {/* {data.title} tập {data.episodeNum} */}
-              {title}
-            </Text>
-            {/* <Text style={stylesForyou.nameFilm}>
+        <View style={stylesForyou.poster}>
+          <Image
+            source={{
+              uri: data.posterURL,
+            }}
+            style={stylesForyou.posterimg}
+          />
+          {/* <Text style={stylesForyou.duration}>{data.duration}</Text> */}
+        </View>
+        <View style={stylesForyou.content}>
+          <Text
+            style={stylesForyou.nameFilm}
+            numberOfLines={2}
+            ellipsizeMode="tail"
+          >
+            {/* {data.title} tập {data.episodeNum} */}
+            {title}
+          </Text>
+          {/* <Text style={stylesForyou.nameFilm}>
               {data.category.map((cate) => cate.concat(", ")) || [""]}
             </Text> */}
-            {data.status && (
-              <Text style={stylesForyou.subtxt}> Đã xem {data.status}%</Text>
-            )}
-          </View>
-        </TouchableOpacity>
+          {data.status && (
+            <Text style={stylesForyou.subtxt}> Đã xem {data.status}%</Text>
+          )}
+        </View>
+
         <View style={stylesForyou.checkbox}>
           {isEditing && (
             <CheckBox
