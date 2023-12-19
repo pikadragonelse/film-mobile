@@ -23,6 +23,7 @@ export interface Episodes{
     duration: number,
     episode_no: number,
     posterURL: string
+    
 }
 
 export type Film = {
@@ -40,5 +41,6 @@ export type Film = {
     actors: Array<Actors>,
     episodes:Array<Episodes>
     isSeries?:boolean,
+   rating?:number,
     
 }

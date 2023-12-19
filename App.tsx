@@ -34,7 +34,7 @@ export type RootStackParamList = {
   Lovelist: undefined;
   Home: undefined;
   Register: undefined;
-  Actor: undefined;
+  Actor: { actorId?: number };
   ForgetPassword: undefined;
 };
 
@@ -118,6 +118,7 @@ export default function App() {
           <Stack.Screen
             name="Actor"
             component={ActorDetail}
+            initialParams={{ actorId: 0 }}
             options={{ headerShown: false }}
           />
           <Stack.Screen

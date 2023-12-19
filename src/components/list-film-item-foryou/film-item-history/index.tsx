@@ -41,7 +41,7 @@ export const FilmItemHistory = ({
         <View style={stylesForyou.poster}>
           <Image
             source={{
-              uri: data.posterURL,
+              uri: data.backgroundMovieURL,
             }}
             style={stylesForyou.posterimg}
           />
@@ -54,7 +54,7 @@ export const FilmItemHistory = ({
             ellipsizeMode="tail"
           >
             {/* {data.title} tập {data.episodeNum} */}
-            {title}
+            {data.title}
           </Text>
           {/* <Text style={stylesForyou.nameFilm}>
               {data.category.map((cate) => cate.concat(", ")) || [""]}

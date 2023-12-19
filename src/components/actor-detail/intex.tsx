@@ -16,26 +16,39 @@ import Colors from "../../constants/Colors";
 import { RootStackParamList } from "../../../App";
 import { TabParamList } from "../tab-navigator";
 import { Film } from "../model/film";
+import moment from "moment";
 
 type ActorScreenProp = CompositeScreenProps<
   BottomTabScreenProps<TabParamList>,
   StackScreenProps<RootStackParamList>
 >;
+interface ActorInfo {
+  name: string;
+  gender: string;
+  avatar: string;
+  dateOfBirth: string;
+  description: string;
+}
 
 export const ActorDetail = ({ navigation, route }: ActorScreenProp) => {
-  const [trendingData, setTrendingData] = useState<Film[]>([]);
+  const { actorId } = route.params || {
+    actorId: 0,
+  };
 
-  const fetchTrending = async () => {
+  const [movieData, setMovieData] = useState<Film[]>([]);
+
+  const [actorInfo, setActorInfo] = useState<ActorInfo | null>(null);
+  const fetchActorInf = async () => {
     try {
-      const response = await request.get("movies/home/trending");
-      setTrendingData(response.data);
+      const response = await request.get(`/individuals/actors/${actorId}`);
+      setActorInfo(response.data.data);
+      setMovieData(response.data.data.movies);
     } catch (error) {
       console.error(error);
     }
   };
-
   useEffect(() => {
-    fetchTrending();
+    fetchActorInf();
   }, []);
 
   return (
@@ -53,13 +66,15 @@ export const ActorDetail = ({ navigation, route }: ActorScreenProp) => {
           size={84}
           rounded
           source={{
-            uri: "https://randomuser.me/api/portraits/men/36.jpg",
+            uri: actorInfo?.avatar,
           }}
         />
         <View style={styles.actorInfo}>
           <View>
-            <Text style={styles.actorName}>Christopher</Text>
-            <Text style={styles.actorDate}>1994-09-23 ⋅ Trung Quốc</Text>
+            <Text style={styles.actorName}>{actorInfo?.name}</Text>
+            <Text style={styles.actorDate}>
+              {moment(actorInfo?.dateOfBirth).format("DD-MM-YYYY")}
+            </Text>
           </View>
           <TouchableOpacity style={styles.actorShareBg}>
             <FontAwesomeIcon
@@ -74,20 +89,19 @@ export const ActorDetail = ({ navigation, route }: ActorScreenProp) => {
       <View style={styles.actorDescription}>
         <Text style={styles.actorDescriptionTitle}>Giới thiệu</Text>
         <Text style={styles.actorDescriptionText}>
-          Scarlett Johansson (sinh năm 1984) là một nữ diễn viên và ca sĩ người
-          Mỹ. Cô được khán giả khắp thế giới biết đến qua các bộ phim nổi tiếng
-          như: A Love Song for Bobby Long (2004), Match Point (2005), The
-          Prestige (2006), Người Sắt (2010), Her (2013), Under the Skin (2013),
-          Lucy (2014), Vỏ bọc ma (2017)…
+          {actorInfo?.description}
         </Text>
         {[
-          { label: "Tên", value: "Christopher" },
-          { label: "Giới tính", value: "Christopher" },
-          { label: "Ngày sinh", value: "1994-09-23" },
-          { label: "Quốc gia", value: "Trung Quốc" },
-          { label: "Chiều cao", value: "170cm" },
-          { label: "Cân nặng", value: "60kg" },
-          { label: "Nghề nghiệp", value: "Diễn viên, Người mẫu" },
+          { label: "Tên", value: actorInfo?.name },
+          { label: "Giới tính", value: actorInfo?.gender },
+          {
+            label: "Ngày sinh",
+            value: moment(actorInfo?.dateOfBirth).format("DD-MM-YYYY"),
+          },
+          // { label: "Quốc gia", value: "Trung Quốc" },
+          // { label: "Chiều cao", value: "170cm" },
+          // { label: "Cân nặng", value: "60kg" },
+          // { label: "Nghề nghiệp", value: "Diễn viên, Người mẫu" },
         ].map((item, index) => (
           <View style={styles.infoItem} key={index}>
             <Text style={styles.infoLabel}>{item.label}</Text>
@@ -98,7 +112,7 @@ export const ActorDetail = ({ navigation, route }: ActorScreenProp) => {
 
       <FilmItem
         title="Phim liên quan"
-        data={trendingData}
+        data={movieData}
         navigation={navigation}
         route={route}
       />

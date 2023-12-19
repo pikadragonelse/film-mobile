@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
     },
     ratingText: {
         color: "white",
-        marginLeft: 10,
+        marginLeft: 2,
         fontSize: 15,
     },
     hashtagContainer: {
@@ -120,5 +120,17 @@ export const styles = StyleSheet.create({
         paddingLeft:5,
         marginLeft:7,
         marginRight:7,
-    }
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      },
+      modalContent: {
+        backgroundColor: 'white',
+        padding: 15,
+        borderRadius: 10,
+        width: '65%',
+      },
 });

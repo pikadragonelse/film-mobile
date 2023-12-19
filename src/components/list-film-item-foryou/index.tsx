@@ -1,3 +1,5 @@
+import { faFaceFrown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { ScrollView } from "@nandorojo/anchor";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
@@ -86,6 +88,16 @@ export const ListFilmItemFouyou = ({
                   )}
                 </TouchableOpacity>
               </View>
+            )}
+            {dataList.length === 0 && (
+              <>
+                <FontAwesomeIcon
+                  // style={}
+                  icon={faFaceFrown}
+                  size={16}
+                />
+                <Text>Bộ sưu tập còn trống.</Text>
+              </>
             )}
             <View style={styles.header}>
               <Text style={styles.titleForyou}>{title}</Text>

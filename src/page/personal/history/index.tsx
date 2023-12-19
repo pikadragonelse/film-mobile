@@ -33,6 +33,7 @@ export interface FilmItemForyouType {
   // genres?:Array<genres>
   status?: number;
   movieId?: number;
+  backgroundMovieURL?: string;
 }
 
 export const HistoryList = ({ navigation, route }: HistoryScreenProp) => {
@@ -50,8 +51,7 @@ export const HistoryList = ({ navigation, route }: HistoryScreenProp) => {
           },
         }
       );
-      const data = response.data.data.ListMovie;
-      setDataHistorymovies(data);
+      setDataHistorymovies(response.data.data.ListMovie);
     } catch (error) {
       console.error(error);
     }
@@ -64,7 +64,7 @@ export const HistoryList = ({ navigation, route }: HistoryScreenProp) => {
   const toggleEditing = () => {
     setIsEditing(!isEditing);
   };
-
+  console.log(dataHistorymovies);
   return (
     <View>
       <SafeAreaView>
