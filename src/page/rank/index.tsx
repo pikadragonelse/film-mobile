@@ -19,7 +19,7 @@ type RankProps = CompositeScreenProps<
 >;
 const rankMonth: FilmItemSearch[] = [
   {
-    id: 1,
+    movieId: 1,
     posterURL:
       "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
     isSeries: true,
@@ -34,7 +34,7 @@ const rankMonth: FilmItemSearch[] = [
     vip: true,
   },
   {
-    id: 2,
+    movieId: 2,
     posterURL:
       "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
     isSeries: true,
@@ -49,7 +49,7 @@ const rankMonth: FilmItemSearch[] = [
     vip: false,
   },
   {
-    id: 3,
+    movieId: 3,
     posterURL:
       "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
     isSeries: false,
@@ -64,7 +64,7 @@ const rankMonth: FilmItemSearch[] = [
     vip: false,
   },
   {
-    id: 4,
+    movieId: 4,
     posterURL:
       "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
     isSeries: true,
@@ -79,7 +79,7 @@ const rankMonth: FilmItemSearch[] = [
     vip: true,
   },
   {
-    id: 5,
+    movieId: 5,
     posterURL:
       "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
     isSeries: true,
@@ -96,7 +96,7 @@ const rankMonth: FilmItemSearch[] = [
 ];
 const rankWeek: FilmItemSearch[] = [
   {
-    id: 1,
+    movieId: 1,
     posterURL:
       "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
     isSeries: true,
@@ -111,7 +111,7 @@ const rankWeek: FilmItemSearch[] = [
     vip: true,
   },
   {
-    id: 2,
+    movieId: 2,
     posterURL:
       "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
     isSeries: true,

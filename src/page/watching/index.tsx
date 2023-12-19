@@ -9,6 +9,7 @@ import {
   faArrowUpFromBracket,
   faBookmark,
   faHeart,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
@@ -18,6 +19,7 @@ import { Avatar, Button, ListItem } from "@rneui/themed";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
+  Modal,
   ScrollView,
   Text,
   TextInput,
@@ -42,32 +44,12 @@ import { FilmItemForyouType } from "../personal/history";
 import { styles } from "./style";
 
 const moment = require("moment");
-const list = [
-  {
-    name: "Amy Farha 123123",
-    avatar_url:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-    subtitle: "Vice President",
-  },
-  {
-    name: "Chris Jackson",
-    avatar_url:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-    subtitle: "Vice Chairman",
-  },
-  {
-    name: "Chris Jackson",
-    avatar_url:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-    subtitle: "Vice Chairman",
-  },
-  {
-    name: "Chris Jackson",
-    avatar_url:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-    subtitle: "Vice Chairman",
-  },
-];
+
+export interface Actors {
+  actor_id: number;
+  name: string;
+  avatar: string;
+}
 export interface UserProps {
   user_id: number;
   gender: string;
@@ -168,16 +150,69 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
   };
 
   const [episodeId, setEpisodeId] = useState<number | undefined>(id);
+  const [rating, setRating] = useState<number>(0);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+  const handleRating = async (newValue: number) => {
+    const accessToken = await getToken();
+    try {
+      const response = await request.post(
+        "ratings/create",
+        {
+          movieId: movieId,
+          rating: newValue,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const data = response.data;
+      console.log(data);
+    } catch (error: any) {
+      console.log(error);
+    }
+    setModalVisible(false);
+  };
+
+  const isUserLogged = useSelector((state: RootState) => state.user.isLogin);
+  const [actor, setActor] = useState<Actors[]>([]);
 
   const fetchData = async () => {
+    const accessToken = await getToken();
     try {
-      const response = await request.get(`movies/${movieId}`);
-      const data = response.data;
-      setEpisodeId(
-        data.episodes.length > 0 ? data.episodes[0].episode_id : undefined
-      );
-      setActiveEpisode(episodeId);
-      setWatchingData(data);
+      if (accessToken) {
+        const response = await request.get(`movies/${movieId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        const data = response.data;
+        setEpisodeId(
+          data.movie.episodes.length > 0
+            ? data.movie.episodes[0].episode_id
+            : undefined
+        );
+        setActiveEpisode(episodeId);
+        setWatchingData(data.movie);
+        setRating(data.rating);
+        setActor(data.movie.actors);
+      } else {
+        const response = await request.get(`movies/${movieId}`);
+        const data = response.data;
+        setEpisodeId(
+          data.movie.episodes.length > 0
+            ? data.movie.episodes[0].episode_id
+            : undefined
+        );
+        setActiveEpisode(episodeId);
+        setWatchingData(data.movie);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -484,8 +519,6 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
           },
         }
       );
-
-      console.log("API Response:", response.data);
     } catch (error) {
       console.error("API Error:", error);
     }
@@ -528,16 +561,39 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
               {watchingData.title}-{dataEpisode.title}
             </Text>
             <View style={styles.ratingContainer}>
-              <Rating
-                ratingColor="red"
-                ratingBackgroundColor="red"
-                startingValue={3.5}
-                imageSize={15}
-                tintColor="#191919"
-              />
+              <Text style={{ color: "white", marginRight: 5 }}>
+                {dataEpisode.numView.toLocaleString()} lượt xem
+              </Text>
+              <FontAwesomeIcon icon={faStar} color={"#fadb14"} />
+
               <Text style={styles.ratingText}>
                 {watchingData.averageRating}
               </Text>
+              {isUserLogged && (
+                <TouchableOpacity onPress={openModal}>
+                  <Text style={{ color: "white", marginLeft: 5 }}>
+                    Đánh giá ngay
+                  </Text>
+                </TouchableOpacity>
+              )}
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+              >
+                <View style={styles.modalContainer}>
+                  <View style={styles.modalContent}>
+                    <Rating
+                      ratingColor="#fadb14"
+                      ratingBackgroundColor="red"
+                      startingValue={rating}
+                      imageSize={35}
+                      // tintColor="#191919"
+                      onFinishRating={handleRating}
+                    />
+                  </View>
+                </View>
+              </Modal>
             </View>
             <View style={styles.hashtagContainer}>
               <Text
@@ -579,31 +635,39 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
             }}
             horizontal
           >
-            {list.map((l, i) => (
-              <ListItem
-                key={i}
-                style={{ width: 190 }}
-                containerStyle={{
-                  backgroundColor: "#191919",
+            {actor.map((l, i) => (
+              <TouchableOpacity
+                key={l.actor_id}
+                onPress={() => {
+                  navigation.navigate("Actor", { actorId: l.actor_id });
                 }}
               >
-                <Avatar
-                  source={{ uri: l.avatar_url }}
-                  avatarStyle={{ borderRadius: 50 }}
-                />
-                <ListItem.Content style={{ backgroundColor: "#191919" }}>
-                  <ListItem.Title
-                    style={{ color: "white" }}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                  >
-                    {l.name}
-                  </ListItem.Title>
-                  <ListItem.Subtitle style={{ color: "white" }}>
-                    {l.subtitle}
-                  </ListItem.Subtitle>
-                </ListItem.Content>
-              </ListItem>
+                <ListItem
+                  key={i}
+                  style={{ width: 240 }}
+                  containerStyle={{
+                    backgroundColor: "#191919",
+                  }}
+                >
+                  <Avatar
+                    size={70}
+                    source={{ uri: l.avatar }}
+                    avatarStyle={{ borderRadius: 50 }}
+                  />
+                  <ListItem.Content style={{ backgroundColor: "#191919" }}>
+                    <ListItem.Title
+                      style={{ color: "white", width: "auto" }}
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {l.name}
+                    </ListItem.Title>
+                    <ListItem.Subtitle style={{ color: "white" }}>
+                      {l.name}
+                    </ListItem.Subtitle>
+                  </ListItem.Content>
+                </ListItem>
+              </TouchableOpacity>
             ))}
           </ScrollView>
           <View style={styles.containerFeature}>
