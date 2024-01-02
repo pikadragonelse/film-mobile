@@ -17,106 +17,113 @@ import { Login } from "./src/page/login";
 import { Profile } from "./src/page/personal/profile";
 import { Collection } from "./src/page/personal/collection";
 import { HistoryList } from "./src/page/personal/history";
-import { VIPPackage } from "./src/page/personal/VIP-package";
+import { VIPPackageUser } from "./src/page/personal/VIP-Package-User";
 import { Lovelist } from "./src/page/personal/lovelist";
 import { Register } from "./src/page/register";
+import { VIPPackage } from "./src/page/VIPPackage";
 
 export type RootStackParamList = {
-  BottomTabNav: undefined;
-  Search: undefined;
-  Watching: { filmId: number };
-  Rank: undefined;
-  Personal: undefined;
-  Login: undefined;
-  VIPPackage: undefined;
-  Profile: undefined;
-  Collection: undefined;
-  History: undefined;
-  Lovelist: undefined;
-  Home: undefined;
-  Register: undefined;
+    BottomTabNav: undefined;
+    Search: undefined;
+    Watching: { filmId: number };
+    Rank: undefined;
+    Personal: undefined;
+    Login: undefined;
+    VIPPackageUser: undefined;
+    VIPPackage: undefined;
+    Profile: undefined;
+    Collection: undefined;
+    History: undefined;
+    Lovelist: undefined;
+    Home: undefined;
+    Register: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
-  const styles = useStyles();
-  const MyTheme = {
-    ...DefaultTheme,
-    colors: {
-      ...DefaultTheme.colors,
-      background: "#191919",
-    },
-  };
+    const styles = useStyles();
+    const MyTheme = {
+        ...DefaultTheme,
+        colors: {
+            ...DefaultTheme.colors,
+            background: "#191919",
+        },
+    };
 
-  return (
-    <Provider store={store}>
-      <NavigationContainer theme={MyTheme}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="BottomTabNav"
-            component={TabNavigator}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Search"
-            component={SearchScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Watching"
-            component={Watching}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Rank"
-            component={Rank}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Personal"
-            component={Personal}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Register"
-            component={Register}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="VIPPackage"
-            component={VIPPackage}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Profile"
-            component={Profile}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Collection"
-            component={Collection}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Lovelist"
-            component={Lovelist}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="History"
-            component={HistoryList}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
-  );
+    return (
+        <Provider store={store}>
+            <NavigationContainer theme={MyTheme}>
+                <Stack.Navigator>
+                    <Stack.Screen
+                        name="BottomTabNav"
+                        component={TabNavigator}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Search"
+                        component={SearchScreen}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="VIPPackage"
+                        component={VIPPackage}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Watching"
+                        component={Watching}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Rank"
+                        component={Rank}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Personal"
+                        component={Personal}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Login"
+                        component={Login}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Register"
+                        component={Register}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="VIPPackageUser"
+                        component={VIPPackageUser}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Profile"
+                        component={Profile}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Collection"
+                        component={Collection}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Lovelist"
+                        component={Lovelist}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="History"
+                        component={HistoryList}
+                        options={{ headerShown: false }}
+                    />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </Provider>
+    );
 }
 
 const useStyles = makeStyles((theme) => ({}));
