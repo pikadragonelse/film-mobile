@@ -2,9 +2,9 @@ import { ScrollView } from "@nandorojo/anchor";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Tab, TabView } from "@rneui/base";
-import React, { useState } from "react";
-import { View, Text, StyleSheet, FlatList, Dimensions } from "react-native";
+import { Tab } from "@rneui/base";
+import React, { useEffect, useState } from "react";
+import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
 import { RootStackParamList } from "../../../App";
 import { FilmItemSearch } from "../../components/film-item-search";
 import { GenreCardRank } from "../../components/genre-card-rank";
@@ -12,120 +12,12 @@ import { Header } from "../../components/header";
 import { ListItemSearch } from "../../components/list-film-item-search";
 import { TabParamList } from "../../components/tab-navigator";
 import Colors from "../../constants/Colors";
+import { request } from "../../utils/request";
 
 type RankProps = CompositeScreenProps<
   BottomTabScreenProps<TabParamList>,
   StackScreenProps<RootStackParamList>
 >;
-const rankMonth: FilmItemSearch[] = [
-  {
-    movieId: 1,
-    posterURL:
-      "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
-    isSeries: true,
-    releaseDate: "2022",
-    category: ["Hành động"],
-    episode: 10,
-    averageRating: 7.8,
-    nation: "Trung Quốc",
-    description:
-      "Doona là một bộ phim tâm lý, tình cảm lãng mạn Hàn Quốc của đạo diễn Lee Jeong Hyo, được chuyển thể từ webtoon The Girl Downstairs của tác giả Min Song Ah được nhiều bạn trẻ yêu thích. Phim này, sẽ đem đến câu chuyện tình cảm giữa một nữ ngôi sao đã giải nghệ và anh chàng sinh viên, khi họ vô tình gặp nhau tại một ngôi nhà chung. Đặc biệt, ở phim này sẽ có sự tham gia đóng chính của Suzy và Yang Se Jong",
-    title: "Vân Chi Vũ",
-    vip: true,
-  },
-  {
-    movieId: 2,
-    posterURL:
-      "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
-    isSeries: true,
-    releaseDate: "2022",
-    category: ["Hành động"],
-    episode: 10,
-    averageRating: 7.8,
-    nation: "Trung Quốc",
-    description:
-      "Doona là một bộ phim tâm lý, tình cảm lãng mạn Hàn Quốc của đạo diễn Lee Jeong Hyo, được chuyển thể từ webtoon The Girl Downstairs của tác giả Min Song Ah được nhiều bạn trẻ yêu thích. Phim này, sẽ đem đến câu chuyện tình cảm giữa một nữ ngôi sao đã giải nghệ và anh chàng sinh viên, khi họ vô tình gặp nhau tại một ngôi nhà chung. Đặc biệt, ở phim này sẽ có sự tham gia đóng chính của Suzy và Yang Se Jong",
-    title: "Vân Chi Vũ",
-    vip: false,
-  },
-  {
-    movieId: 3,
-    posterURL:
-      "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
-    isSeries: false,
-    releaseDate: "2022",
-    category: ["Hành động"],
-    // episode: 10,
-    averageRating: 7.8,
-    nation: "Trung Quốc",
-    description:
-      "Doona là một bộ phim tâm lý, tình cảm lãng mạn Hàn Quốc của đạo diễn Lee Jeong Hyo, được chuyển thể từ webtoon The Girl Downstairs của tác giả Min Song Ah được nhiều bạn trẻ yêu thích. Phim này, sẽ đem đến câu chuyện tình cảm giữa một nữ ngôi sao đã giải nghệ và anh chàng sinh viên, khi họ vô tình gặp nhau tại một ngôi nhà chung. Đặc biệt, ở phim này sẽ có sự tham gia đóng chính của Suzy và Yang Se Jong",
-    title: "Vân Chi Vũ",
-    vip: false,
-  },
-  {
-    movieId: 4,
-    posterURL:
-      "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
-    isSeries: true,
-    releaseDate: "2022",
-    category: ["Hành động"],
-    episode: 10,
-    averageRating: 7.8,
-    nation: "Trung Quốc",
-    description:
-      "Doona là một bộ phim tâm lý, tình cảm lãng mạn Hàn Quốc của đạo diễn Lee Jeong Hyo, được chuyển thể từ webtoon The Girl Downstairs của tác giả Min Song Ah được nhiều bạn trẻ yêu thích. Phim này, sẽ đem đến câu chuyện tình cảm giữa một nữ ngôi sao đã giải nghệ và anh chàng sinh viên, khi họ vô tình gặp nhau tại một ngôi nhà chung. Đặc biệt, ở phim này sẽ có sự tham gia đóng chính của Suzy và Yang Se Jong",
-    title: "Vân Chi Vũ",
-    vip: true,
-  },
-  {
-    movieId: 5,
-    posterURL:
-      "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
-    isSeries: true,
-    releaseDate: "2022",
-    category: ["Hành động"],
-    episode: 10,
-    averageRating: 7.8,
-    nation: "Trung Quốc",
-    description:
-      "Doona là một bộ phim tâm lý, tình cảm lãng mạn Hàn Quốc của đạo diễn Lee Jeong Hyo, được chuyển thể từ webtoon The Girl Downstairs của tác giả Min Song Ah được nhiều bạn trẻ yêu thích. Phim này, sẽ đem đến câu chuyện tình cảm giữa một nữ ngôi sao đã giải nghệ và anh chàng sinh viên, khi họ vô tình gặp nhau tại một ngôi nhà chung. Đặc biệt, ở phim này sẽ có sự tham gia đóng chính của Suzy và Yang Se Jong",
-    title: "Vân Chi Vũ",
-    vip: true,
-  },
-];
-const rankWeek: FilmItemSearch[] = [
-  {
-    movieId: 1,
-    posterURL:
-      "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
-    isSeries: true,
-    releaseDate: "2022",
-    category: ["Hành động"],
-    episode: 10,
-    averageRating: 7.8,
-    nation: "Trung Quốc",
-    description:
-      "Doona là một bộ phim tâm lý, tình cảm lãng mạn Hàn Quốc của đạo diễn Lee Jeong Hyo, được chuyển thể từ webtoon The Girl Downstairs của tác giả Min Song Ah được nhiều bạn trẻ yêu thích. Phim này, sẽ đem đến câu chuyện tình cảm giữa một nữ ngôi sao đã giải nghệ và anh chàng sinh viên, khi họ vô tình gặp nhau tại một ngôi nhà chung. Đặc biệt, ở phim này sẽ có sự tham gia đóng chính của Suzy và Yang Se Jong",
-    title: "Vân Chi Vũ",
-    vip: true,
-  },
-  {
-    movieId: 2,
-    posterURL:
-      "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg",
-    isSeries: true,
-    releaseDate: "2022",
-    category: ["Hành động"],
-    episode: 10,
-    averageRating: 7.8,
-    nation: "Trung Quốc",
-    description:
-      "Doona là một bộ phim tâm lý, tình cảm lãng mạn Hàn Quốc của đạo diễn Lee Jeong Hyo, được chuyển thể từ webtoon The Girl Downstairs của tác giả Min Song Ah được nhiều bạn trẻ yêu thích. Phim này, sẽ đem đến câu chuyện tình cảm giữa một nữ ngôi sao đã giải nghệ và anh chàng sinh viên, khi họ vô tình gặp nhau tại một ngôi nhà chung. Đặc biệt, ở phim này sẽ có sự tham gia đóng chính của Suzy và Yang Se Jong",
-    title: "Vân Chi Vũ",
-    vip: false,
-  },
-];
 
 export const Rank = ({ navigation, route }: RankProps) => {
   const tabs = ["Tháng", "Tuần"];
@@ -142,17 +34,47 @@ export const Rank = ({ navigation, route }: RankProps) => {
     { id: 4, name: "Tình cảm" },
     { id: 5, name: "Kinh dị" },
   ];
+
+  const [dataRankMonth, setdataRankMonth] = useState<FilmItemSearch[]>([]);
+  const [dataRankWeek, setdataRankWeek] = useState<FilmItemSearch[]>([]);
+  const fetchdataMonth = async () => {
+    try {
+      const response = await request.get(
+        "movies?page=1&pageSize=32&sort=highFavorited&sortBy=DESC"
+      );
+      const data = response.data;
+      setdataRankMonth(data.movies);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchdataWeek = async () => {
+    try {
+      const response = await request.get(
+        "movies?page=1&pageSize=8&sort=highRated&sortBy=DESC"
+      );
+      const data = response.data;
+      setdataRankWeek(data.movies);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchdataMonth();
+    fetchdataWeek();
+  }, []);
   const tabContents = [
     <View>
       <ListItemSearch
-        listFilms={rankMonth}
+        listFilms={dataRankMonth}
         navigation={navigation}
         route={route}
       />
     </View>,
     <View>
       <ListItemSearch
-        listFilms={rankWeek}
+        listFilms={dataRankWeek}
         navigation={navigation}
         route={route}
       />
