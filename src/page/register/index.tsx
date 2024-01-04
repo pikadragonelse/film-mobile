@@ -23,7 +23,7 @@ export type RegisterScreenProp = StackScreenProps<RootStackParamList>;
 export const Register = ({ navigation, route }: RegisterScreenProp) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-
+  const moment = require("moment");
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };
@@ -57,6 +57,22 @@ export const Register = ({ navigation, route }: RegisterScreenProp) => {
       [name]: value,
     });
   };
+  const sendActive = async (values: any) => {
+    try {
+      const data = { identifier: values.email };
+      console.log(data);
+      const response = await request.post("auth/active-user", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // if (response.data.status === "Ok!") {
+      //   alert("Hãy kiểm tra mail để xác nhận.");
+      // }
+    } catch (error) {
+      console.error("Error sending data to API:", error);
+    }
+  };
 
   const handleRegistration = async () => {
     try {
@@ -66,15 +82,19 @@ export const Register = ({ navigation, route }: RegisterScreenProp) => {
       }
       const registrationData = {
         email: formData.email,
-        dateOfBirth: formData.birthday,
+        dateOfBirth: moment(formData.birthday).format(
+          "YYYY-MM-DD HH:mm:ss.SSSZ"
+        ),
         gender: formData.gender,
         username: formData.username,
         password: formData.password,
       };
-      const response = await request.post("auth/register", registrationData);
+      await request.post("auth/register", registrationData);
 
-      console.log("Registration successful:", response.data);
-      alert("Đăng kí tài khoản thành công");
+      sendActive(formData);
+      alert(
+        "Đăng kí tài khoản thành công. Kiểm tra mail để xác nhận tài khoản"
+      );
       navigation.navigate("Login");
     } catch (error) {
       console.error(

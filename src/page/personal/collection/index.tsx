@@ -99,7 +99,7 @@ export const Collection = ({ navigation, route }: CollectionScreenProp) => {
               paddingLeft: 40,
             }}
           >
-            Đăng nhập xem danh sách xem sau của bạn.
+            Đăng nhập để có những trải nghiệm tốt nhất từ MovTime.
           </Text>
         </TouchableOpacity>
       )}

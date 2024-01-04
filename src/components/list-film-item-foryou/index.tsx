@@ -12,9 +12,11 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import { useSelector } from "react-redux";
 import { RootStackParamList } from "../../../App";
 import Colors from "../../constants/Colors";
 import { FilmItemForyouType } from "../../page/personal/history";
+import { RootState } from "../../redux/store";
 import { TabParamList } from "../tab-navigator";
 import { FilmItemCollection } from "./film-item-collection";
 import { FilmItemHistory } from "./film-item-history";
@@ -35,6 +37,7 @@ export const ListFilmItemFouyou = ({
   navigation,
   route,
 }: FilmItemForyouProps) => {
+  const isUserLogged = useSelector((state: RootState) => state.user.isLogin);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [selectedAll, setSelectedAll] = useState<boolean>(false);
   const toggleItemSelection = (itemId: number) => {
@@ -89,19 +92,36 @@ export const ListFilmItemFouyou = ({
                 </TouchableOpacity>
               </View>
             )}
-            {dataList.length === 0 && (
-              <>
-                <FontAwesomeIcon
-                  // style={}
-                  icon={faFaceFrown}
-                  size={16}
-                />
-                <Text>Bộ sưu tập còn trống.</Text>
-              </>
-            )}
+
             <View style={styles.header}>
               <Text style={styles.titleForyou}>{title}</Text>
             </View>
+            {dataList.length === 0 && (
+              <View
+                style={{
+                  paddingTop: 50,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <FontAwesomeIcon
+                  style={{
+                    color: "white",
+                    paddingTop: 50,
+                    paddingLeft: 40,
+                  }}
+                  icon={faFaceFrown}
+                  size={16}
+                />
+                <Text
+                  style={{
+                    color: "white",
+                  }}
+                >
+                  Bộ sưu tập còn trống.
+                </Text>
+              </View>
+            )}
             {dataList.map((data) => (
               <TouchableOpacity
                 onPress={() => {

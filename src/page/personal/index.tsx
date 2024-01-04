@@ -131,7 +131,7 @@ export const Personal = ({ navigation, route }: PersonalScreenProps) => {
       </View>
       {isUserLogged ? (
         <View style={styles.infor}>
-          <Avatar rounded size={60} source={{ uri: currentUser.avatarURL }} />
+          <Avatar rounded size={70} source={{ uri: currentUser.avatarURL }} />
           <Text style={styles.usernameTxt}>{currentUser.username}</Text>
         </View>
       ) : (
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   usernameTxt: {
     marginLeft: 10,
     color: Colors.WHITE,
-    fontSize: 15,
+    fontSize: 18,
   },
   containerVIP: {
     display: "flex",
