@@ -17,6 +17,8 @@ import { getToken } from "../../auth";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { TabParamList } from "../../../components/tab-navigator";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { RootState } from "../../../redux/store";
+import { useSelector } from "react-redux";
 
 export type HistoryScreenProp = CompositeScreenProps<
   BottomTabScreenProps<TabParamList>,
@@ -37,6 +39,7 @@ export interface FilmItemForyouType {
 }
 
 export const HistoryList = ({ navigation, route }: HistoryScreenProp) => {
+  const isUserLogged = useSelector((state: RootState) => state.user.isLogin);
   const [dataHistorymovies, setDataHistorymovies] = useState<
     FilmItemForyouType[]
   >([]);
@@ -66,39 +69,55 @@ export const HistoryList = ({ navigation, route }: HistoryScreenProp) => {
   };
   console.log(dataHistorymovies);
   return (
-    <View>
-      <SafeAreaView>
-        <View style={styles.containerHeaderForyou}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <FontAwesomeIcon
-              icon={faAngleLeft}
-              style={styles.backIcon}
-              size={20}
-            />
-          </TouchableOpacity>
-          <View style={styles.subHeaderForyou}>
-            <Text style={styles.titleText}>Lịch sử xem</Text>
-            <TouchableOpacity onPress={toggleEditing}>
-              <Text style={styles.subTitle}>
-                {isEditing ? "Hủy bỏ" : "Chỉnh sửa"}
-              </Text>
-            </TouchableOpacity>
-          </View>
+    <>
+      {isUserLogged ? (
+        <View>
+          <SafeAreaView>
+            <View style={styles.containerHeaderForyou}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <FontAwesomeIcon
+                  icon={faAngleLeft}
+                  style={styles.backIcon}
+                  size={20}
+                />
+              </TouchableOpacity>
+              <View style={styles.subHeaderForyou}>
+                <Text style={styles.titleText}>Lịch sử xem</Text>
+                <TouchableOpacity onPress={toggleEditing}>
+                  <Text style={styles.subTitle}>
+                    {isEditing ? "Hủy bỏ" : "Chỉnh sửa"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </SafeAreaView>
+          <ListFilmItemFouyou
+            title="Chọn để tiếp tục xem"
+            dataList={dataHistorymovies}
+            isEditing={isEditing}
+            navigation={navigation}
+            route={route}
+          />
+          {/* <ListFilmItemFouyou
+      title="Trong 1 tuần"
+      dataList={dataWeek}
+      isEditing={isEditing}
+    /> */}
         </View>
-      </SafeAreaView>
-      <ListFilmItemFouyou
-        title="Chọn để tiếp tục xem"
-        dataList={dataHistorymovies}
-        isEditing={isEditing}
-        navigation={navigation}
-        route={route}
-      />
-      {/* <ListFilmItemFouyou
-        title="Trong 1 tuần"
-        dataList={dataWeek}
-        isEditing={isEditing}
-      /> */}
-    </View>
+      ) : (
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <Text
+            style={{
+              color: "white",
+              paddingTop: 50,
+              paddingLeft: 40,
+            }}
+          >
+            Đăng nhập để có những trải nghiệm tốt nhất từ MovTime.
+          </Text>
+        </TouchableOpacity>
+      )}
+    </>
   );
 };
 const styles = StyleSheet.create({

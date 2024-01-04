@@ -4,7 +4,7 @@ import { ScrollView } from "@nandorojo/anchor";
 import DatePicker from "@react-native-community/datetimepicker";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Avatar } from "@rneui/base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -25,13 +25,24 @@ import { RootState } from "../../../redux/store";
 import DropDownPicker from "react-native-dropdown-picker";
 
 export type ProfileScreenProp = StackScreenProps<RootStackParamList>;
-
+export const defaultSubscription = {
+  closeAt: "",
+  subscriptionType: "",
+  updatedAt: "",
+};
+export const defaultCurrentUser = {
+  dateOfBirth: "",
+  gender: "",
+  username: "",
+  email: "",
+  avatarURL: "",
+  role: 0,
+  userId: 0,
+  subscription: defaultSubscription,
+};
 export const Profile = ({ navigation, route }: ProfileScreenProp) => {
   const isUserLogged = useSelector((state: RootState) => state.user.isLogin);
-  const currentUser: CurrentUser | undefined = route.params?.currentUser;
-
-  const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<any>(currentUser?.gender);
+  const [value, setValue] = useState<any>("");
   type GenderOption = { label: string; value: string };
   const [items, setItems] = useState<GenderOption[]>([
     { label: "Nam", value: "Male" },
@@ -40,52 +51,97 @@ export const Profile = ({ navigation, route }: ProfileScreenProp) => {
   ]);
 
   const [showPicker, setShowPicker] = useState<boolean>(false);
-  const [date, setDate] = useState<Date>(
-    new Date(currentUser?.dateOfBirth as string)
-  );
-  const [userInfo, setUserInfo] = useState({
-    userId: currentUser?.userId,
-    avatar: currentUser?.avatarURL,
-    username: currentUser?.username,
-    email: currentUser?.email,
-    genre: currentUser?.gender,
-    dayOfBirth: date,
-  });
+  const [date, setDate] = useState<Date>(new Date());
+  const [currentUser, setCurrentUser] =
+    useState<CurrentUser>(defaultCurrentUser);
+  const fetchDataCurrentUser = async () => {
+    const accessToken = await getToken();
+    try {
+      const response = await request.get("user/get-self-information", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = response.data;
+      setCurrentUser(data);
+      setValue(data?.gender);
+      setDate(new Date(data?.dateOfBirth as string));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchDataCurrentUser();
+  }, []);
+  const [open, setOpen] = useState<boolean>(false);
+  //passsword
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
+  const handlePasswordChange = (key: string, value: string) => {
+    if (key === "oldPassword") {
+      setOldPassword(value);
+    } else if (key === "newPassword") {
+      setNewPassword(value);
+    } else if (key === "confirmPassword") {
+      setConfirmNewPassword(value);
+    }
+  };
+
   const hashPassword = (password?: string) => {
     return password;
   };
   const handleInputChange = (key: string, value: string) => {
-    setUserInfo((prev) => ({ ...prev, [key]: value }));
-    if (key === "dateOfBirth") {
-      setDate(new Date(value));
-    }
+    setCurrentUser((prev) => ({ ...prev, [key]: value }));
   };
-  const handleSave = async () => {
-    // if (userInfo.newPassword || userInfo.confirmPassword) {
-    //   if (hashPassword(userInfo.passwordtest) !== user.password) {
-    //     alert("Mật khẩu hiện tại chưa đúng");
-    //     return;
-    //   }
-
-    //   if (userInfo.newPassword !== userInfo.confirmPassword) {
-    //     alert("Mật khẩu và xác nhận mật khẩu không khớp");
-    //     return;
-    //   }
-    // }
+  const changePassword = async () => {
+    if (newPassword || confirmNewPassword) {
+      if (newPassword !== confirmNewPassword) {
+        alert("Mật khẩu và xác nhận mật khẩu không khớp");
+        return;
+      }
+    }
     const accessToken = await getToken();
-    const editProfileUser = async () => {
-      try {
-        await request.put("user/update-self-information", userInfo, {
+    try {
+      const response = await request.post(
+        "auth/change-password",
+        { oldPassword: oldPassword, newPassword: newPassword },
+        {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        });
+        }
+      );
+      if (response.statusText === "OK") {
         alert("Lưu thông tin thành công");
         navigation.goBack();
-      } catch (error) {
-        console.error(error);
       }
-    };
+    } catch (error) {
+      console.error(error);
+      alert("Lưu thông tin không thành công");
+    }
+  };
+  const editProfileUser = async () => {
+    const accessToken = await getToken();
+    try {
+      await request.put(
+        "user/update-self-information",
+        { dateOfBirth: date, gender: value },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      alert("Lưu thông tin thành công");
+      navigation.goBack();
+    } catch (error) {
+      console.error(error);
+      alert("Lưu thông tin không thành công");
+    }
+  };
+  const handleSave = async () => {
+    changePassword();
     editProfileUser();
   };
 
@@ -132,7 +188,7 @@ export const Profile = ({ navigation, route }: ProfileScreenProp) => {
               {/* <TouchableOpacity onPress={handleUploadAvatar}> */}
               <Avatar
                 rounded
-                size={70}
+                size={80}
                 source={{ uri: currentUser?.avatarURL }}
               />
               {/* </TouchableOpacity> */}
@@ -141,13 +197,13 @@ export const Profile = ({ navigation, route }: ProfileScreenProp) => {
               <Text style={styles.titleItem}>Tên tài khoản</Text>
               <TextInput
                 style={styles.inputItem}
-                value={userInfo.username}
+                value={currentUser.username}
                 onChangeText={(text) => handleInputChange("username", text)}
               />
               <Text style={styles.titleItem}>Email</Text>
               <TextInput
                 style={styles.inputItem}
-                value={userInfo.email}
+                value={currentUser.email}
                 editable={false}
               />
               <Text style={styles.titleItem}>Giới tính</Text>
@@ -157,10 +213,8 @@ export const Profile = ({ navigation, route }: ProfileScreenProp) => {
                 items={items}
                 setOpen={setOpen}
                 setValue={(value: any) => {
-                  const selectedValue =
-                    typeof value === "function" ? value() : value;
-                  setValue(selectedValue);
-                  handleInputChange("gender", selectedValue);
+                  setValue(value);
+                  handleInputChange("gender", value);
                 }}
                 setItems={setItems}
                 searchable={false}
@@ -173,6 +227,7 @@ export const Profile = ({ navigation, route }: ProfileScreenProp) => {
                   borderColor: "#202020",
                 }}
               />
+
               <Text style={styles.titleItem}>Ngày sinh</Text>
 
               <TouchableOpacity
@@ -217,24 +272,28 @@ export const Profile = ({ navigation, route }: ProfileScreenProp) => {
               <Text style={styles.titleItem}>Mật khẩu hiện tại</Text>
               <TextInput
                 style={styles.inputItem}
-                // value={userInfo.passwordtest}
+                value={oldPassword}
                 secureTextEntry={true}
-                onChangeText={(text) => handleInputChange("passwordtest", text)}
+                onChangeText={(text) =>
+                  handlePasswordChange("oldPassword", text)
+                }
               />
               <Text style={styles.titleItem}>Mật khẩu mới</Text>
               <TextInput
                 style={styles.inputItem}
-                // value={userInfo.newPassword}
+                value={newPassword}
                 secureTextEntry={true}
-                onChangeText={(text) => handleInputChange("newPassword", text)}
+                onChangeText={(text) =>
+                  handlePasswordChange("newPassword", text)
+                }
               />
               <Text style={styles.titleItem}>Xác nhận lại mật khẩu mới</Text>
               <TextInput
                 style={styles.inputItem}
-                // value={userInfo.confirmPassword}
+                value={confirmNewPassword}
                 secureTextEntry={true}
                 onChangeText={(text) =>
-                  handleInputChange("confirmPassword", text)
+                  handlePasswordChange("confirmPassword", text)
                 }
               />
             </View>
@@ -249,7 +308,7 @@ export const Profile = ({ navigation, route }: ProfileScreenProp) => {
               paddingLeft: 70,
             }}
           >
-            Đăng nhập xem thông tin của bạn.
+            Đăng nhập để có những trải nghiệm tốt nhất từ MovTime.
           </Text>
         </TouchableOpacity>
       )}

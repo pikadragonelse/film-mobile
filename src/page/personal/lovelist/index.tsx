@@ -97,7 +97,7 @@ export const Lovelist = ({ navigation, route }: LovelistScreenProp) => {
               paddingLeft: 40,
             }}
           >
-            Đăng nhập xem danh sách yêu thích của bạn.
+            Đăng nhập để có những trải nghiệm tốt nhất từ MovTime.
           </Text>
         </TouchableOpacity>
       )}
