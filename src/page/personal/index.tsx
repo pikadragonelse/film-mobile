@@ -51,12 +51,12 @@ export const Personal = ({ navigation, route }: PersonalScreenProps) => {
       nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
       onPress: () => navigation.navigate("Profile", { currentUser }),
     },
-    {
-      title: "Gói VIP",
-      icon: <FontAwesomeIcon icon={faCrown} color={"#989898"} />,
-      nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
-      onPress: () => navigation.navigate("VIPPackage"),
-    },
+    // {
+    //   title: "Gói VIP",
+    //   icon: <FontAwesomeIcon icon={faCrown} color={"#989898"} />,
+    //   nextIcon: <FontAwesomeIcon icon={faAngleRight} color={"#E3E0D7"} />,
+    //   onPress: () => navigation.navigate("VIPPackage"),
+    // },
     {
       title: "Sưu tập của tôi",
       icon: <FontAwesomeIcon icon={faList} color={"#989898"} />,
