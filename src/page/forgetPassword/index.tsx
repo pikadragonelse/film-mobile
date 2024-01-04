@@ -26,9 +26,27 @@ export const ForgetPassword = ({
   route,
 }: ForgetPasswordScreenProp) => {
   const [email, setEmail] = useState("");
-
   const handleConfirm = async () => {
-    alert("Hãy vào email của bạn để xác nhận.");
+    if (!email) {
+      alert("Vui lòng nhập email.");
+      return;
+    }
+    const postEmail = {
+      email: email,
+    };
+    await request
+      .post("auth/forgot-password", postEmail)
+      .then((response) => {
+        if (response.data.status == "Ok!") {
+          alert("Hãy vào mail của bạn để xác nhận nhé!.");
+        }
+        navigation.navigate("Home");
+      })
+      .catch(function (err) {
+        console.error(err);
+        alert("Hãy kiểm tra lại email bạn nhập nhé!.");
+      });
+ 
   };
 
   return (

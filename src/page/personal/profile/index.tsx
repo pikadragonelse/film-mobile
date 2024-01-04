@@ -73,10 +73,9 @@ export const Profile = ({ navigation, route }: ProfileScreenProp) => {
     //   }
     // }
     const accessToken = await getToken();
-    userInfo.userId = currentUser?.userId;
     const editProfileUser = async () => {
       try {
-        await request.put("user/update-user", userInfo, {
+        await request.put("user/update-self-information", userInfo, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },

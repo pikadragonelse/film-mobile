@@ -53,7 +53,7 @@ export const Login = ({ navigation, route }: LoginScreenProp) => {
   const handleLogin = async () => {
     try {
       if (!formData.username || !formData.password) {
-        alert("Vui lòng nhập username và mật khẩu.");
+        alert("Vui lòng nhập tên đăng nhập/email và mật khẩu.");
         return;
       }
       const loginData = {
@@ -86,6 +86,7 @@ export const Login = ({ navigation, route }: LoginScreenProp) => {
         "Login failed:",
         error.response ? error.response.data : error.message
       );
+      alert("Vui lòng kiểm tra lại tên đăng nhập/email và mật khẩu.");
     }
   };
   const dispatch = useDispatch();
@@ -116,7 +117,7 @@ export const Login = ({ navigation, route }: LoginScreenProp) => {
         <View style={styles.username}>
           <TextInput
             style={styles.usernameText}
-            placeholder="Tên đăng nhập"
+            placeholder="Tên đăng nhập/email"
             placeholderTextColor="grey"
             onChangeText={(text) => handleChange("username", text)}
             value={formData.username}
