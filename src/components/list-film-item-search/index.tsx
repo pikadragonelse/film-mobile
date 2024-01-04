@@ -6,6 +6,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { RootStackParamList } from "../../../App";
 import { FilmItemSearch } from "../film-item-search";
 import { TabParamList } from "../tab-navigator";
+import { ScrollView } from "@nandorojo/anchor";
 
 export type ListItemSearchProps = {
   listFilms: Array<FilmItemSearch>;
@@ -21,7 +22,7 @@ export const ListItemSearch = ({
   route,
 }: ListItemSearchProps) => {
   return (
-    <View>
+    <ScrollView>
       <Text style={styles.title}>{title}</Text>
       {listFilms.map((data) => (
         <FilmItemSearch
@@ -31,7 +32,7 @@ export const ListItemSearch = ({
           route={route}
         />
       ))}
-    </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "500",
-    marginTop: 30,
+    marginTop: 20,
     marginLeft: 10,
     marginBottom: 0,
   },

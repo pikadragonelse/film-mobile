@@ -23,7 +23,7 @@ export interface FilmItemSearch {
   nation: string;
   description: string;
   title: string;
-  vip: boolean;
+  level: number;
 }
 export type FilmItemSearchProps = {
   data: FilmItemSearch;
@@ -44,17 +44,13 @@ export const FilmItemSearch = ({
       <View style={styles.containerItem}>
         <View style={styles.posterItem}>
           <Image source={{ uri: data.posterURL }} style={styles.poster} />
-          <View style={styles.filmSub}>
-            <Text style={styles.filmSubText}>
-              {data.vip === true ? (
-                "VIP"
-              ) : (
-                <Text>
-                  {data.isSeries === true ? `${data.episode} tập` : "Phim lẻ"}
-                </Text>
-              )}
-            </Text>
-          </View>
+          {data.level === 1 ? (
+            <View style={styles.filmSub}>
+              <Text style={styles.filmSubText}>VIP</Text>
+            </View>
+          ) : (
+            ""
+          )}
         </View>
         <View style={styles.content}>
           <Text style={styles.name}>{data.title}</Text>
@@ -77,7 +73,7 @@ export const FilmItemSearch = ({
             </Text>
           )}
           <Text style={styles.desc}>
-            {expanded ? data.description : data.description.slice(0, 50)}
+            {expanded ? data.description : data.description.slice(0, 48)}
             {data.description.length > 50 && !expanded && (
               <Text>
                 ...
@@ -160,7 +156,7 @@ const styles = StyleSheet.create({
   },
   name: {
     color: "white",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "500",
   },
   evaluateContent: {
