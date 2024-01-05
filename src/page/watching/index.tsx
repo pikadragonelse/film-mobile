@@ -223,13 +223,20 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
   // api từng tập
   const [dataEpisode, setDataEpisode] = useState<Episodes>(defaultEpisode);
   const fetchDataEpisode = async () => {
+    const accessToken = await getToken();
     try {
-      const response = await request.get(`episode/${episodeId}`);
+      const response = await request.get(`episode/${episodeId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       const data = response.data;
       if (watchingData.movieId !== data.movieId) {
         await fetchData();
       }
-      setDataEpisode(data);
+      setDataEpisode(data.episode);
+      console.log(dataEpisode);
       //
       if (startTime) {
         const elapsedMinutes = calculateElapsedTime();
@@ -237,7 +244,10 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
       }
       setStartTime(Date.now());
     } catch (error) {
-      console.error(error);
+      if (error.response?.status === 401) {
+        alert("Vui lòng đăng nhập để xem phim.");
+        navigation.goBack();
+      }
     }
   };
   useEffect(() => {
@@ -562,7 +572,7 @@ export const Watching = ({ navigation, route }: WatchingScreenProps) => {
             </Text>
             <View style={styles.ratingContainer}>
               <Text style={{ color: "white", marginRight: 5 }}>
-                {dataEpisode.numView.toLocaleString()} lượt xem
+                {dataEpisode.numView} lượt xem
               </Text>
               <FontAwesomeIcon icon={faStar} color={"#fadb14"} />
 
